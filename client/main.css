@@ -1,0 +1,72 @@
+@import 'tailwindcss';
+
+body {
+  background-color: #faf8f1;
+  color: #0a1520;
+  font-family: 'Poppins', sans-serif;
+}
+
+button {
+  font-size: larger;
+  background-color: transparent;
+  border: none;
+}
+
+.defaultFlex {
+  display: flex;
+  justify-content: center;
+}
+
+.archiveMainPage {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  height: 80vh;
+}
+/* 
+.archiveInfo {
+  max-width: 400px;
+  font-size: larger;
+}
+
+.gigPoster {
+} */
+
+.variantGigPoster {
+  height: 75vh;
+}
+
+.variantContainerColumn {
+  display: flex;
+  flex-direction: column;
+  margin-left: 2%;
+  margin-right: 2%;
+}
+
+.buttonFooter {
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 5%;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.buttonColumn {
+  justify-content: center;
+  margin-right: 10%;
+  margin-left: 10%;
+  margin-top: 2%;
+  margin-bottom: 2%;
+}
+
+.variantContainer {
+  display: flex;
+  justify-content: center;
+  width: 100vw;
+
+  /* align-items: center; */
+  margin-left: 2%;
+  margin-right: 2%;
+}
