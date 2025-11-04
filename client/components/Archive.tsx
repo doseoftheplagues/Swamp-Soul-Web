@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Gig, gigsData } from '../../data/shows'
+import { gigsData } from '../../data/shows'
 import showArchiveInfo from './ArchiveInfo'
 
 function Archive() {
@@ -43,22 +43,29 @@ function Archive() {
   }
 
   return (
-    <div className="flex-1">
-      <div className="flex w-screen justify-center">
-        <div className="flex-col size-11/12 justify-center sm:flex-row">
-          <div className="size-">
+    <div className="w-screen">
+      <div className="flex w-full justify-center ">
+        <div className=" flex flex-col sm:flex-row w-screen justify-center">
+          <div className="flex align-middle">
             <img
-              className="w-2 sm:w-140"
+              className=" sm:h-180 sm:object-fit"
               src={'/posters/' + firstPoster.image}
               alt={firstPoster.image}
             ></img>
           </div>
 
-          <div className="text-3xl/normal w-6/6 p-3">
-            <p>{currentGig.date}</p>
-            <p>{currentGig.location}</p>
-            <p>{currentGig.performers}</p>
-            <p>Poster by {firstPoster.designer}</p>
+          <div className="flex items-center text-left text-pre w-screen sm:w-100  p-3">
+            <p className="hidden sm:block whitespace-pre-line">
+              {currentGig.location} <br></br>
+              {currentGig.date}
+              <br></br>
+              {currentGig.performers}
+              <br></br>
+              Designed by {firstPoster.designer}
+            </p>
+            <p className="block sm:hidden">
+              Designed by {firstPoster.designer}
+            </p>
           </div>
         </div>
       </div>

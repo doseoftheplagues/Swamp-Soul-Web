@@ -12,7 +12,7 @@ function App() {
     //     <ul>{data && data.map((fruit) => <li key={fruit}>{fruit}</li>)}</ul>
     //   </div>
     // </>
-    <div>
+    <div className="w-screen">
       <h3>Swamp Soul</h3>
       <Outlet />
     </div>

@@ -1,0 +1,19 @@
+/**
+ * @param { import("knex").Knex } knex
+ * @returns { Promise<void> }
+ */
+export function up(knex) {
+  return knex.schema.createTable('posters', (table) => {
+    table.increments('id')
+    table.string('img')
+    table.string('designer')
+  })
+}
+
+/**
+ * @param { import("knex").Knex } knex
+ * @returns { Promise<void> }
+ */
+export function down(knex) {
+  return knex.schema.dropTable('posters')
+}
