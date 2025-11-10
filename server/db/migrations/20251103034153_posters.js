@@ -5,7 +5,7 @@
 export function up(knex) {
   return knex.schema.createTable('posters', (table) => {
     table.increments('id')
-    table.string('img')
+    table.string('image')
     table.string('designer')
   })
 }

@@ -23,14 +23,6 @@ button {
   align-items: center;
   height: 80vh;
 }
-/* 
-.archiveInfo {
-  max-width: 400px;
-  font-size: larger;
-}
-
-.gigPoster {
-} */
 
 .variantGigPoster {
   height: 75vh;
@@ -69,4 +61,8 @@ button {
   /* align-items: center; */
   margin-left: 2%;
   margin-right: 2%;
+}
+
+.loginButton {
+  font-size: 11pt;
 }

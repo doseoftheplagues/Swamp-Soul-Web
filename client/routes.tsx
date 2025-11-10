@@ -3,12 +3,16 @@ import { createRoutesFromElements, Route } from 'react-router'
 import App from './components/App'
 import Home from './components/Home'
 import { Archive } from './components/Archive'
+import Header from './components/Header'
+import Profile from './components/Profile'
 
 // const routes = createRoutesFromElements(<Route index element={<App />} />)
 
 const routes = createRoutesFromElements(
   <Route path="/" element={<App />}>
     <Route index element={<Home />} />
+    <Route path="/header" element={<Header />} />
+    <Route path="/profile" element={<Profile />} />
     <Route path="/archive" element={<Archive />} />
   </Route>,
 )
