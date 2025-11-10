@@ -21,4 +21,12 @@ if (process.env.NODE_ENV === 'production') {
   })
 }
 
+if (process.env.NODE_ENV !== 'production') {
+  import('dotenv')
+    .then((dotenv) => dotenv.config())
+    .catch((err) => {
+      console.error('Failed to load dotenv: ', err)
+    })
+}
+
 export default server

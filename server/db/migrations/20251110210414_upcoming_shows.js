@@ -1,0 +1,36 @@
+/**
+ * @param { import("knex").Knex } knex
+ * @returns { Promise<void> }
+ */
+export function up(knex) {
+  return knex.schema.createTable('upcoming_shows', (table) => {
+    table.increments('id')
+    table.string('date')
+    table.string('doors_time')
+    table.string('performers')
+    table.string('location_name')
+    table.boolean('wheelchair_accessible')
+    table.boolean('mobility_accessiblity')
+    table.boolean('bathrooms_nearby')
+    table.string('noise_level')
+    table.string('location_coords').nullable()
+    table.string('set_times').nullable()
+    table.string('tickets_link').nullable()
+    table
+      .integer('poster_id')
+      .references('posters.id')
+      .nullable()
+      .onDelete('CASCADE')
+    table.string('description').nullable()
+    table.integer('max_capacity').nullable()
+    table.boolean('canceled').nullable()
+  })
+}
+
+/**
+ * @param { import("knex").Knex } knex
+ * @returns { Promise<void> }
+ */
+export function down(knex) {
+  return knex.schema.dropTable('upcoming_shows')
+}

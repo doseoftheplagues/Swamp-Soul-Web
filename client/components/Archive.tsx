@@ -1,11 +1,14 @@
 import { useEffect, useState } from 'react'
-import { gigsData } from '../../data/shows'
+// import { gigsData } from '../../data/shows'
+import { useShows } from '../hooks/useShows'
 import showArchiveInfo from './ArchiveInfo'
 
 function Archive() {
   const [currentGigIndex, setCurrentGigIndex] = useState(0)
   const [showingInfo, setShowingInfo] = useState(false)
   const [displayButton, setDisplayButton] = useState(false)
+  const { data } = useShows
+  const gigsData = data
   const currentGig = gigsData[currentGigIndex]
   const firstPoster = currentGig.posters[0]
 
