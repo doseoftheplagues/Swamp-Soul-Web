@@ -10,7 +10,7 @@ export function up(knex) {
     table.string('performers')
     table.string('location_name')
     table.boolean('wheelchair_accessible')
-    table.boolean('mobility_accessiblity')
+    table.boolean('mobility_accessible')
     table.boolean('bathrooms_nearby')
     table.string('noise_level')
     table.string('location_coords').nullable()

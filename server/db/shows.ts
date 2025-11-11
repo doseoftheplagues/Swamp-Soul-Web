@@ -1,7 +1,8 @@
 import knexfile from './knexfile.js'
 import knex from 'knex'
+import connection from './connection.ts'
 
-const db = knex(knexfile.development)
+const db = connection
 
 export function getAllShows() {
   return db('shows')
