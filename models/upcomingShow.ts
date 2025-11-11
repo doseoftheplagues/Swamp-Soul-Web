@@ -1,19 +1,19 @@
 export interface UpcomingShowData {
   date: string
-  doors_time: string
+  doorsTime: string
   performers: string
-  location_name: string
-  wheelchair_accessible: boolean
-  mobility_accessible: boolean
-  bathrooms_nearby: boolean
-  noise_level: string
+  locationName: string
+  wheelchairAccessible: boolean
+  mobilityAccessible: boolean
+  bathroomsNearby: boolean
+  noiseLevel: string
   //optional parameterss
-  location_coords?: string | null
-  set_times?: string | null
-  tickets_link?: string | null
-  poster_id?: number | null
+  locationCoords?: string | null
+  setTimes?: string | null
+  ticketsLink?: string | null
+  posterId?: number | null
   description?: string | null
-  max_capacity?: number | null
+  maxCapacity?: number | null
   canceled?: boolean | null
 }
 
