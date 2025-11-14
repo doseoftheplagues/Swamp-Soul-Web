@@ -4,6 +4,7 @@ import { UpcomingShowData, UpcomingShow } from '../../models/upcomingShow.ts'
 const db = connection
 
 const showProperites = [
+  'id',
   'date',
   'doors_time as doorsTime',
   'performers',
@@ -22,8 +23,25 @@ const showProperites = [
 ]
 
 //read
-export async function getUpcomingShows() {
-  const result = await db('upcoming_shows').select([...showProperites])
+export async function getUpcomingShows(): Promise<UpcomingShow[]> {
+  const result = await db('upcoming_shows').select(
+    'id',
+    'date',
+    'doors_time as doorsTime',
+    'performers',
+    'location_name as locationName',
+    'wheelchair_accessible as wheelchairAccessible',
+    'mobility_accessible as mobilityAccessible',
+    'bathrooms_nearby as bathroomsNearby',
+    'noise_level as noiseLevel',
+    'location_coords as locationCoords',
+    'set_times as setTimes',
+    'tickets_link as ticketsLink',
+    'poster_id as posterId',
+    'description',
+    'max_capacity as maxCapacity',
+    'canceled',
+  )
   return result
 }
 
@@ -35,45 +53,63 @@ export async function getUpcomingShowById(id: number) {
 }
 
 //create
-export async function addUpcomingShow({
-  date,
-  doors_time,
-  performers,
-  location_name,
-  wheelchair_accessible,
-  mobility_accessible,
-  bathrooms_nearby,
-  noise_level,
-  location_coords,
-  set_times,
-  tickets_link,
-  poster_id,
-  description,
-  max_capacity,
-  canceled,
-}: any) {
-  const result = await db('upcoming_shows')
+export async function addUpcomingShow(showData: UpcomingShowData) {
+  const {
+    date,
+    doorsTime,
+    performers,
+    locationName,
+    wheelchairAccessible,
+    mobilityAccessible,
+    bathroomsNearby,
+    noiseLevel,
+    locationCoords,
+    setTimes,
+    ticketsLink,
+    posterId,
+    description,
+    maxCapacity,
+    canceled,
+  } = showData
+
+  const [result] = await db('upcoming_shows')
     .insert({
       date,
-      doors_time,
+      doors_time: doorsTime,
       performers,
-      location_name,
-      wheelchair_accessible,
-      mobility_accessible,
-      bathrooms_nearby,
-      noise_level,
-      location_coords,
-      set_times,
-      tickets_link,
-      poster_id,
+      location_name: locationName,
+      wheelchair_accessible: wheelchairAccessible,
+      mobility_accessible: mobilityAccessible,
+      bathrooms_nearby: bathroomsNearby,
+      noise_level: noiseLevel,
+      location_coords: locationCoords,
+      set_times: setTimes,
+      tickets_link: ticketsLink,
+      poster_id: posterId,
       description,
-      max_capacity,
+      max_capacity: maxCapacity,
       canceled,
     })
-    .returning([...showProperites])
-  const resultNoArray = result[0]
+    .returning([
+      'id',
+      'date',
+      'doors_time as doorsTime',
+      'performers',
+      'location_name as locationName',
+      'wheelchair_accessible as wheelchairAccessible',
+      'mobility_accessible as mobilityAccessible',
+      'bathrooms_nearby as bathroomsNearby',
+      'noise_level as noiseLevel',
+      'location_coords as locationCoords',
+      'set_times as setTimes',
+      'tickets_link as ticketsLink',
+      'poster_id as posterId',
+      'description',
+      'max_capacity as maxCapacity',
+      'canceled',
+    ])
 
-  return resultNoArray as UpcomingShow
+  return result
 }
 
 //update

@@ -6,7 +6,7 @@ import jwks from 'jwks-rsa'
 
 // TODO: set the domain and audience (API Identifier)
 const domain = 'https://sofia-tarn.au.auth0.com'
-const audience = 'https://Swampsoul/api'
+const audience = 'https://swampsoul/api'
 
 const checkJwt = jwt({
   secret: jwks.expressJwtSecret({

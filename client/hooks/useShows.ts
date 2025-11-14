@@ -1,9 +1,14 @@
 import { useQuery } from '@tanstack/react-query'
-import { getShows } from '../apis/shows'
+
+import * as API from '../apis/shows.ts'
 
 export function useShows() {
-  const query = useQuery({ queryKey: ['shows'], queryFn: getShows })
+  const { data, ...query } = useQuery({
+    queryKey: ['shows'],
+    queryFn: () => API.getShows(),
+  })
   return {
+    shows: data?.shows ?? [], // ⬅️ Fix here
     ...query,
   }
 }

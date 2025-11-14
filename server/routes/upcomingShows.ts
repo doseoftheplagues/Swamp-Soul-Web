@@ -57,10 +57,10 @@ router.delete('/:id', async (req, res) => {
   try {
     const showId = Number(req.params.id)
     await db.deleteUpcomingShow(showId)
-    res.sendStatus(200)
+    res.sendStatus(204)
   } catch (error) {
     console.log(error)
-    res.status(500).json({ message: 'Something went wrong updating show' })
+    res.status(500).json({ message: 'Something went wrong deleting show' })
   }
 })
 
