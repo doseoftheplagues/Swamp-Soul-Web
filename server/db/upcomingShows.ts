@@ -114,8 +114,46 @@ export async function addUpcomingShow(showData: UpcomingShowData) {
 
 //update
 
-export async function updateUpcomingShow(id: number, showData: object) {
-  return await db('upcoming_shows').where('id', id).update(showData)
+export async function updateUpcomingShow(
+  id: number,
+  showData: UpcomingShowData,
+) {
+  const {
+    date,
+    doorsTime,
+    performers,
+    locationName,
+    wheelchairAccessible,
+    mobilityAccessible,
+    bathroomsNearby,
+    noiseLevel,
+    locationCoords,
+    setTimes,
+    ticketsLink,
+    posterId,
+    description,
+    maxCapacity,
+    canceled,
+  } = showData
+  const snakeCaseShowData = {
+    date,
+    doors_time: doorsTime,
+    performers,
+    location_name: locationName,
+    wheelchair_accessible: wheelchairAccessible,
+    mobility_accessible: mobilityAccessible,
+    bathrooms_nearby: bathroomsNearby,
+    noise_level: noiseLevel,
+    location_coords: locationCoords,
+    set_times: setTimes,
+    tickets_link: ticketsLink,
+    poster_id: posterId,
+    description,
+    max_capacity: maxCapacity,
+    canceled,
+  }
+
+  return await db('upcoming_shows').where('id', id).update(snakeCaseShowData)
 }
 
 //delete

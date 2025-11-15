@@ -3,10 +3,13 @@ import {
   useDeleteUpcomingShow,
 } from '../hooks/useUpcomingShows'
 import { UpcomingShow } from '../../models/upcomingShow'
+import { useNavigate } from 'react-router'
 
 export function UpcomingShows() {
   const { data, isLoading, isError } = useUpcomingShows()
   const deleteShowMutation = useDeleteUpcomingShow()
+  const navigate = useNavigate()
+
   if (isLoading) {
     return (
       <div role="status">
@@ -35,8 +38,12 @@ export function UpcomingShows() {
     return <h1>An error occured when loading upcoming shows</h1>
   }
 
-  async function handleDeleteClick(id: number) {
+  function handleDeleteClick(id: number) {
     deleteShowMutation.mutate(id)
+  }
+
+  const handleEditClick = (id: number) => {
+    navigate(`/showeditform/${id}`)
   }
 
   return (
@@ -64,25 +71,27 @@ export function UpcomingShows() {
               Link to buy tickets: <a href={show.ticketsLink}>Here</a>
             </p>
           )}
-          {show.bathroomsNearby && <p>Venue has accessible bathrooms</p>}
-          {!show.bathroomsNearby && (
+          {show.bathroomsNearby ? (
+            <p>Venue has accessible bathrooms</p>
+          ) : (
             <p>Venue has no accessible bathrooms nearby</p>
           )}
-          {show.mobilityAccessible && (
+          {show.mobilityAccessible ? (
             <p>Venue is easily accessible for anyone with limited mobility</p>
-          )}
-          {!show.mobilityAccessible && (
+          ) : (
             <p>
               Venue is not easily accessible for anyone with limited mobility
             </p>
           )}
-          {show.wheelchairAccessible && <p>Venue is wheelchair accessible </p>}
-          {!show.wheelchairAccessible && (
+          {show.wheelchairAccessible ? (
+            <p>Venue is wheelchair accessible </p>
+          ) : (
             <p>Venue is not wheelchair accessible</p>
           )}
           <button onClick={() => handleDeleteClick(show.id)}>
             Delete show
           </button>
+          <button onClick={() => handleEditClick(show.id)}>Edit</button>
         </div>
       ))}
     </div>

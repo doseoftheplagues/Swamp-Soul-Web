@@ -19,7 +19,7 @@ router.get('/:id', async (req, res) => {
   try {
     const id = Number(req.params.id)
     const showById = await db.getUpcomingShowById(id)
-    res.json({ showById })
+    res.json(showById)
   } catch (error) {
     console.log(error)
     res.status(500).json({ message: 'Something went wrong getting show' })

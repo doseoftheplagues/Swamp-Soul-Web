@@ -13,7 +13,10 @@ export async function getUpcomingShowById(id: number) {
   return response.body
 }
 
-export async function updateUpcomingShow(id: number, showData: UpcomingShow) {
+export async function updateUpcomingShow(
+  id: number,
+  showData: UpcomingShowData,
+) {
   const response = await request
     .patch(`${rootURL}/upcomingshows/${id}`)
     .send(showData)
