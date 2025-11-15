@@ -3,8 +3,10 @@ import { useState } from 'react'
 import { useAddUpcomingShow } from '../hooks/useUpcomingShows'
 import 'react-date-picker/dist/DatePicker.css'
 import 'react-calendar/dist/Calendar.css'
+import { useNavigate } from 'react-router'
 
 export function ShowUploadForm() {
+  const navigate = useNavigate()
   const [formData, setFormData] = useState({
     date: new Date(),
     doorsTime: '',
@@ -52,6 +54,7 @@ export function ShowUploadForm() {
       maxCapacity: parseInt(formData.maxCapacity, 10) || 0,
     }
     addShowMutation.mutate(submissionData)
+    navigate('/upcomingshows')
   }
 
   return (
