@@ -8,7 +8,6 @@ export async function seed(knex) {
   await knex('shows').del()
   await knex('posters').del()
 
-  // Data from the original seed file
   const showData = {
     date: 'October 19th 2024',
     location: 'Secret Location',
@@ -26,11 +25,9 @@ export async function seed(knex) {
     { image: 'plastic-double-4.png', designer: 'Cassie Tenebaum' },
   ]
 
-  // 1. Insert the show and get its ID
   const [showIdObj] = await knex('shows').insert(showData).returning('id')
   const showId = showIdObj.id
 
-  // 2. Loop through posters, insert them, and link to the show
   for (const poster of postersData) {
     const [posterIdObj] = await knex('posters').insert(poster).returning('id')
     const posterId = posterIdObj.id
