@@ -1,25 +1,12 @@
 import { useEffect, useState } from 'react'
-// import { gigsData } from '../../data/shows'
+// import { shows } from '../../data/shows'
 import { useShows } from '../hooks/useShows'
 import showArchiveInfo from './ArchiveInfo'
 
 function Archive() {
   const [currentGigIndex, setCurrentGigIndex] = useState(0)
   const [showingInfo, setShowingInfo] = useState(false)
-  const [displayButton, setDisplayButton] = useState(false)
-  const { data } = useShows
-  const gigsData = data
-  const currentGig = gigsData[currentGigIndex]
-  const firstPoster = currentGig.posters[0]
-
-  useEffect(() => {
-    if (currentGig.posters[1]) {
-      setDisplayButton(true)
-    } else {
-      setDisplayButton(false)
-    }
-    ;[currentGig]
-  })
+  const { shows, isLoading, isError, error } = useShows()
 
   useEffect(() => {
     if (showingInfo) {
@@ -31,8 +18,20 @@ function Archive() {
     }
   }, [showingInfo])
 
+  if (isLoading) return <h2>Is Loading...</h2>
+
+  if (isError) return <h2>{String(error)}</h2>
+
+  if (!shows || shows.length === 0) return <div>No shows found.</div>
+
+  const currentGig = shows[currentGigIndex]
+
+  if (!currentGig) return <div>Could not find the selected show.</div>
+
+  const displayButton = currentGig.posters.length > 0
+
   function handleNext() {
-    if (currentGigIndex == gigsData.length - 1) {
+    if (currentGigIndex == shows.length - 1) {
       setCurrentGigIndex(0)
       setShowingInfo(false)
     } else {
@@ -45,29 +44,31 @@ function Archive() {
     setShowingInfo(true)
   }
 
+  const firstPoster = currentGig.posters[0]
+
   return (
     <div className="w-screen">
-      <div className="flex w-full justify-center ">
-        <div className=" flex flex-col sm:flex-row w-screen justify-center">
+      <div className="flex w-full justify-center">
+        <div className="flex w-screen flex-col justify-center sm:flex-row">
           <div className="flex align-middle">
             <img
-              className=" sm:h-180 sm:object-fit"
+              className="sm:object-fit sm:h-180"
               src={'/posters/' + firstPoster.image}
-              alt={firstPoster.image}
+              alt={'archive poster'}
             ></img>
           </div>
 
-          <div className="flex items-center text-left text-pre w-screen sm:w-100  p-3">
-            <p className="hidden sm:block whitespace-pre-line">
+          <div className="text-pre flex w-screen items-center p-3 text-left sm:w-100">
+            <p className="hidden whitespace-pre-line sm:block">
               {currentGig.location} <br></br>
               {currentGig.date}
               <br></br>
               {currentGig.performers}
               <br></br>
-              Designed by {firstPoster.designer}
+              Poster design by {firstPoster.designer}
             </p>
             <p className="block sm:hidden">
-              Designed by {firstPoster.designer}
+              Poster design by {firstPoster.designer}
             </p>
           </div>
         </div>

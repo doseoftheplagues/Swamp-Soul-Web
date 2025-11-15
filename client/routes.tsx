@@ -5,6 +5,9 @@ import Home from './components/Home'
 import { Archive } from './components/Archive'
 import Header from './components/Header'
 import Profile from './components/Profile'
+import { ShowUploadForm } from './components/ShowUploadForm'
+import { ShowEditForm } from './components/ShowEditForm'
+import { UpcomingShows } from './components/UpcomingShows'
 
 // const routes = createRoutesFromElements(<Route index element={<App />} />)
 
@@ -13,6 +16,9 @@ const routes = createRoutesFromElements(
     <Route index element={<Home />} />
     <Route path="/header" element={<Header />} />
     <Route path="/profile" element={<Profile />} />
+    <Route path="/showuploadform" element={<ShowUploadForm />} />
+    <Route path="/showeditform/:id" element={<ShowEditForm />} />
+    <Route path="/upcomingshows" element={<UpcomingShows />} />
     <Route path="/archive" element={<Archive />} />
   </Route>,
 )

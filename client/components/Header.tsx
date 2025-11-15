@@ -7,16 +7,16 @@ function Header() {
   const LoginButton = () => {
     const { loginWithRedirect } = useAuth0()
     return (
-      <button onClick={() => loginWithRedirect()} className="loginButton ">
+      <button onClick={() => loginWithRedirect()} className="loginButton">
         Log In
       </button>
     )
   }
   if (!isAuthenticated) {
     return (
-      <div className="w-screen p-2 flex flex-row">
+      <div className="flex w-screen flex-row p-2">
         <div className="flex w-1/2">
-          <h3>Swamp Soul</h3>
+          <h1>Swamp Soul</h1>
         </div>
         <div className="flex w-1/2 justify-end">
           <LoginButton />
@@ -25,7 +25,7 @@ function Header() {
     )
   } else {
     return (
-      <div className="w-screen p-2 flex flex-row">
+      <div className="flex w-screen flex-row p-2">
         <div className="flex w-1/2">
           <h3>Swamp Soul</h3>
         </div>
