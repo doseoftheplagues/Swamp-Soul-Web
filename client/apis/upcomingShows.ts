@@ -1,5 +1,5 @@
 import request from 'superagent'
-import { UpcomingShow, UpcomingShowData } from '../../models/upcomingShow'
+import { UpcomingShowData } from '../../models/upcomingShow'
 
 const rootURL = new URL(`/api/v1`, document.baseURI)
 
@@ -16,19 +16,29 @@ export async function getUpcomingShowById(id: number) {
 export async function updateUpcomingShow(
   id: number,
   showData: UpcomingShowData,
+  token: string,
 ) {
   const response = await request
     .patch(`${rootURL}/upcomingshows/${id}`)
     .send(showData)
+    .set('Authorization', `Bearer ${token}`)
   return response.body
 }
 
-export async function addUpcomingShow(showData: UpcomingShowData) {
-  const response = await request.post(`${rootURL}/upcomingshows`).send(showData)
+export async function addUpcomingShow(
+  showData: UpcomingShowData,
+  token: string,
+) {
+  const response = await request
+    .post(`${rootURL}/upcomingshows`)
+    .send(showData)
+    .set('Authorization', `Bearer ${token}`)
   return response.body
 }
 
-export async function deleteUpcomingShow(id: number) {
-  const response = await request.delete(`${rootURL}/upcomingshows/${id}`)
+export async function deleteUpcomingShow(id: number, token: string) {
+  const response = await request
+    .delete(`${rootURL}/upcomingshows/${id}`)
+    .set('Authorization', `Bearer ${token}`)
   return response.body
 }

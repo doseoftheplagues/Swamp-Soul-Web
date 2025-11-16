@@ -4,10 +4,12 @@ import {
 } from '../hooks/useUpcomingShows'
 import { UpcomingShow } from '../../models/upcomingShow'
 import { useNavigate } from 'react-router'
+import { useAuth0 } from '@auth0/auth0-react'
 
 export function UpcomingShows() {
   const { data, isLoading, isError } = useUpcomingShows()
   const deleteShowMutation = useDeleteUpcomingShow()
+  const { getAccessTokenSilently, isAuthenticated } = useAuth0()
   const navigate = useNavigate()
 
   if (isLoading) {
@@ -38,8 +40,12 @@ export function UpcomingShows() {
     return <h1>An error occured when loading upcoming shows</h1>
   }
 
-  function handleDeleteClick(id: number) {
-    deleteShowMutation.mutate(id)
+  async function handleDeleteClick(id: number) {
+    const token = await getAccessTokenSilently()
+    if (!isAuthenticated) {
+      alert('You need to log in to delete shows')
+    }
+    deleteShowMutation.mutate(id, token)
   }
 
   const handleEditClick = (id: number) => {

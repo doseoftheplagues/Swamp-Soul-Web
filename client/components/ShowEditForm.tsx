@@ -8,13 +8,14 @@ import 'react-date-picker/dist/DatePicker.css'
 import 'react-calendar/dist/Calendar.css'
 import { useParams } from 'react-router'
 import { useNavigate } from 'react-router'
+import { useAuth0 } from '@auth0/auth0-react'
 
 export function ShowEditForm() {
   const params = useParams()
   const navigate = useNavigate()
-  const { data, isLoading, isError, error } = useGetUpcomingShowById(
-    Number(params.id),
-  )
+  const { getAccessTokenSilently } = useAuth0()
+
+  const { data, isLoading, isError } = useGetUpcomingShowById(Number(params.id))
   const [formData, setFormData] = useState({
     date: new Date(),
     doorsTime: '',
@@ -81,6 +82,7 @@ export function ShowEditForm() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     const currentId = Number(params.id)
+    const token = await getAccessTokenSilently()
     const submissionData = {
       ...formData,
       wheelchairAccessible: formData.wheelchairAccessible === 'true',
@@ -88,7 +90,7 @@ export function ShowEditForm() {
       bathroomsNearby: formData.bathroomsNearby === 'true',
       maxCapacity: parseInt(formData.maxCapacity, 10) || null,
     }
-    editShowMutation.mutate({ id: currentId, data: submissionData })
+    editShowMutation.mutate({ id: currentId, data: submissionData, token })
     navigate('/upcomingshows')
   }
 
@@ -106,17 +108,19 @@ export function ShowEditForm() {
         <br></br>
         <label htmlFor="doorsTime">Doors open at:</label>
         <br></br>
-        <input
+        <textarea
           type="text"
+          className="field-sizing-content"
           id="doorsTime"
           name="doorsTime"
           value={formData.doorsTime}
           onChange={handleChange}
-        ></input>
+        ></textarea>
         <br></br>
         <label htmlFor="performers">Performers:</label>
         <br></br>
         <input
+          className="field-sizing-content"
           type="text"
           id="performers"
           name="performers"

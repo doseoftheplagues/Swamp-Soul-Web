@@ -1,5 +1,6 @@
 import { Router } from 'express'
 import * as db from '../db/upcomingShows.ts'
+import checkJwt from '../../auth0.ts'
 
 const router = Router()
 
@@ -27,7 +28,7 @@ router.get('/:id', async (req, res) => {
 })
 
 // POST localhost:3000/api/v1/upcomingShows
-router.post('/', async (req, res) => {
+router.post('/', checkJwt, async (req, res) => {
   try {
     const showData = req.body
     await db.addUpcomingShow(showData)
@@ -40,7 +41,7 @@ router.post('/', async (req, res) => {
 })
 
 // PATCH localhost:3000/api/v1/upcomingShows/:id
-router.patch('/:id', async (req, res) => {
+router.patch('/:id', checkJwt, async (req, res) => {
   try {
     const showData = req.body
     const showId = Number(req.params.id)
@@ -53,7 +54,7 @@ router.patch('/:id', async (req, res) => {
 })
 
 // DELETE localhost:3000/api/v1/upcomingShows/:id
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', checkJwt, async (req, res) => {
   try {
     const showId = Number(req.params.id)
     await db.deleteUpcomingShow(showId)

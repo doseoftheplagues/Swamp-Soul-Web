@@ -18,6 +18,12 @@ input {
   border-radius: 3px;
 }
 
+textarea {
+  background-color: #ffffff;
+  border: 2px solid #000000;
+  border-radius: 3px;
+}
+
 .defaultFlex {
   display: flex;
   justify-content: center;
