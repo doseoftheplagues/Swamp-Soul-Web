@@ -4,9 +4,11 @@ import { useAddUpcomingShow } from '../hooks/useUpcomingShows'
 import 'react-date-picker/dist/DatePicker.css'
 import 'react-calendar/dist/Calendar.css'
 import { useNavigate } from 'react-router'
+import { useAuth0 } from '@auth0/auth0-react'
 
 export function ShowUploadForm() {
   const navigate = useNavigate()
+  const { getAccessTokenSilently, isAuthenticated } = useAuth0()
   const [formData, setFormData] = useState({
     date: new Date(),
     doorsTime: '',
@@ -44,8 +46,12 @@ export function ShowUploadForm() {
     }
   }
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+    if (!isAuthenticated) {
+      alert('You need to log in to submit shows')
+    }
+    const token = await getAccessTokenSilently()
     const submissionData = {
       ...formData,
       wheelchairAccessible: formData.wheelchairAccessible === 'true',
@@ -53,7 +59,7 @@ export function ShowUploadForm() {
       bathroomsNearby: formData.bathroomsNearby === 'true',
       maxCapacity: parseInt(formData.maxCapacity, 10) || 0,
     }
-    addShowMutation.mutate(submissionData)
+    addShowMutation.mutate(submissionData, token)
     navigate('/upcomingshows')
   }
 
@@ -81,13 +87,14 @@ export function ShowUploadForm() {
         <br></br>
         <label htmlFor="performers">Performers:</label>
         <br></br>
-        <input
-          type="text"
+        <textarea
+          className="w-90"
+          rows={3}
           id="performers"
           name="performers"
           value={formData.performers}
           onChange={handleChange}
-        ></input>
+        ></textarea>
         <br></br>
         <label htmlFor="locationName">Location:</label>
         <br></br>

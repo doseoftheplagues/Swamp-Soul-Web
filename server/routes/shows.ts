@@ -2,8 +2,6 @@ import { Router } from 'express'
 
 import * as db from '../db/shows.ts'
 
-// At the top of server/routes/shows.ts
-
 interface ShowDbRow {
   showId: number
   performers: string

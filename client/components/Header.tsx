@@ -1,8 +1,9 @@
 import { useAuth0 } from '@auth0/auth0-react'
-import { Link } from 'react-router'
+import { Link, useLocation } from 'react-router'
 
 function Header() {
   const { user, isAuthenticated, isLoading } = useAuth0()
+  const location = useLocation()
 
   const LoginButton = () => {
     const { loginWithRedirect } = useAuth0()
@@ -16,7 +17,9 @@ function Header() {
     return (
       <div className="flex w-screen flex-row p-2">
         <div className="flex w-1/2">
-          <h1>Swamp Soul</h1>
+          <h1>
+            <Link to={'/'}>Swamp Soul </Link> {location.pathname}
+          </h1>
         </div>
         <div className="flex w-1/2 justify-end">
           <LoginButton />
@@ -27,7 +30,9 @@ function Header() {
     return (
       <div className="flex w-screen flex-row p-2">
         <div className="flex w-1/2">
-          <h3>Swamp Soul</h3>
+          <h3>
+            <Link to={'/'}>Swamp Soul </Link> {location.pathname}
+          </h3>
         </div>
         <div className="flex w-1/2 justify-end">
           <Link to={'/profile'}>Profile</Link>

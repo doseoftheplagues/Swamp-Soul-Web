@@ -7,7 +7,7 @@ function App() {
   // const { data } = useFruits()
 
   return (
-    <div>
+    <div className="">
       <Header />
       <Outlet />
     </div>
