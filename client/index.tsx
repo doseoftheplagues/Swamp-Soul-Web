@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
       clientId="mqCCZ4X7323TwP6uuAnaDLluqG6mQNSG"
       authorizationParams={{
         redirect_uri: window.location.origin,
-        audience: 'https://test/api',
+        audience: 'https://swampsoul/api',
       }}
     >
       <QueryClientProvider client={queryClient}>

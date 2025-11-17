@@ -8,6 +8,7 @@ import Profile from './components/Profile'
 import { ShowUploadForm } from './components/ShowUploadForm'
 import { ShowEditForm } from './components/ShowEditForm'
 import { UpcomingShows } from './components/UpcomingShows'
+import { Register } from './components/Register'
 
 // const routes = createRoutesFromElements(<Route index element={<App />} />)
 
@@ -16,6 +17,7 @@ const routes = createRoutesFromElements(
     <Route index element={<Home />} />
     <Route path="/header" element={<Header />} />
     <Route path="/profile" element={<Profile />} />
+    <Route path="/register" element={<Register />} />
     <Route path="/showuploadform" element={<ShowUploadForm />} />
     <Route path="/showeditform/:id" element={<ShowEditForm />} />
     <Route path="/upcomingshows" element={<UpcomingShows />} />
