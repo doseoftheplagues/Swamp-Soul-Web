@@ -8,13 +8,13 @@ function App() {
   const { isAuthenticated } = useAuth0()
   const { data, isLoading } = useUser()
 
-  // const navigate = useNavigate()
+  const navigate = useNavigate()
 
-  // useEffect(() => {
-  //   if (isAuthenticated && !isLoading && !data) {
-  //     navigate('/register')
-  //   }
-  // }, [isAuthenticated, isLoading, data, navigate])
+  useEffect(() => {
+    if (isAuthenticated && !isLoading && !data) {
+      navigate('/register')
+    }
+  }, [isAuthenticated, isLoading, data, navigate])
 
   if (isLoading) {
     return (
@@ -39,9 +39,9 @@ function App() {
       </div>
     )
   }
-  // if (isAuthenticated && !isLoading && !data) {
-  //   return <p>Loading registration...</p>
-  // }
+  if (isAuthenticated && !isLoading && !data) {
+    return <p>Loading registration...</p>
+  }
 
   return (
     <div className="">

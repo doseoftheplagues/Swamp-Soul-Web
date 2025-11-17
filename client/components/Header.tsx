@@ -8,12 +8,13 @@ function Header() {
   const { data } = useUser()
 
   const handleSignIn = () => {
-    console.log('sign in')
-    loginWithRedirect({
-      authorizationParams: {
-        redirect_uri: `${window.location.origin}/register`,
-      },
-    })
+    console.log('window.location.origin')
+    loginWithRedirect()
+    // loginWithRedirect({
+    //   authorizationParams: {
+    //     redirect_uri: `${window.location.origin}/register`,
+    //   },
+    // })
   }
 
   const LoginButton = () => {
