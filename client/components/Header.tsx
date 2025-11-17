@@ -1,14 +1,24 @@
 import { useAuth0 } from '@auth0/auth0-react'
 import { Link, useLocation } from 'react-router'
+import { useUser } from '../hooks/useUsers'
 
 function Header() {
-  const { user, isAuthenticated, isLoading } = useAuth0()
+  const { user, isAuthenticated, isLoading, loginWithRedirect } = useAuth0()
   const location = useLocation()
+  const { data } = useUser()
+
+  const handleSignIn = () => {
+    console.log('sign in')
+    loginWithRedirect({
+      authorizationParams: {
+        redirect_uri: `${window.location.origin}/register`,
+      },
+    })
+  }
 
   const LoginButton = () => {
-    const { loginWithRedirect } = useAuth0()
     return (
-      <button onClick={() => loginWithRedirect()} className="loginButton">
+      <button onClick={handleSignIn} className="loginButton">
         Log In
       </button>
     )
@@ -23,6 +33,17 @@ function Header() {
         </div>
         <div className="flex w-1/2 justify-end">
           <LoginButton />
+        </div>
+      </div>
+    )
+  }
+  if (isAuthenticated && !data) {
+    return (
+      <div className="flex w-screen flex-row p-2">
+        <div className="flex w-1/2">
+          <h1>
+            <Link to={'/'}>Swamp Soul </Link> {location.pathname}
+          </h1>
         </div>
       </div>
     )
