@@ -4,46 +4,56 @@ import { useUser } from '../hooks/useUsers'
 import { useNavigate } from 'react-router'
 
 export function Register() {
-  const [errorMsg, setErrorMsg] = useState('')
-  const { isAuthenticated } = useAuth0()
-  const user = useUser()
+  const { isAuthenticated, user, getAccessTokenSilently } = useAuth0()
+  const { add, ...userDb } = useUser()
   const [formData, setFormData] = useState({
     username: '',
+    bio: '',
+    status: '',
+    email: '',
   })
 
-  const handleMutationSuccess = () => {
-    setErrorMsg('')
-  }
-  const handleError = (error: unknown) => {
-    if (error instanceof Error) {
-      setErrorMsg(error.message)
-    } else setErrorMsg('Unknown error')
-  }
-
-  const mutationOptions = {
-    onSuccess: handleMutationSuccess,
-    onError: handleError,
-  }
   const navigate = useNavigate()
 
   useEffect(() => {
-    if (user.data) navigate('/')
-  }, [user.data, navigate])
+    if (userDb.data) navigate('/')
+  }, [userDb.data, navigate])
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
-  ) => {
-    const { name, value } = e.target
-    setFormData((previousData) => ({
-      ...previousData,
-      [name]: value,
-    }))
+  useEffect(() => {
+    const emailFromAuth0 = user?.email
+    if (emailFromAuth0) {
+      setFormData((currentData) => ({
+        ...currentData,
+        email: emailFromAuth0,
+      }))
+    }
+  }, [user])
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    try {
+      const token = await getAccessTokenSilently()
+      add.mutate({ newUser: formData, token })
+    } catch (error) {
+      console.error('Failed to get access token:', error)
+    }
+  }
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    })
+  }
+
+  if (userDb.isLoading){
+    return <p>Checking authentication</p>
   }
 
   if (isAuthenticated) {
     return (
       <div>
-        <form onSubmit={console.log('meow')}>
+        <form onSubmit={handleSubmit}>
           <label htmlFor="username">Username</label>
           <br></br>
           <input
@@ -62,9 +72,20 @@ export function Register() {
             rows={3}
             id="bio"
             name="bio"
-            value={formData.username}
+            value={formData.bio}
             onChange={handleChange}
           ></textarea>
+          <br></br>
+          <label htmlFor="status">Status</label>
+          <br></br>
+          <input
+            type="text"
+            className="w-90"
+            id="status"
+            name="status"
+            value={formData.status}
+            onChange={handleChange}
+          ></input>
           <br></br>
           <input type="submit" className="submitButton" value="Submit" />
         </form>
