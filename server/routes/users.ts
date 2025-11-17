@@ -25,7 +25,7 @@ router.post('/', checkJwt, async (req: JwtRequest, res) => {
 
     const [user] = await db.addUser({
       ...newUser,
-      auth0Id,
+      authId: auth0Id,
     })
     res.json({ user })
   } catch (error) {
