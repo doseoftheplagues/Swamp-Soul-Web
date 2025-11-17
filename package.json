@@ -33,6 +33,7 @@
     "@tailwindcss/vite": "^4.1.16",
     "bootstrap": "^5.3.8",
     "bootstrap-icons": "^1.13.1",
+    "dotenv": "^16.4.5",
     "express": "^4.17.2",
     "express-jwt": "^8.4.1",
     "jsonwebtoken": "^9.0.2",
@@ -42,10 +43,10 @@
     "react-bootstrap": "^2.10.10",
     "react-bootstrap-icons": "^1.11.6",
     "react-date-picker": "^12.0.1",
+    "react-router-dom": "^7.9.6",
     "sqlite3": "^5.1.7",
     "superagent": "^10.2.1",
-    "tailwindcss": "^4.1.16",
-    "dotenv": "^16.4.5"
+    "tailwindcss": "^4.1.16"
   },
   "devDependencies": {
     "@devacademy/eslint-config": "^1.10.1",

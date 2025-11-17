@@ -3,18 +3,27 @@ import { Link, useLocation } from 'react-router'
 import { useUser } from '../hooks/useUsers'
 
 function Header() {
-  const { user, isAuthenticated, isLoading, loginWithRedirect } = useAuth0()
+  const {
+    isAuthenticated,
+
+    loginWithRedirect,
+  } = useAuth0()
   const location = useLocation()
   const { data } = useUser()
 
   const handleSignIn = () => {
+    console.log('--- handleSignIn called ---')
+    console.log('window.location.origin:', window.location.origin)
     console.log('window.location.origin')
-    loginWithRedirect()
-    // loginWithRedirect({
-    //   authorizationParams: {
-    //     redirect_uri: `${window.location.origin}/register`,
-    //   },
-    // })
+    const redirectUri = `${window.location.origin}/register`
+    console.log('redirect_uri being used:', redirectUri)
+    loginWithRedirect({
+      authorizationParams: {
+        redirect_uri: redirectUri,
+
+        prompt: 'login',
+      },
+    })
   }
 
   const LoginButton = () => {
