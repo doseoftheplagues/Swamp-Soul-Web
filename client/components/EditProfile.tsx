@@ -1,12 +1,13 @@
 import { useAuth0 } from '@auth0/auth0-react'
-import { useEffect, useState } from 'react'
 import { useUser } from '../hooks/useUsers'
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router'
 import * as API from '../apis/users'
 
-export function Register() {
-  const { isAuthenticated, user, getAccessTokenSilently } = useAuth0()
-  const { add, ...userDb } = useUser()
+const EditProfile = () => {
+  const { user, isAuthenticated, isLoading, getAccessTokenSilently } =
+    useAuth0()
+  const { update, ...userDb } = useUser()
   const [userNameIsTaken, setUsernameIsTaken] = useState(false)
   const [formData, setFormData] = useState({
     username: '',
@@ -18,29 +19,39 @@ export function Register() {
   const navigate = useNavigate()
 
   useEffect(() => {
-    if (userDb.data) navigate('/')
-  }, [userDb.data, navigate])
-
-  useEffect(() => {
-    const emailFromAuth0 = user?.email
-    if (emailFromAuth0) {
-      setFormData((currentData) => ({
-        ...currentData,
-        email: emailFromAuth0,
-      }))
+    if (user && userDb.data) {
+      setFormData({
+        username: userDb.data.username,
+        bio: userDb.data.bio,
+        status: userDb.data.status,
+        email: user.email,
+      })
     }
-  }, [user])
+  }, [user, userDb.data])
+
+  const userId = userDb.data?.authId
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     try {
-      const response = await API.checkUsernameTaken(formData.username)
-      if (response.isTaken) {
-        setUsernameIsTaken(true)
-        return
+      const originalUsername = userDb.data?.username
+      if (originalUsername !== formData.username) {
+        const response = await API.checkUsernameTaken(formData.username)
+        if (response.isTaken) {
+          setUsernameIsTaken(true)
+          return
+        }
       }
       const token = await getAccessTokenSilently()
-      add.mutate({ newUser: formData, token })
+      if (!userId) {
+        console.error('Could not find user ID to update.')
+        return
+      }
+      update.mutate({
+        id: userId,
+        updatedUser: formData,
+        token,
+      })
       setUsernameIsTaken(false)
       navigate('/profile')
     } catch (error) {
@@ -48,7 +59,9 @@ export function Register() {
     }
   }
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
@@ -59,9 +72,13 @@ export function Register() {
     return <p>Checking authentication</p>
   }
 
+  if (isLoading) {
+    return <div className="loading-text">Loading profile...</div>
+  }
   if (isAuthenticated) {
     return (
       <div>
+        <h2>Edit Profile</h2>
         <form onSubmit={handleSubmit}>
           {userNameIsTaken && <p>That username is already taken</p>}
           <label htmlFor="username">Username</label>
@@ -97,15 +114,16 @@ export function Register() {
             onChange={handleChange}
           ></input>
           <br></br>
-          <input type="submit" className="submitButton" value="Submit" />
+          <input
+            type="submit"
+            className="submitButton"
+            value={update.isLoading ? 'Updating...' : 'Submit'}
+            disabled={update.isLoading}
+          />
         </form>
-      </div>
-    )
-  } else {
-    return (
-      <div>
-        <p>Loading registration page...</p>
       </div>
     )
   }
 }
+
+export default EditProfile

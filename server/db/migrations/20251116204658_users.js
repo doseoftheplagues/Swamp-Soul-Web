@@ -4,8 +4,8 @@
  */
 export function up(knex) {
   return knex.schema.createTable('users', (table) => {
-    table.string('authId')
-    table.string('username')
+    table.string('authId').primary()
+    table.string('username').unique()
     table.string('bio')
     table.string('status')
     table.string('email')

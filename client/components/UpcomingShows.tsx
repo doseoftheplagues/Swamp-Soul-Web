@@ -57,47 +57,62 @@ export function UpcomingShows() {
       {data.map((show: UpcomingShow) => (
         <div
           key={show.id}
-          className="m-1 border-2 border-b-stone-500 bg-lime-100 p-5"
+          className="m-1 flex flex-row border-2 border-b-stone-500 bg-teal-50 p-1 sm:p-5"
         >
-          <h1>{show.locationName}</h1>
-          <p>{show.date}</p>
-          <p>{show.performers}</p>
-          {show.description && <p>{show.description} </p>}
-          <p>Doors: {show.doorsTime}</p>
-          {show.setTimes && <p>Set times: {show.setTimes}</p>}
+          <div>
+            <img
+              className="h-35 sm:h-65"
+              src="./posters/valhallaJuly10th.jpg"
+              alt="temp poster"
+            ></img>
+          </div>
+          <div>
+            <h1>{show.locationName}</h1>
+            <p>
+              {show.date} {show.doorsTime}
+            </p>
+            <p>{show.performers}</p>
+            {/* {show.description && <p>{show.description} </p>}
 
-          {show.noiseLevel === 'high' && (
-            <p>Noise level: High (bring earplugs)</p>
-          )}
-          {show.noiseLevel === 'medium' && <p>Noise level: Medium</p>}
-          {show.noiseLevel === 'low' && <p>Noise level: Low / safe</p>}
-          {show.maxCapacity && <p>Max capacity: {show.maxCapacity} </p>}
-          {show.ticketsLink && (
-            <p>
-              Link to buy tickets: <a href={show.ticketsLink}>Here</a>
-            </p>
-          )}
-          {show.bathroomsNearby ? (
-            <p>Venue has accessible bathrooms</p>
-          ) : (
-            <p>Venue has no accessible bathrooms nearby</p>
-          )}
-          {show.mobilityAccessible ? (
-            <p>Venue is easily accessible for anyone with limited mobility</p>
-          ) : (
-            <p>
-              Venue is not easily accessible for anyone with limited mobility
-            </p>
-          )}
-          {show.wheelchairAccessible ? (
-            <p>Venue is wheelchair accessible </p>
-          ) : (
-            <p>Venue is not wheelchair accessible</p>
-          )}
-          <button onClick={() => handleDeleteClick(show.id)}>
-            Delete show
-          </button>
-          <button onClick={() => handleEditClick(show.id)}>Edit</button>
+            {show.setTimes && <p>Set times: {show.setTimes}</p>} */}
+            {/* 
+            {show.noiseLevel === 'high' && (
+              <p>Noise level: High (bring earplugs)</p>
+            )} */}
+            {/* {show.noiseLevel === 'medium' && <p>Noise level: Medium</p>}
+            {show.noiseLevel === 'low' && <p>Noise level: Low / safe</p>}
+            {show.maxCapacity && <p>Max capacity: {show.maxCapacity} </p>} */}
+            {/* {show.ticketsLink && (
+              <p>
+                Link to buy tickets: <a href={show.ticketsLink}>Here</a>
+              </p>
+            )}
+            {show.bathroomsNearby ? (
+              <p>Venue has accessible bathrooms</p>
+            ) : (
+              <p>Venue has no accessible bathrooms nearby</p>
+            )}
+            {show.mobilityAccessible ? (
+              <p>Venue is easily accessible for anyone with limited mobility</p>
+            ) : (
+              <p>
+                Venue is not easily accessible for anyone with limited mobility
+              </p>
+            )}
+            {show.wheelchairAccessible ? (
+              <p>Venue is wheelchair accessible </p>
+            ) : (
+              <p>Venue is not wheelchair accessible</p>
+            )} */}
+            {isAuthenticated && (
+              <div>
+                <button onClick={() => handleDeleteClick(show.id)}>
+                  Delete show
+                </button>
+                <button onClick={() => handleEditClick(show.id)}>Edit</button>
+              </div>
+            )}
+          </div>
         </div>
       ))}
     </div>

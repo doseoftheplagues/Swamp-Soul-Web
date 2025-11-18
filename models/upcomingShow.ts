@@ -1,12 +1,14 @@
 export interface UpcomingShowData {
   date: string
   doorsTime: string
+  price: string
   performers: string
   locationName: string
   wheelchairAccessible: boolean
   mobilityAccessible: boolean
   bathroomsNearby: boolean
   noiseLevel: string
+  userId: string
   //optional parameterss
   locationCoords?: string | null
   setTimes?: string | null

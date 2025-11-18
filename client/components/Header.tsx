@@ -47,17 +47,18 @@ function Header() {
       </div>
     )
   }
-  if (isAuthenticated && !data) {
-    return (
-      <div className="flex w-screen flex-row p-2">
-        <div className="flex w-1/2">
-          <h1>
-            <Link to={'/'}>Swamp Soul </Link> {location.pathname}
-          </h1>
-        </div>
-      </div>
-    )
-  } else {
+  // if (isAuthenticated && data) {
+  //   return (
+  //     <div className="flex w-screen flex-row p-2">
+  //       <div className="flex w-1/2">
+  //         <h1>
+  //           <Link to={'/'}>Swamp Soul </Link> {location.pathname}
+  //         </h1>
+  //       </div>
+  //     </div>
+  //   )
+  // }
+  else {
     return (
       <div className="flex w-screen flex-row p-2">
         <div className="flex w-1/2">

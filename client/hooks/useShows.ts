@@ -8,7 +8,7 @@ export function useShows() {
     queryFn: () => API.getShows(),
   })
   return {
-    shows: data?.shows ?? [], // ⬅️ Fix here
+    shows: data?.shows ?? [],
     ...query,
   }
 }
