@@ -39,3 +39,35 @@ export async function addUser({
       throw err
     })
 }
+
+interface EditUserFunction {
+  id: string
+  updatedUser: User
+  token: string
+}
+
+export async function editUser({
+  id,
+  updatedUser,
+  token,
+}: EditUserFunction): Promise<User> {
+  return request
+    .patch(`${rootURL}/users/edit-user/${id}`)
+    .send(updatedUser)
+    .set('Authorization', `Bearer ${token}`)
+    .catch((err) => {
+      console.error(err)
+      throw err
+    })
+}
+
+export async function checkUsernameTaken(username: string) {
+  const response = await request
+    .get(`${rootURL}/users/check-username/${username}`)
+    .catch((err) => {
+      console.error(err)
+      throw err
+    })
+
+  return response.body
+}

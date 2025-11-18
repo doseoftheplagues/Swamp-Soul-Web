@@ -22,6 +22,7 @@ export function useUser() {
   return {
     ...query,
     add: useAddUser(),
+    update: useUpdateUser(),
   }
 }
 
@@ -41,4 +42,8 @@ export function useUserMutation<TData = unknown, TVariables = unknown>(
 
 function useAddUser() {
   return useUserMutation(API.addUser)
+}
+
+function useUpdateUser() {
+  return useUserMutation(API.editUser)
 }

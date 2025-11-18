@@ -1,6 +1,6 @@
 import { Router } from 'express'
 import * as db from '../db/upcomingShows.ts'
-import checkJwt from '../../auth0.ts'
+import checkJwt, { JwtRequest } from '../../auth0.ts'
 
 const router = Router()
 
@@ -28,12 +28,24 @@ router.get('/:id', async (req, res) => {
 })
 
 // POST localhost:3000/api/v1/upcomingShows
-router.post('/', checkJwt, async (req, res) => {
+router.post('/', checkJwt, async (req: JwtRequest, res) => {
   try {
     const showData = req.body
-    await db.addUpcomingShow(showData)
+    const userId = req.auth?.sub
+
+    if (!userId) {
+      return res
+        .status(401)
+        .json({ message: 'Authentication error: User ID not found' })
+    }
+
+    const newShowData = {
+      ...showData,
+      userId: userId,
+    }
+
+    await db.addUpcomingShow(newShowData)
     res.sendStatus(201)
-    console.log('added' + showData)
   } catch (error) {
     console.log(error)
     res.status(500).json({ message: 'Something went wrong posting show' })

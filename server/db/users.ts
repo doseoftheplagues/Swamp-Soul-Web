@@ -15,3 +15,13 @@ export async function addUser(newUser: User): Promise<UserData[]> {
     .insert(newUser)
     .returning([...columns])
 }
+
+export async function usernameTakenCheck(username: string) {
+  const result = await db('users').where('username', username).first()
+  return !!result
+}
+
+export async function editUser(userData: User, userId: string) {
+  const result = await db('users').where('authId', userId).update(userData)
+  return result
+}

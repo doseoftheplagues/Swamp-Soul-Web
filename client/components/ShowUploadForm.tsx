@@ -12,6 +12,7 @@ export function ShowUploadForm() {
   const [formData, setFormData] = useState({
     date: new Date(),
     doorsTime: '',
+    price: '',
     performers: '',
     locationName: '',
     wheelchairAccessible: '',
@@ -28,7 +29,7 @@ export function ShowUploadForm() {
   const addShowMutation = useAddUpcomingShow()
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>,
   ) => {
     const { name, value } = e.target
     setFormData((previousData) => ({
@@ -50,6 +51,7 @@ export function ShowUploadForm() {
     e.preventDefault()
     if (!isAuthenticated) {
       alert('You need to log in to submit shows')
+      return
     }
     const token = await getAccessTokenSilently()
     const submissionData = {
@@ -59,7 +61,7 @@ export function ShowUploadForm() {
       bathroomsNearby: formData.bathroomsNearby === 'true',
       maxCapacity: parseInt(formData.maxCapacity, 10) || 0,
     }
-    addShowMutation.mutate(submissionData, token)
+    addShowMutation.mutate({ showData: submissionData, token })
     navigate('/upcomingshows')
   }
 
@@ -82,6 +84,16 @@ export function ShowUploadForm() {
           id="doorsTime"
           name="doorsTime"
           value={formData.doorsTime}
+          onChange={handleChange}
+        ></input>
+        <br></br>
+        <label htmlFor="price">Price:</label>
+        <br></br>
+        <input
+          type="text"
+          id="price"
+          name="price"
+          value={formData.price}
           onChange={handleChange}
         ></input>
         <br></br>
