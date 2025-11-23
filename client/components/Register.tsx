@@ -40,11 +40,11 @@ export function Register() {
         return
       }
       const token = await getAccessTokenSilently()
-      add.mutate({ newUser: formData, token })
+      await add.mutateAsync({ newUser: formData, token })
       setUsernameIsTaken(false)
       navigate('/profile')
     } catch (error) {
-      console.error('Failed to get access token:', error)
+      console.error('Failed to create user or get access token:', error)
     }
   }
 
