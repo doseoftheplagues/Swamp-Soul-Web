@@ -3,6 +3,7 @@ import { useUser } from '../hooks/useUsers'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router'
 import * as API from '../apis/users'
+import * as Form from '@radix-ui/react-form'
 
 const EditProfile = () => {
   const { user, isAuthenticated, isLoading, getAccessTokenSilently } =
@@ -79,50 +80,86 @@ const EditProfile = () => {
     return (
       <div>
         <h2>Edit Profile</h2>
-        <form onSubmit={handleSubmit}>
+        <Form.Root onSubmit={handleSubmit}>
           {userNameIsTaken && <p>That username is already taken</p>}
-          <label htmlFor="username">Username</label>
-          <br></br>
-          <input
-            type="text"
-            className="w-90"
-            id="username"
-            name="username"
-            value={formData.username}
-            onChange={handleChange}
-          ></input>
-          <br></br>
-          <label htmlFor="bio">Bio</label>
-          <br></br>
-          <textarea
-            className="w-90"
-            rows={3}
-            id="bio"
-            name="bio"
-            value={formData.bio}
-            onChange={handleChange}
-          ></textarea>
-          <br></br>
-          <label htmlFor="status">Status</label>
-          <br></br>
-          <input
-            type="text"
-            className="w-90"
-            id="status"
-            name="status"
-            value={formData.status}
-            onChange={handleChange}
-          ></input>
-          <br></br>
-          <input
-            type="submit"
-            className="submitButton"
-            value={update.isLoading ? 'Updating...' : 'Submit'}
-            disabled={update.isLoading}
-          />
-        </form>
+          <Form.Field name="username">
+            <div>
+              <Form.Label>Username</Form.Label>
+              <br />
+              <Form.Message match="valueMissing">
+                Please enter your username
+              </Form.Message>
+            </div>
+            <Form.Control asChild>
+              <input
+                type="text"
+                className="w-90"
+                name="username"
+                value={formData.username}
+                onChange={handleChange}
+                required
+              />
+            </Form.Control>
+          </Form.Field>
+          <br />
+          <Form.Field name="bio">
+            <div>
+              <Form.Label>Bio</Form.Label>
+              <br />
+              <Form.Message match="valueMissing">
+                Please enter your bio
+              </Form.Message>
+            </div>
+            <Form.Control asChild>
+              <textarea
+                className="w-90"
+                rows={3}
+                name="bio"
+                value={formData.bio}
+                onChange={handleChange}
+                required
+              />
+            </Form.Control>
+          </Form.Field>
+          <br />
+          <Form.Field name="status">
+            <div>
+              <Form.Label>Status</Form.Label>
+              <br />
+              <Form.Message match="valueMissing">
+                Please enter your status
+              </Form.Message>
+            </div>
+            <Form.Control asChild>
+              <input
+                type="text"
+                className="w-90"
+                name="status"
+                value={formData.status}
+                onChange={handleChange}
+                required
+              />
+            </Form.Control>
+          </Form.Field>
+          <br />
+          <Form.Submit asChild>
+            <button
+              className="submitButton"
+              disabled={
+                update.isPending ||
+                !formData.username ||
+                !formData.bio ||
+                !formData.status
+              }
+            >
+              {update.isPending ? 'Updating...' : 'Submit'}
+            </button>
+          </Form.Submit>
+        </Form.Root>
       </div>
     )
+  } else {
+    return <p>Log in to edit profile</p>
   }
 }
 

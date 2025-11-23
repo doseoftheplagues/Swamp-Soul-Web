@@ -1,10 +1,17 @@
 import DatePicker from 'react-date-picker'
-import { useState } from 'react'
+import { useState, forwardRef } from 'react'
 import { useAddUpcomingShow } from '../hooks/useUpcomingShows'
 import 'react-date-picker/dist/DatePicker.css'
 import 'react-calendar/dist/Calendar.css'
 import { useNavigate } from 'react-router'
 import { useAuth0 } from '@auth0/auth0-react'
+import * as Form from '@radix-ui/react-form'
+import * as Select from '@radix-ui/react-select'
+import {
+  CheckIcon,
+  ChevronDownIcon,
+  ChevronUpIcon,
+} from '@radix-ui/react-icons'
 
 export function ShowUploadForm() {
   const navigate = useNavigate()
@@ -29,9 +36,16 @@ export function ShowUploadForm() {
   const addShowMutation = useAddUpcomingShow()
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>,
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
     const { name, value } = e.target
+    setFormData((previousData) => ({
+      ...previousData,
+      [name]: value,
+    }))
+  }
+
+  const handleSelectChange = (name: string) => (value: string) => {
     setFormData((previousData) => ({
       ...previousData,
       [name]: value,
@@ -65,171 +79,377 @@ export function ShowUploadForm() {
     navigate('/upcomingshows')
   }
 
-  return (
-    <div>
-      <h1>Required info</h1>
-      <form onSubmit={handleSubmit}>
-        <label htmlFor="date">Date:</label>
-        <br></br>
-        <DatePicker
-          id="date"
-          onChange={handleDateChange}
-          value={formData.date}
-        />
-        <br></br>
-        <label htmlFor="doorsTime">Doors open at:</label>
-        <br></br>
-        <input
-          type="text"
-          id="doorsTime"
-          name="doorsTime"
-          value={formData.doorsTime}
-          onChange={handleChange}
-        ></input>
-        <br></br>
-        <label htmlFor="price">Price:</label>
-        <br></br>
-        <input
-          type="text"
-          id="price"
-          name="price"
-          value={formData.price}
-          onChange={handleChange}
-        ></input>
-        <br></br>
-        <label htmlFor="performers">Performers:</label>
-        <br></br>
-        <textarea
-          className="w-90"
-          rows={3}
-          id="performers"
-          name="performers"
-          value={formData.performers}
-          onChange={handleChange}
-        ></textarea>
-        <br></br>
-        <label htmlFor="locationName">Location:</label>
-        <br></br>
-        <input
-          type="text"
-          id="locationName"
-          name="locationName"
-          value={formData.locationName}
-          onChange={handleChange}
-        ></input>
-        <br></br>
-        <label htmlFor="noiseLevel">Noise level:</label>
-        <br></br>
+  const requiredFields: (keyof typeof formData)[] = [
+    'doorsTime',
+    'price',
+    'performers',
+    'locationName',
+    'noiseLevel',
+    'wheelchairAccessible',
+    'bathroomsNearby',
+    'mobilityAccessible',
+  ]
 
-        <select
-          id="noiseLevel"
-          name="noiseLevel"
-          value={formData.noiseLevel}
-          onChange={handleChange}
+  const isFormInvalid =
+    requiredFields.some((field) => !formData[field]) || !formData.date
+
+  return (
+    <div className="mx-auto max-w-md p-4">
+      <h1 className="mb-4 text-2xl font-bold">Required info</h1>
+      <Form.Root onSubmit={handleSubmit} className="space-y-4">
+        <Form.Field name="date" className="mb-4">
+          <Form.Label className="mb-1 block text-sm font-medium text-gray-700">
+            Date:
+          </Form.Label>
+          <DatePicker
+            id="date"
+            onChange={handleDateChange}
+            value={formData.date}
+            required
+            className="focus:ring-opacity-50 mt-1 block w-full rounded-md border-gray-300 px-3 py-2 shadow-sm focus:border-green-300 focus:ring focus:ring-green-200"
+          />
+        </Form.Field>
+
+        <Form.Field name="doorsTime" className="mb-4">
+          <Form.Label className="mb-1 block text-sm font-medium text-gray-700">
+            Doors open at:
+          </Form.Label>
+          <Form.Message
+            match="valueMissing"
+            className="mt-1 text-xs text-red-500"
+          >
+            Please enter a time
+          </Form.Message>
+          <Form.Control asChild>
+            <input
+              type="text"
+              name="doorsTime"
+              value={formData.doorsTime}
+              onChange={handleChange}
+              required
+              className="focus:ring-opacity-50 focus:border-swamp-green-300 mt-1 block w-full rounded-md border-gray-300 px-3 py-2 shadow-sm focus:ring focus:ring-green-200"
+            />
+          </Form.Control>
+        </Form.Field>
+
+        <Form.Field name="price" className="mb-4">
+          <Form.Label className="mb-1 block text-sm font-medium text-gray-700">
+            Price:
+          </Form.Label>
+          <Form.Message
+            match="valueMissing"
+            className="mt-1 text-xs text-red-500"
+          >
+            Please enter a price
+          </Form.Message>
+          <Form.Control asChild>
+            <input
+              type="text"
+              name="price"
+              value={formData.price}
+              onChange={handleChange}
+              required
+              className="focus:ring-opacity-50 mt-1 block w-full rounded-md border-gray-300 px-3 py-2 shadow-sm focus:border-green-300 focus:ring focus:ring-green-200"
+            />
+          </Form.Control>
+        </Form.Field>
+
+        <Form.Field name="performers" className="mb-4">
+          <Form.Label className="mb-1 block text-sm font-medium text-gray-700">
+            Performers:
+          </Form.Label>
+          <Form.Message
+            match="valueMissing"
+            className="mt-1 text-xs text-red-500"
+          >
+            Please enter performers
+          </Form.Message>
+          <Form.Control asChild>
+            <textarea
+              className="focus:ring-opacity-50 mt-1 block w-full rounded-md border-gray-300 px-3 py-2 shadow-sm focus:border-green-300 focus:ring focus:ring-green-200"
+              name="performers"
+              value={formData.performers}
+              onChange={handleChange}
+              required
+            />
+          </Form.Control>
+        </Form.Field>
+
+        <Form.Field name="locationName" className="mb-4">
+          <Form.Label className="mb-1 block text-sm font-medium text-gray-700">
+            Location:
+          </Form.Label>
+          <Form.Message
+            match="valueMissing"
+            className="mt-1 text-xs text-red-500"
+          >
+            Please enter a location
+          </Form.Message>
+          <Form.Control asChild>
+            <input
+              type="text"
+              name="locationName"
+              value={formData.locationName}
+              onChange={handleChange}
+              required
+              className="focus:ring-opacity-50 mt-1 block w-full rounded-md border-gray-300 px-3 py-2 shadow-sm focus:border-green-300 focus:ring focus:ring-green-200"
+            />
+          </Form.Control>
+        </Form.Field>
+
+        <Form.Field name="noiseLevel" className="mb-4">
+          <Form.Label className="mb-1 block text-sm font-medium text-gray-700">
+            Noise level:
+          </Form.Label>
+          <Select.Root
+            value={formData.noiseLevel}
+            onValueChange={handleSelectChange('noiseLevel')}
+            required
+          >
+            <Select.Trigger className="focus:ring-opacity-50 mt-1 flex w-full items-center justify-between rounded-md border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm focus:border-green-300 focus:ring focus:ring-green-200">
+              <Select.Value placeholder="Select noise level" />
+              <Select.Icon className="h-4 w-4 text-gray-400">
+                <ChevronDownIcon />
+              </Select.Icon>
+            </Select.Trigger>
+            <Select.Portal>
+              <Select.Content className="z-10 rounded-md bg-white py-1 shadow-lg">
+                <Select.ScrollUpButton className="flex h-6 items-center justify-center bg-white text-gray-700">
+                  <ChevronUpIcon />
+                </Select.ScrollUpButton>
+                <Select.Viewport className="p-1">
+                  <SelectItem value="Low">Low / safe</SelectItem>
+                  <SelectItem value="Medium">Medium</SelectItem>
+                  <SelectItem value="Loud">Loud (Bring Earplugs)</SelectItem>
+                </Select.Viewport>
+                <Select.ScrollDownButton className="flex h-6 items-center justify-center bg-white text-gray-700">
+                  <ChevronDownIcon />
+                </Select.ScrollDownButton>
+              </Select.Content>
+            </Select.Portal>
+          </Select.Root>
+          <Form.Message
+            match="valueMissing"
+            className="mt-1 text-xs text-red-500"
+          >
+            Please select a noise level
+          </Form.Message>
+        </Form.Field>
+
+        <Form.Field name="wheelchairAccessible" className="mb-4">
+          <Form.Label className="mb-1 block text-sm font-medium text-gray-700">
+            Is it wheelchair accessible? :
+          </Form.Label>
+          <Select.Root
+            value={String(formData.wheelchairAccessible)}
+            onValueChange={handleSelectChange('wheelchairAccessible')}
+            required
+          >
+            <Select.Trigger className="focus:ring-opacity-50 mt-1 flex w-full items-center justify-between rounded-md border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm focus:border-green-300 focus:ring focus:ring-green-200">
+              <Select.Value placeholder="Select an option" />
+              <Select.Icon className="h-4 w-4 text-gray-400">
+                <ChevronDownIcon />
+              </Select.Icon>
+            </Select.Trigger>
+            <Select.Portal>
+              <Select.Content className="z-10 rounded-md bg-white py-1 shadow-lg">
+                <Select.ScrollUpButton className="flex h-6 items-center justify-center bg-white text-gray-700">
+                  <ChevronUpIcon />
+                </Select.ScrollUpButton>
+                <Select.Viewport className="p-1">
+                  <SelectItem value="true">Yes</SelectItem>
+                  <SelectItem value="false">No</SelectItem>
+                </Select.Viewport>
+                <Select.ScrollDownButton className="flex h-6 items-center justify-center bg-white text-gray-700">
+                  <ChevronDownIcon />
+                </Select.ScrollDownButton>
+              </Select.Content>
+            </Select.Portal>
+          </Select.Root>
+          <Form.Message
+            match="valueMissing"
+            className="mt-1 text-xs text-red-500"
+          >
+            Please select an option
+          </Form.Message>
+        </Form.Field>
+
+        <Form.Field name="bathroomsNearby" className="mb-4">
+          <Form.Label className="mb-1 block text-sm font-medium text-gray-700">
+            Are there easily accessible bathrooms nearby? (If they are further
+            than a few minutes walk away select no):
+          </Form.Label>
+          <Select.Root
+            value={String(formData.bathroomsNearby)}
+            onValueChange={handleSelectChange('bathroomsNearby')}
+            required
+          >
+            <Select.Trigger className="focus:ring-opacity-50 mt-1 flex w-full items-center justify-between rounded-md border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm focus:border-green-300 focus:ring focus:ring-green-200">
+              <Select.Value placeholder="Select an option" />
+              <Select.Icon className="h-4 w-4 text-gray-400">
+                <ChevronDownIcon />
+              </Select.Icon>
+            </Select.Trigger>
+            <Select.Portal>
+              <Select.Content className="z-10 rounded-md bg-white py-1 shadow-lg">
+                <Select.ScrollUpButton className="flex h-6 items-center justify-center bg-white text-gray-700">
+                  <ChevronUpIcon />
+                </Select.ScrollUpButton>
+                <Select.Viewport className="p-1">
+                  <SelectItem value="true">Yes</SelectItem>
+                  <SelectItem value="false">No</SelectItem>
+                </Select.Viewport>
+                <Select.ScrollDownButton className="flex h-6 items-center justify-center bg-white text-gray-700">
+                  <ChevronDownIcon />
+                </Select.ScrollDownButton>
+              </Select.Content>
+            </Select.Portal>
+          </Select.Root>
+          <Form.Message
+            match="valueMissing"
+            className="mt-1 text-xs text-red-500"
+          >
+            Please select an option
+          </Form.Message>
+        </Form.Field>
+
+        <Form.Field name="mobilityAccessible" className="mb-4">
+          <Form.Label className="mb-1 block text-sm font-medium text-gray-700">
+            Is the location somewhere that someone with limited mobility could
+            easily access?
+          </Form.Label>
+          <Select.Root
+            value={String(formData.mobilityAccessible)}
+            onValueChange={handleSelectChange('mobilityAccessible')}
+            required
+          >
+            <Select.Trigger className="focus:ring-opacity-50 mt-1 flex w-full items-center justify-between rounded-md border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm focus:border-green-300 focus:ring focus:ring-green-200">
+              <Select.Value placeholder="Select an option" />
+              <Select.Icon className="h-4 w-4 text-gray-400">
+                <ChevronDownIcon />
+              </Select.Icon>
+            </Select.Trigger>
+            <Select.Portal>
+              <Select.Content className="z-10 rounded-md bg-white py-1 shadow-lg">
+                <Select.ScrollUpButton className="flex h-6 items-center justify-center bg-white text-gray-700">
+                  <ChevronUpIcon />
+                </Select.ScrollUpButton>
+                <Select.Viewport className="p-1">
+                  <SelectItem value="true">Yes</SelectItem>
+                  <SelectItem value="false">No</SelectItem>
+                </Select.Viewport>
+                <Select.ScrollDownButton className="flex h-6 items-center justify-center bg-white text-gray-700">
+                  <ChevronDownIcon />
+                </Select.ScrollDownButton>
+              </Select.Content>
+            </Select.Portal>
+          </Select.Root>
+          <Form.Message
+            match="valueMissing"
+            className="mt-1 text-xs text-red-500"
+          >
+            Please select an option
+          </Form.Message>
+        </Form.Field>
+
+        <h2 className="mt-6 mb-4 text-xl font-bold">Extra info (Optional)</h2>
+        <label
+          htmlFor="locationCoords"
+          className="mb-1 block text-sm font-medium text-gray-700"
         >
-          <option value="Low">Low / safe</option>
-          <option value="Medium">Medium</option>
-          <option value="Loud">Loud (Bring Earplugs)</option>
-        </select>
-        <br></br>
-        <label htmlFor="wheelchairAccessible">
-          Is it wheelchair accessible? :
+          Location coordinates:
         </label>
-        <br></br>
-        <select
-          id="wheelchairAccessible"
-          name="wheelchairAccessible"
-          value={String(formData.wheelchairAccessible)}
-          onChange={handleChange}
-        >
-          <option value="true">Yes</option>
-          <option value="false">No</option>
-        </select>
-        <br></br>
-        <label htmlFor="bathroomsNearby">
-          Are there easily accessible bathrooms nearby? (If they are further
-          than a few minutes walk away select no):
-        </label>
-        <br></br>
-        <select
-          id="bathroomsNearby"
-          name="bathroomsNearby"
-          value={String(formData.bathroomsNearby)}
-          onChange={handleChange}
-        >
-          <option value="true">Yes</option>
-          <option value="false">No</option>
-        </select>
-        <br></br>
-        <label htmlFor="mobility">
-          Is the location somewhere that someone with limited mobility could
-          easily access?
-        </label>
-        <br></br>
-        <select
-          id="mobility"
-          name="mobilityAccessible"
-          value={String(formData.mobilityAccessible)}
-          onChange={handleChange}
-        >
-          <option value="true">Yes</option>
-          <option value="false">No</option>
-        </select>
-        <br></br>
-        <h2>Extra info (Optional)</h2>
-        <br></br>
-        <label htmlFor="locationCoords">Location coordinates:</label>
-        <br></br>
         <input
           type="text"
           id="locationCoords"
           name="locationCoords"
           value={formData.locationCoords}
           onChange={handleChange}
-        ></input>
-        <br></br>
-        <label htmlFor="setTimes">Set times:</label>
-        <br></br>
+          className="focus:ring-opacity-50 mt-1 block w-full rounded-md border-gray-300 px-3 py-2 shadow-sm focus:border-green-300 focus:ring focus:ring-green-200"
+        />
+        <label
+          htmlFor="setTimes"
+          className="mb-1 block text-sm font-medium text-gray-700"
+        >
+          Set times:
+        </label>
         <input
           type="text"
           id="setTimes"
           name="setTimes"
           value={formData.setTimes}
           onChange={handleChange}
-        ></input>
-        <br></br>
-        <label htmlFor="ticketsLink">Link to buy tickets:</label>
-        <br></br>
+          className="focus:ring-opacity-50 mt-1 block w-full rounded-md border-gray-300 px-3 py-2 shadow-sm focus:border-green-300 focus:ring focus:ring-green-200"
+        />
+        <label
+          htmlFor="ticketsLink"
+          className="mb-1 block text-sm font-medium text-gray-700"
+        >
+          Link to buy tickets:
+        </label>
         <input
           type="text"
           id="ticketsLink"
           name="ticketsLink"
           value={formData.ticketsLink}
           onChange={handleChange}
-        ></input>
-        <br></br>
-        <label htmlFor="description">Description / bios:</label>
-        <br></br>
+          className="focus:ring-opacity-50 focus:border-swamp-green-200 mt-1 block w-full rounded-md border-gray-300 px-3 py-2 shadow-sm focus:ring focus:ring-green-200"
+        />
+        <label
+          htmlFor="description"
+          className="mb-1 block text-sm font-medium text-gray-700"
+        >
+          Description / bios:
+        </label>
         <input
           type="text"
           id="description"
           name="description"
           value={formData.description}
           onChange={handleChange}
-        ></input>
-        <br></br>
-        <label htmlFor="maxCapacity">Max Capacity:</label>
-        <br></br>
+          className="focus:ring-opacity-50 focus:border-primary-200 mt-1 block w-full rounded-md border-gray-300 px-3 py-2 shadow-sm focus:ring focus:ring-green-200"
+        />
+        <label
+          htmlFor="maxCapacity"
+          className="mb-1 block text-sm font-medium text-gray-700"
+        >
+          Max Capacity:
+        </label>
         <input
           type="number"
           id="maxCapacity"
           name="maxCapacity"
           value={formData.maxCapacity}
           onChange={handleChange}
-        ></input>
-        <br></br>
-        <input type="submit" className="submitButton" value="Submit" />
-      </form>
+          className="focus:ring-opacity-50 mt-1 block w-full rounded-md border-gray-300 px-3 py-2 shadow-sm focus:border-green-300 focus:ring focus:ring-green-200"
+        />
+        <Form.Submit asChild>
+          <button
+            className="mt-6 inline-flex w-full justify-center rounded-md border border-transparent bg-green-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-green-700 focus:ring-2 focus:ring-green-500 focus:ring-offset-2 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+            disabled={isFormInvalid}
+          >
+            Submit
+          </button>
+        </Form.Submit>
+      </Form.Root>
     </div>
   )
 }
+
+const SelectItem = forwardRef<HTMLDivElement, Select.SelectItemProps>(
+  ({ children, ...props }, forwardedRef) => {
+    return (
+      <Select.Item
+        className="data-highlighted:bg-swamp-green-300 relative flex cursor-default items-center px-3 py-2 text-sm select-none data-highlighted:text-white data-highlighted:outline-none"
+        {...props}
+        ref={forwardedRef}
+      >
+        <Select.ItemText>{children}</Select.ItemText>
+        <Select.ItemIndicator className="absolute left-2 inline-flex items-center text-white">
+          <CheckIcon className="h-4 w-4" />
+        </Select.ItemIndicator>
+      </Select.Item>
+    )
+  },
+)
+SelectItem.displayName = 'SelectItem'

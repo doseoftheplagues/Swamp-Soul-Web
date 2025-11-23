@@ -10,6 +10,7 @@ import { ShowEditForm } from './components/ShowEditForm'
 import { UpcomingShows } from './components/UpcomingShows'
 import { Register } from './components/Register'
 import EditProfile from './components/EditProfile'
+import NotFound from './components/NotFound'
 
 // const routes = createRoutesFromElements(<Route index element={<App />} />)
 
@@ -24,6 +25,7 @@ const routes = createRoutesFromElements(
     <Route path="/showeditform/:id" element={<ShowEditForm />} />
     <Route path="/upcomingshows" element={<UpcomingShows />} />
     <Route path="/archive" element={<Archive />} />
+    <Route path="*" element={<NotFound />} />
   </Route>,
 )
 
