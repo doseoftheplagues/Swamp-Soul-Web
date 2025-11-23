@@ -6,7 +6,7 @@ const db = connection
 const columns = ['authId', 'username', 'bio', 'status', 'email']
 
 export async function getUserById(id: string) {
-  const result = await db('users').where('authid', id).first()
+  const result = await db('users').where('authId', id).first()
   return result
 }
 
