@@ -5,6 +5,7 @@ import {
 import { UpcomingShow } from '../../models/upcomingShow'
 import { useNavigate } from 'react-router'
 import { useAuth0 } from '@auth0/auth0-react'
+import * as AlertDialog from '@radix-ui/react-alert-dialog'
 
 export function UpcomingShows() {
   const { data, isLoading, isError } = useUpcomingShows()
@@ -57,21 +58,28 @@ export function UpcomingShows() {
       {data.map((show: UpcomingShow) => (
         <div
           key={show.id}
-          className="m-1 flex flex-row border-2 border-b-stone-500 bg-teal-50 p-1 sm:p-5"
+          className="m-1 flex flex-row items-start gap-4 sm:h-65 sm:p-5"
         >
-          <div>
+          <div className="w-auto">
             <img
-              className="h-35 sm:h-65"
+              className="h-50 object-contain"
               src="./posters/valhallaJuly10th.jpg"
               alt="temp poster"
             ></img>
           </div>
-          <div>
-            <h1>{show.locationName}</h1>
-            <p>
-              {show.date} {show.doorsTime}
-            </p>
-            <p>{show.performers}</p>
+          <div className="flex flex-col">
+            <div>
+              <p>
+                {show.date} {show.doorsTime}
+              </p>
+            </div>
+            <div>
+              <p>{show.performers}</p>
+            </div>
+            <div>
+              <h1>{show.locationName}</h1>
+            </div>
+
             {/* {show.description && <p>{show.description} </p>}
 
             {show.setTimes && <p>Set times: {show.setTimes}</p>} */}
@@ -106,9 +114,47 @@ export function UpcomingShows() {
             )} */}
             {isAuthenticated && (
               <div>
-                <button onClick={() => handleDeleteClick(show.id)}>
-                  Delete show
-                </button>
+                <AlertDialog.Root>
+                  <AlertDialog.Trigger asChild>
+                    <button
+                      className=""
+                      onClick={() => handleDeleteClick(show.id)}
+                    >
+                      Delete show
+                    </button>
+                  </AlertDialog.Trigger>
+                  <AlertDialog.Portal>
+                    <AlertDialog.Overlay className="AlertDialogOverlay" />
+                    <AlertDialog.Content className="AlertDialogContent">
+                      <AlertDialog.Title className="AlertDialogTitle">
+                        Are you sure?
+                      </AlertDialog.Title>
+                      <AlertDialog.Description className="AlertDialogDescription">
+                        This action cannot be undone. This will permanently
+                        delete this show and its data from our server. If the
+                        show is cancelled please select cancel instead to notify
+                        attendees of the change.
+                      </AlertDialog.Description>
+                      <div
+                        style={{
+                          display: 'flex',
+                          gap: 25,
+                          justifyContent: 'flex-end',
+                        }}
+                      >
+                        <AlertDialog.Cancel asChild>
+                          <button className="Button mauve">Cancel</button>
+                        </AlertDialog.Cancel>
+                        <AlertDialog.Action asChild>
+                          <button className="Button red">
+                            Yes, delete show
+                          </button>
+                        </AlertDialog.Action>
+                      </div>
+                    </AlertDialog.Content>
+                  </AlertDialog.Portal>
+                </AlertDialog.Root>
+                <br />
                 <button onClick={() => handleEditClick(show.id)}>Edit</button>
               </div>
             )}

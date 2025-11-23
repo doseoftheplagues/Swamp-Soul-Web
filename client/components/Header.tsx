@@ -36,12 +36,12 @@ function Header() {
   if (!isAuthenticated) {
     return (
       <div className="flex w-screen flex-row p-2">
-        <div className="flex w-1/2">
+        <div className="flex w-3/4 sm:w-1/2">
           <h1>
             <Link to={'/'}>Swamp Soul </Link> {location.pathname}
           </h1>
         </div>
-        <div className="flex w-1/2 justify-end">
+        <div className="flex w-1/4 justify-end sm:w-1/2">
           <LoginButton />
         </div>
       </div>
@@ -61,12 +61,12 @@ function Header() {
   else {
     return (
       <div className="flex w-screen flex-row p-2">
-        <div className="flex w-1/2">
+        <div className="flex w-3/4 sm:w-1/2">
           <h3>
             <Link to={'/'}>Swamp Soul </Link> {location.pathname}
           </h3>
         </div>
-        <div className="flex w-1/2 justify-end">
+        <div className="flex w-1/4 justify-end sm:w-1/2">
           <Link to={'/profile'}>Profile</Link>
         </div>
       </div>
