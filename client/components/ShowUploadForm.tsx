@@ -7,11 +7,8 @@ import { useNavigate } from 'react-router'
 import { useAuth0 } from '@auth0/auth0-react'
 import * as Form from '@radix-ui/react-form'
 import * as Select from '@radix-ui/react-select'
-import {
-  CheckIcon,
-  ChevronDownIcon,
-  ChevronUpIcon,
-} from '@radix-ui/react-icons'
+import { ChevronDownIcon, ChevronUpIcon } from '@radix-ui/react-icons'
+import DatePicker from 'react-date-picker'
 
 export function ShowUploadForm() {
   const navigate = useNavigate()
