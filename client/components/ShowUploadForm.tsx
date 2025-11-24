@@ -61,7 +61,9 @@ export function ShowUploadForm() {
     }
   }
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (
+    e: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
     e.preventDefault()
     if (!isAuthenticated) {
       alert('You need to log in to submit shows')
@@ -166,7 +168,7 @@ export function ShowUploadForm() {
           </Form.Message>
           <Form.Control asChild>
             <textarea
-              className="focus:ring-opacity-50 mt-1 block w-full rounded-md border-gray-300 px-3 py-2 shadow-sm focus:border-green-300 focus:ring focus:ring-green-200"
+              className="focus:ring-opacity-50 mt-1 block w-full rounded-md border-gray-300 px-3 py-2 shadow-sm"
               name="performers"
               value={formData.performers}
               onChange={handleChange}
@@ -206,7 +208,7 @@ export function ShowUploadForm() {
             onValueChange={handleSelectChange('noiseLevel')}
             required
           >
-            <Select.Trigger className="focus:ring-opacity-50 mt-1 flex w-full items-center justify-between rounded-md border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm focus:border-green-300 focus:ring focus:ring-green-200">
+            <Select.Trigger className="focus:ring-opacity-50 mt-1 flex w-full items-center justify-between rounded-md border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm focus:border-[#8f9779] focus:ring focus:ring-[#8f9779]">
               <Select.Value placeholder="Select noise level" />
               <Select.Icon className="h-4 w-4 text-gray-400">
                 <ChevronDownIcon />
@@ -245,7 +247,7 @@ export function ShowUploadForm() {
             onValueChange={handleSelectChange('wheelchairAccessible')}
             required
           >
-            <Select.Trigger className="focus:ring-opacity-50 mt-1 flex w-full items-center justify-between rounded-md border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm focus:border-green-300 focus:ring focus:ring-green-200">
+            <Select.Trigger className="focus:ring-opacity-50 mt-1 flex w-full items-center justify-between rounded-md border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm focus:border-[#8f9779] focus:ring focus:ring-[#8f9779]">
               <Select.Value placeholder="Select an option" />
               <Select.Icon className="h-4 w-4 text-gray-400">
                 <ChevronDownIcon />
@@ -284,7 +286,7 @@ export function ShowUploadForm() {
             onValueChange={handleSelectChange('bathroomsNearby')}
             required
           >
-            <Select.Trigger className="focus:ring-opacity-50 mt-1 flex w-full items-center justify-between rounded-md border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm focus:border-green-300 focus:ring focus:ring-green-200">
+            <Select.Trigger className="focus:ring-opacity-50 mt-1 flex w-full items-center justify-between rounded-md border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm focus:border-[#8f9779] focus:ring focus:ring-[#8f9779]">
               <Select.Value placeholder="Select an option" />
               <Select.Icon className="h-4 w-4 text-gray-400">
                 <ChevronDownIcon />
@@ -323,7 +325,7 @@ export function ShowUploadForm() {
             onValueChange={handleSelectChange('mobilityAccessible')}
             required
           >
-            <Select.Trigger className="focus:ring-opacity-50 mt-1 flex w-full items-center justify-between rounded-md border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm focus:border-green-300 focus:ring focus:ring-green-200">
+            <Select.Trigger className="focus:ring-opacity-50 mt-1 flex w-full items-center justify-between rounded-md border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm focus:border-[#8f9779] focus:ring focus:ring-[#8f9779]">
               <Select.Value placeholder="Select an option" />
               <Select.Icon className="h-4 w-4 text-gray-400">
                 <ChevronDownIcon />
@@ -407,7 +409,7 @@ export function ShowUploadForm() {
           name="description"
           value={formData.description}
           onChange={handleChange}
-          className="focus:ring-opacity-50 focus:border-primary-200 mt-1 block w-full rounded-md border-gray-300 px-3 py-2 shadow-sm focus:ring focus:ring-green-200"
+          className="focus:ring-opacity-50 focus:border-primary-200 mt-1 block w-full rounded-md border-gray-300 px-3 py-2 shadow-sm focus:border-[#8f9779] focus:ring-[#8f9779]"
         />
         <label
           htmlFor="maxCapacity"
@@ -421,11 +423,11 @@ export function ShowUploadForm() {
           name="maxCapacity"
           value={formData.maxCapacity}
           onChange={handleChange}
-          className="focus:ring-opacity-50 mt-1 block w-full rounded-md border-gray-300 px-3 py-2 shadow-sm focus:border-green-300 focus:ring focus:ring-green-200"
+          className="focus:ring-opacity-50 mt-1 block w-full rounded-md border-gray-300 px-3 py-2 shadow-sm focus:border-[#8f9779] focus:ring focus:ring-[#8f9779]"
         />
         <Form.Submit asChild>
           <button
-            className="mt-6 inline-flex w-full justify-center rounded-md border border-transparent bg-green-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-green-700 focus:ring-2 focus:ring-green-500 focus:ring-offset-2 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+            className="border-transparentpx-4 mt-6 inline-flex w-full justify-center rounded-md border bg-[#dad7c2] py-2 text-sm font-medium text-[#000000] shadow-sm focus:border-[#d1d5c7] focus:bg-[#c1bd9a] focus:ring-[#8f9779] focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
             disabled={isFormInvalid}
           >
             Submit
@@ -440,14 +442,12 @@ const SelectItem = forwardRef<HTMLDivElement, Select.SelectItemProps>(
   ({ children, ...props }, forwardedRef) => {
     return (
       <Select.Item
-        className="data-highlighted:bg-swamp-green-300 relative flex cursor-default items-center px-3 py-2 text-sm select-none data-highlighted:text-white data-highlighted:outline-none"
+        className="relative flex cursor-default items-center px-3 py-2 text-sm select-none data-highlighted:bg-[#dad7c2] data-highlighted:text-black data-highlighted:outline-none"
         {...props}
         ref={forwardedRef}
       >
         <Select.ItemText>{children}</Select.ItemText>
-        <Select.ItemIndicator className="absolute left-2 inline-flex items-center text-white">
-          <CheckIcon className="h-4 w-4" />
-        </Select.ItemIndicator>
+        <Select.ItemIndicator className="absolute left-2 inline-flex items-center text-white"></Select.ItemIndicator>
       </Select.Item>
     )
   },

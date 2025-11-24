@@ -1,11 +1,28 @@
 /** @type {import('tailwindcss').Config} */
 export default {
-  content: [
-    './index.html',
-    './client/**/*.{js,ts,jsx,tsx}',
-  ],
+  content: ['./index.html', './client/**/*.{js,ts,jsx,tsx}'],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        'swamp-green': {
+          100: '#dad7c2',
+          200: '#c1bd9a',
+          300: '#8f9779',
+          400: '#78866b',
+          700: '#646f58',
+          800: '#4d5d53',
+        },
+        'swamp-cream': {
+          100: '#faf8f1',
+          200: '#f2e8d9',
+        },
+        'swamp-pastel': {
+          100: '#d8cfc7',
+          200: '#e1bebe',
+          300: '#bdb5b9',
+        },
+      },
+    },
   },
   plugins: [],
 }

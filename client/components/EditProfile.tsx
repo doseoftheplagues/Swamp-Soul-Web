@@ -20,6 +20,12 @@ const EditProfile = () => {
   const navigate = useNavigate()
 
   useEffect(() => {
+    if (!userDb.isLoading && !userDb.data) {
+      navigate('/register')
+    }
+  }, [userDb.isLoading, userDb.data, navigate])
+
+  useEffect(() => {
     if (user && userDb.data) {
       setFormData({
         username: userDb.data.username,
@@ -78,8 +84,8 @@ const EditProfile = () => {
   }
   if (isAuthenticated) {
     return (
-      <div>
-        <h2>Edit Profile</h2>
+      <div className="mx-auto max-w-md p-4">
+        <h2 className="mb-2 text-xl">Edit Profile</h2>
         <Form.Root onSubmit={handleSubmit}>
           {userNameIsTaken && <p>That username is already taken</p>}
           <Form.Field name="username">
@@ -93,7 +99,7 @@ const EditProfile = () => {
             <Form.Control asChild>
               <input
                 type="text"
-                className="w-90"
+                className="w-full p-1"
                 name="username"
                 value={formData.username}
                 onChange={handleChange}
@@ -112,7 +118,7 @@ const EditProfile = () => {
             </div>
             <Form.Control asChild>
               <textarea
-                className="w-90"
+                className="w-full p-1"
                 rows={3}
                 name="bio"
                 value={formData.bio}
@@ -133,7 +139,7 @@ const EditProfile = () => {
             <Form.Control asChild>
               <input
                 type="text"
-                className="w-90"
+                className="w-full p-1"
                 name="status"
                 value={formData.status}
                 onChange={handleChange}
@@ -144,7 +150,7 @@ const EditProfile = () => {
           <br />
           <Form.Submit asChild>
             <button
-              className="submitButton"
+              className="text-md mt-6 inline-flex w-full justify-center rounded-md border-2 border-black bg-[#dad7c2] px-4 py-2 font-medium text-black shadow-sm focus:ring-offset-2 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
               disabled={
                 update.isPending ||
                 !formData.username ||

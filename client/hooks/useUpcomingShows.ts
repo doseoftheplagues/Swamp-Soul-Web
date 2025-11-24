@@ -59,8 +59,16 @@ export function useAddUpcomingShow() {
   return useUpcomingShowsMutation(mutationFn)
 }
 
+interface DeleteShowVariables {
+  id: number
+  token: string
+}
+
 export function useDeleteUpcomingShow() {
-  return useUpcomingShowsMutation(deleteUpcomingShow)
+  const mutationFn = (variables: DeleteShowVariables) => {
+    return deleteUpcomingShow(variables.id, variables.token)
+  }
+  return useUpcomingShowsMutation(mutationFn)
 }
 
 interface UpdateShowVariables {
