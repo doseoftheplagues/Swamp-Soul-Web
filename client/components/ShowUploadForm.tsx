@@ -1,5 +1,5 @@
-import DatePicker from 'react-date-picker'
-import { useState, forwardRef } from 'react'
+import { useUser } from '../hooks/useUsers'
+import { useEffect, useState, forwardRef } from 'react'
 import { useAddUpcomingShow } from '../hooks/useUpcomingShows'
 import 'react-date-picker/dist/DatePicker.css'
 import 'react-calendar/dist/Calendar.css'
@@ -16,6 +16,14 @@ import {
 export function ShowUploadForm() {
   const navigate = useNavigate()
   const { getAccessTokenSilently, isAuthenticated } = useAuth0()
+  const { data: userDb, isLoading: isUserLoading } = useUser()
+
+  useEffect(() => {
+    if (!isUserLoading && isAuthenticated && !userDb) {
+      navigate('/register')
+    }
+  }, [isUserLoading, isAuthenticated, userDb, navigate])
+
   const [formData, setFormData] = useState({
     date: new Date(),
     doorsTime: '',
