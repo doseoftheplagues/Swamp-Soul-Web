@@ -37,7 +37,7 @@ function Header() {
     return (
       <div className="flex w-screen flex-row p-2">
         <div className="flex w-3/4 sm:w-1/2">
-          <h1>
+          <h1 className="text-swamp-green-300">
             <Link to={'/'}>Swamp Soul </Link> {location.pathname}
           </h1>
         </div>
@@ -46,23 +46,22 @@ function Header() {
         </div>
       </div>
     )
-  }
-  // if (isAuthenticated && data) {
-  //   return (
-  //     <div className="flex w-screen flex-row p-2">
-  //       <div className="flex w-1/2">
-  //         <h1>
-  //           <Link to={'/'}>Swamp Soul </Link> {location.pathname}
-  //         </h1>
-  //       </div>
-  //     </div>
-  //   )
-  // }
-  else {
+  } else if (isAuthenticated && location.pathname == '/profile') {
     return (
       <div className="flex w-screen flex-row p-2">
         <div className="flex w-3/4 sm:w-1/2">
-          <h3>
+          <h3 className="text-swamp-green-300">
+            <Link to={'/'}>Swamp Soul </Link> {location.pathname}
+          </h3>
+        </div>
+        <div className="flex w-1/4 justify-end sm:w-1/2"></div>
+      </div>
+    )
+  } else {
+    return (
+      <div className="flex w-screen flex-row p-2">
+        <div className="flex w-3/4 sm:w-1/2">
+          <h3 className="text-swamp-green-300">
             <Link to={'/'}>Swamp Soul </Link> {location.pathname}
           </h3>
         </div>

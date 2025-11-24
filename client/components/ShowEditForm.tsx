@@ -1,4 +1,4 @@
-import DatePicker from 'react-date-picker'
+import DatePicker, { DatePickerProps } from 'react-date-picker'
 import { useEffect, useState, forwardRef } from 'react'
 import {
   useGetUpcomingShowById,
@@ -11,7 +11,11 @@ import { useNavigate } from 'react-router'
 import { useAuth0 } from '@auth0/auth0-react'
 import * as Form from '@radix-ui/react-form'
 import * as Select from '@radix-ui/react-select'
-import { CheckIcon, ChevronDownIcon, ChevronUpIcon } from '@radix-ui/react-icons'
+import {
+  CheckIcon,
+  ChevronDownIcon,
+  ChevronUpIcon,
+} from '@radix-ui/react-icons'
 
 export function ShowEditForm() {
   const params = useParams()
@@ -118,11 +122,11 @@ export function ShowEditForm() {
     requiredFields.some((field) => !formData[field]) || !formData.date
 
   return (
-    <div className="max-w-md mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4">Required info</h1>
+    <div className="mx-auto max-w-md p-4">
+      <h1 className="mb-4 text-2xl font-bold">Required info</h1>
       <Form.Root onSubmit={handleSubmit} className="space-y-4">
         <Form.Field name="date" className="mb-4">
-          <Form.Label className="block text-sm font-medium text-gray-700 mb-1">
+          <Form.Label className="mb-1 block text-sm font-medium text-gray-700">
             Date:
           </Form.Label>
           <DatePicker
@@ -130,20 +134,23 @@ export function ShowEditForm() {
             onChange={handleDateChange}
             value={formData.date}
             required
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 px-3 py-2"
+            className="focus:ring-opacity-50 mt-1 block w-full rounded-md border-gray-300 px-3 py-2 shadow-sm focus:border-[#8f9779] focus:ring-[#8f9779]"
           />
         </Form.Field>
 
         <Form.Field name="doorsTime" className="mb-4">
-          <Form.Label className="block text-sm font-medium text-gray-700 mb-1">
+          <Form.Label className="mb-1 block text-sm font-medium text-gray-700">
             Doors open at:
           </Form.Label>
-          <Form.Message match="valueMissing" className="text-red-500 text-xs mt-1">
+          <Form.Message
+            match="valueMissing"
+            className="mt-1 text-xs text-red-500"
+          >
             Please enter a time
           </Form.Message>
           <Form.Control asChild>
             <textarea
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 px-3 py-2"
+              className="focus:ring-opacity-50 mt-1 block w-full rounded-md border-gray-300 px-3 py-2 shadow-sm focus:border-[#8f9779] focus:ring-[#8f9779]"
               name="doorsTime"
               value={formData.doorsTime}
               onChange={handleChange}
@@ -153,15 +160,18 @@ export function ShowEditForm() {
         </Form.Field>
 
         <Form.Field name="performers" className="mb-4">
-          <Form.Label className="block text-sm font-medium text-gray-700 mb-1">
+          <Form.Label className="mb-1 block text-sm font-medium text-gray-700">
             Performers:
           </Form.Label>
-          <Form.Message match="valueMissing" className="text-red-500 text-xs mt-1">
+          <Form.Message
+            match="valueMissing"
+            className="mt-1 text-xs text-red-500"
+          >
             Please enter performers
           </Form.Message>
           <Form.Control asChild>
             <input
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 px-3 py-2"
+              className="focus:ring-opacity-50 mt-1 block w-full rounded-md border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200"
               type="text"
               name="performers"
               value={formData.performers}
@@ -172,10 +182,13 @@ export function ShowEditForm() {
         </Form.Field>
 
         <Form.Field name="locationName" className="mb-4">
-          <Form.Label className="block text-sm font-medium text-gray-700 mb-1">
+          <Form.Label className="mb-1 block text-sm font-medium text-gray-700">
             Location:
           </Form.Label>
-          <Form.Message match="valueMissing" className="text-red-500 text-xs mt-1">
+          <Form.Message
+            match="valueMissing"
+            className="mt-1 text-xs text-red-500"
+          >
             Please enter a location
           </Form.Message>
           <Form.Control asChild>
@@ -185,13 +198,13 @@ export function ShowEditForm() {
               value={formData.locationName}
               onChange={handleChange}
               required
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 px-3 py-2"
+              className="focus:ring-opacity-50 mt-1 block w-full rounded-md border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200"
             />
           </Form.Control>
         </Form.Field>
 
         <Form.Field name="noiseLevel" className="mb-4">
-          <Form.Label className="block text-sm font-medium text-gray-700 mb-1">
+          <Form.Label className="mb-1 block text-sm font-medium text-gray-700">
             Noise level:
           </Form.Label>
           <Select.Root
@@ -199,15 +212,15 @@ export function ShowEditForm() {
             onValueChange={handleSelectChange('noiseLevel')}
             required
           >
-            <Select.Trigger className="flex items-center justify-between mt-1 w-full rounded-md border border-gray-300 shadow-sm px-3 py-2 bg-white text-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+            <Select.Trigger className="focus:ring-opacity-50 mt-1 flex w-full items-center justify-between rounded-md border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200">
               <Select.Value placeholder="Select noise level" />
               <Select.Icon className="h-4 w-4 text-gray-400">
                 <ChevronDownIcon />
               </Select.Icon>
             </Select.Trigger>
             <Select.Portal>
-              <Select.Content className="bg-white rounded-md shadow-lg py-1 z-10">
-                <Select.ScrollUpButton className="flex items-center justify-center h-6 bg-white text-gray-700">
+              <Select.Content className="z-10 rounded-md bg-white py-1 shadow-lg">
+                <Select.ScrollUpButton className="flex h-6 items-center justify-center bg-white text-gray-700">
                   <ChevronUpIcon />
                 </Select.ScrollUpButton>
                 <Select.Viewport className="p-1">
@@ -215,19 +228,22 @@ export function ShowEditForm() {
                   <SelectItem value="Medium">Medium</SelectItem>
                   <SelectItem value="Loud">Loud (Bring Earplugs)</SelectItem>
                 </Select.Viewport>
-                <Select.ScrollDownButton className="flex items-center justify-center h-6 bg-white text-gray-700">
+                <Select.ScrollDownButton className="flex h-6 items-center justify-center bg-white text-gray-700">
                   <ChevronDownIcon />
                 </Select.ScrollDownButton>
               </Select.Content>
             </Select.Portal>
           </Select.Root>
-          <Form.Message match="valueMissing" className="text-red-500 text-xs mt-1">
+          <Form.Message
+            match="valueMissing"
+            className="mt-1 text-xs text-red-500"
+          >
             Please select a noise level
           </Form.Message>
         </Form.Field>
 
         <Form.Field name="wheelchairAccessible" className="mb-4">
-          <Form.Label className="block text-sm font-medium text-gray-700 mb-1">
+          <Form.Label className="mb-1 block text-sm font-medium text-gray-700">
             Is it wheelchair accessible? :
           </Form.Label>
           <Select.Root
@@ -235,34 +251,37 @@ export function ShowEditForm() {
             onValueChange={handleSelectChange('wheelchairAccessible')}
             required
           >
-            <Select.Trigger className="flex items-center justify-between mt-1 w-full rounded-md border border-gray-300 shadow-sm px-3 py-2 bg-white text-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+            <Select.Trigger className="focus:ring-opacity-50 mt-1 flex w-full items-center justify-between rounded-md border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200">
               <Select.Value placeholder="Select an option" />
               <Select.Icon className="h-4 w-4 text-gray-400">
                 <ChevronDownIcon />
               </Select.Icon>
             </Select.Trigger>
             <Select.Portal>
-              <Select.Content className="bg-white rounded-md shadow-lg py-1 z-10">
-                <Select.ScrollUpButton className="flex items-center justify-center h-6 bg-white text-gray-700">
+              <Select.Content className="z-10 rounded-md bg-white py-1 shadow-lg">
+                <Select.ScrollUpButton className="flex h-6 items-center justify-center bg-white text-gray-700">
                   <ChevronUpIcon />
                 </Select.ScrollUpButton>
                 <Select.Viewport className="p-1">
                   <SelectItem value="true">Yes</SelectItem>
                   <SelectItem value="false">No</SelectItem>
                 </Select.Viewport>
-                <Select.ScrollDownButton className="flex items-center justify-center h-6 bg-white text-gray-700">
+                <Select.ScrollDownButton className="flex h-6 items-center justify-center bg-white text-gray-700">
                   <ChevronDownIcon />
                 </Select.ScrollDownButton>
               </Select.Content>
             </Select.Portal>
           </Select.Root>
-          <Form.Message match="valueMissing" className="text-red-500 text-xs mt-1">
+          <Form.Message
+            match="valueMissing"
+            className="mt-1 text-xs text-red-500"
+          >
             Please select an option
           </Form.Message>
         </Form.Field>
 
         <Form.Field name="bathroomsNearby" className="mb-4">
-          <Form.Label className="block text-sm font-medium text-gray-700 mb-1">
+          <Form.Label className="mb-1 block text-sm font-medium text-gray-700">
             Are there easily accessible bathrooms nearby? (If they are further
             than a few minutes walk away select no):
           </Form.Label>
@@ -271,34 +290,37 @@ export function ShowEditForm() {
             onValueChange={handleSelectChange('bathroomsNearby')}
             required
           >
-            <Select.Trigger className="flex items-center justify-between mt-1 w-full rounded-md border border-gray-300 shadow-sm px-3 py-2 bg-white text-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+            <Select.Trigger className="focus:ring-opacity-50 mt-1 flex w-full items-center justify-between rounded-md border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200">
               <Select.Value placeholder="Select an option" />
               <Select.Icon className="h-4 w-4 text-gray-400">
                 <ChevronDownIcon />
               </Select.Icon>
             </Select.Trigger>
             <Select.Portal>
-              <Select.Content className="bg-white rounded-md shadow-lg py-1 z-10">
-                <Select.ScrollUpButton className="flex items-center justify-center h-6 bg-white text-gray-700">
+              <Select.Content className="z-10 rounded-md bg-white py-1 shadow-lg">
+                <Select.ScrollUpButton className="flex h-6 items-center justify-center bg-white text-gray-700">
                   <ChevronUpIcon />
                 </Select.ScrollUpButton>
                 <Select.Viewport className="p-1">
                   <SelectItem value="true">Yes</SelectItem>
                   <SelectItem value="false">No</SelectItem>
                 </Select.Viewport>
-                <Select.ScrollDownButton className="flex items-center justify-center h-6 bg-white text-gray-700">
+                <Select.ScrollDownButton className="flex h-6 items-center justify-center bg-white text-gray-700">
                   <ChevronDownIcon />
                 </Select.ScrollDownButton>
               </Select.Content>
             </Select.Portal>
           </Select.Root>
-          <Form.Message match="valueMissing" className="text-red-500 text-xs mt-1">
+          <Form.Message
+            match="valueMissing"
+            className="mt-1 text-xs text-red-500"
+          >
             Please select an option
           </Form.Message>
         </Form.Field>
 
         <Form.Field name="mobilityAccessible" className="mb-4">
-          <Form.Label className="block text-sm font-medium text-gray-700 mb-1">
+          <Form.Label className="mb-1 block text-sm font-medium text-gray-700">
             Is the location somewhere that someone with limited mobility could
             easily access?
           </Form.Label>
@@ -307,80 +329,111 @@ export function ShowEditForm() {
             onValueChange={handleSelectChange('mobilityAccessible')}
             required
           >
-            <Select.Trigger className="flex items-center justify-between mt-1 w-full rounded-md border border-gray-300 shadow-sm px-3 py-2 bg-white text-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+            <Select.Trigger className="focus:ring-opacity-50 mt-1 flex w-full items-center justify-between rounded-md border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200">
               <Select.Value placeholder="Select an option" />
               <Select.Icon className="h-4 w-4 text-gray-400">
                 <ChevronDownIcon />
               </Select.Icon>
             </Select.Trigger>
             <Select.Portal>
-              <Select.Content className="bg-white rounded-md shadow-lg py-1 z-10">
-                <Select.ScrollUpButton className="flex items-center justify-center h-6 bg-white text-gray-700">
+              <Select.Content className="z-10 rounded-md bg-white py-1 shadow-lg">
+                <Select.ScrollUpButton className="flex h-6 items-center justify-center bg-white text-gray-700">
                   <ChevronUpIcon />
                 </Select.ScrollUpButton>
                 <Select.Viewport className="p-1">
                   <SelectItem value="true">Yes</SelectItem>
                   <SelectItem value="false">No</SelectItem>
                 </Select.Viewport>
-                <Select.ScrollDownButton className="flex items-center justify-center h-6 bg-white text-gray-700">
+                <Select.ScrollDownButton className="flex h-6 items-center justify-center bg-white text-gray-700">
                   <ChevronDownIcon />
                 </Select.ScrollDownButton>
               </Select.Content>
             </Select.Portal>
           </Select.Root>
-          <Form.Message match="valueMissing" className="text-red-500 text-xs mt-1">
+          <Form.Message
+            match="valueMissing"
+            className="mt-1 text-xs text-red-500"
+          >
             Please select an option
           </Form.Message>
         </Form.Field>
 
-        <h2 className="text-xl font-bold mt-6 mb-4">Extra info (Optional)</h2>
-        <label htmlFor="locationCoords" className="block text-sm font-medium text-gray-700 mb-1">Location coordinates:</label>
+        <h2 className="mt-6 mb-4 text-xl font-bold">Extra info (Optional)</h2>
+        <label
+          htmlFor="locationCoords"
+          className="mb-1 block text-sm font-medium text-gray-700"
+        >
+          Location coordinates:
+        </label>
         <input
           type="text"
           id="locationCoords"
           name="locationCoords"
           value={formData.locationCoords}
           onChange={handleChange}
-          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 px-3 py-2"
+          className="focus:ring-opacity-50 mt-1 block w-full rounded-md border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200"
         />
-        <label htmlFor="setTimes" className="block text-sm font-medium text-gray-700 mb-1">Set times:</label>
+        <label
+          htmlFor="setTimes"
+          className="mb-1 block text-sm font-medium text-gray-700"
+        >
+          Set times:
+        </label>
         <input
           type="text"
           id="setTimes"
           name="setTimes"
           value={formData.setTimes}
           onChange={handleChange}
-          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 px-3 py-2"
+          className="focus:ring-opacity-50 mt-1 block w-full rounded-md border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200"
         />
-        <label htmlFor="ticketsLink" className="block text-sm font-medium text-gray-700 mb-1">Link to buy tickets:</label>
+        <label
+          htmlFor="ticketsLink"
+          className="mb-1 block text-sm font-medium text-gray-700"
+        >
+          Link to buy tickets:
+        </label>
         <input
           type="text"
           id="ticketsLink"
           name="ticketsLink"
           value={formData.ticketsLink}
           onChange={handleChange}
-          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 px-3 py-2"
+          className="focus:ring-opacity-50 mt-1 block w-full rounded-md border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200"
         />
-        <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-1">Description / bios:</label>
+        <label
+          htmlFor="description"
+          className="mb-1 block text-sm font-medium text-gray-700"
+        >
+          Description / bios:
+        </label>
         <input
           type="text"
           id="description"
           name="description"
           value={formData.description}
           onChange={handleChange}
-          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 px-3 py-2"
+          className="focus:ring-opacity-50 mt-1 block w-full rounded-md border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200"
         />
-        <label htmlFor="maxCapacity" className="block text-sm font-medium text-gray-700 mb-1">Max Capacity:</label>
+        <label
+          htmlFor="maxCapacity"
+          className="mb-1 block text-sm font-medium text-gray-700"
+        >
+          Max Capacity:
+        </label>
         <input
           type="number"
           id="maxCapacity"
           name="maxCapacity"
           value={formData.maxCapacity}
           onChange={handleChange}
-          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 px-3 py-2"
+          className="focus:ring-opacity-50 mt-1 block w-full rounded-md border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200"
         />
         <Form.Submit asChild>
-          <button className="mt-6 w-full inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed" disabled={isFormInvalid}>
+          <button
+            className="mt-6 inline-flex w-full justify-center rounded-md bg-[#dad7c2] px-4 py-2 text-sm font-medium text-black shadow-sm focus:ring-offset-2 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+            disabled={isFormInvalid}
+          >
             Submit
           </button>
         </Form.Submit>
@@ -388,17 +441,18 @@ export function ShowEditForm() {
     </div>
   )
 }
-
 const SelectItem = forwardRef<HTMLDivElement, Select.SelectItemProps>(
   ({ children, ...props }, forwardedRef) => {
     return (
-      <Select.Item className="text-sm py-2 px-3 relative flex items-center cursor-default select-none data-[highlighted]:bg-indigo-600 data-[highlighted]:text-white data-[highlighted]:outline-none" {...props} ref={forwardedRef}>
+      <Select.Item
+        className="relative flex cursor-default items-center px-3 py-2 text-sm select-none data-highlighted:bg-[#dad7c2] data-highlighted:text-black data-highlighted:outline-none"
+        {...props}
+        ref={forwardedRef}
+      >
         <Select.ItemText>{children}</Select.ItemText>
-        <Select.ItemIndicator className="absolute left-2 inline-flex items-center text-white">
-          <CheckIcon className="h-4 w-4" />
-        </Select.ItemIndicator>
+        <Select.ItemIndicator className="absolute left-2 inline-flex items-center text-white"></Select.ItemIndicator>
       </Select.Item>
     )
-  }
+  },
 )
 SelectItem.displayName = 'SelectItem'

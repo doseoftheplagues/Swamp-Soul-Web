@@ -13,12 +13,18 @@ const Profile = () => {
     return <p>Log in to view your profile</p>
   }
   return isAuthenticated && user ? (
-    <div>
-      <p>{data?.username}</p>
+    <div className="p-4">
+      <div className="flex flex-row">
+        <p>{data?.username}</p>
+        <p className="pl-5 italic opacity-80">{user.email}</p>
+      </div>
+      <p className="text-sm">Bio</p>
       <p>{data?.bio}</p>
+
       <p>Status: {data?.status}</p>
-      <p>{user.email}</p>
-      <Link to={'/editprofile'}>Edit details</Link>
+      <button className="mt-1 inline-flex justify-center rounded-sm border border-black bg-[#dad7c2] p-1 text-sm font-medium text-black shadow-sm focus:ring-offset-2 focus:outline-none">
+        <Link to={'/editprofile'}>Edit details</Link>
+      </button>
     </div>
   ) : null
 }
