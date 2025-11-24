@@ -104,7 +104,7 @@ export function ShowEditForm() {
       bathroomsNearby: formData.bathroomsNearby === 'true',
       maxCapacity: parseInt(formData.maxCapacity, 10) || null,
     }
-    editShowMutation.mutate({ id: currentId, data: submissionData, token })
+    editShowMutation.mutate({ id: currentId, showData: submissionData, token })
     navigate('/upcomingshows')
   }
 
