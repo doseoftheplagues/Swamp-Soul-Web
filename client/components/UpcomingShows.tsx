@@ -7,12 +7,20 @@ import { useNavigate } from 'react-router'
 import { useAuth0 } from '@auth0/auth0-react'
 import * as AlertDialog from '@radix-ui/react-alert-dialog'
 import { Tooltip } from 'radix-ui'
+import { useState, useEffect } from 'react'
 
 export function UpcomingShows() {
   const { data, isLoading, isError } = useUpcomingShows()
   const deleteShowMutation = useDeleteUpcomingShow()
   const { getAccessTokenSilently, isAuthenticated } = useAuth0()
   const navigate = useNavigate()
+  const [currentData, setCurrentData] = useState<UpcomingShow[]>()
+
+  useEffect(() => {
+    if (data) {
+      setCurrentData(data)
+    }
+  }, [data])
 
   if (isLoading) {
     return (
@@ -162,9 +170,9 @@ export function UpcomingShows() {
 
   function formatDate(dateString: string) {
     return new Date(dateString).toLocaleDateString('en-NZ', {
-      weekday: 'long',
       day: 'numeric',
-      month: 'long',
+      month: 'numeric',
+      year: '2-digit',
     })
   }
 
@@ -180,138 +188,173 @@ export function UpcomingShows() {
     navigate(`/showeditform/${id}`)
   }
 
+  function handleSearch() {
+    console.log('searching! Yay!!')
+  }
+
+  function SearchBar() {
+    return (
+      <div className="ml-1 flex w-fit flex-row rounded-md border-2 border-black text-sm">
+        <form>
+          <input type="text" className="SearchInput rounded-bl-sm p-1"></input>
+          <button
+            onClick={() => handleSearch}
+            className="SearchButton rounded-r-sm p-1"
+          >
+            Search
+          </button>
+        </form>
+      </div>
+    )
+  }
+
   return (
     <div>
-      {data.map((show: UpcomingShow) => (
-        <div
-          key={show.id}
-          className="flex w-screen flex-row items-start gap-4 text-xs sm:h-auto sm:w-auto sm:p-2 sm:text-base"
-        >
-          <div className="flex w-screen flex-row border border-[#dad7c2] bg-[#f2e8d97e] sm:w-auto sm:border-0">
-            <div className="w-auto">
-              <img
-                className="h-40 object-contain sm:h-50"
-                src="./posters/valhallaJuly10th.jpg"
-                alt="temp poster"
-              ></img>
-            </div>
-            <div className="max-w-fill flex flex-col p-2 sm:w-auto sm:border sm:border-[#dad7c2]">
-              <div className="w-fill flex flex-row">
-                <div className="flex flex-col align-middle sm:max-w-3/4 sm:flex-row">
-                  <p className="align-middle">{formatDate(show.date)}</p>
-                  <p className="align-middle sm:ml-4">{show.doorsTime}</p>
+      <SearchBar />
+      <div className="upcomingShowsBox">
+        {currentData &&
+          currentData.map((show: UpcomingShow) => (
+            <div
+              key={show.id}
+              className="mb-2 flex w-screen flex-row items-start gap-4 text-sm text-wrap sm:h-auto sm:w-auto sm:p-2 sm:text-base"
+            >
+              <div className="flex w-screen flex-row border border-[#dad7c2] bg-[#f2e8d95c] sm:w-auto sm:border-0">
+                <div className="w-2/5 sm:w-auto">
+                  <img
+                    className="h-50 object-contain"
+                    src="./posters/valhallaJuly10th.jpg"
+                    alt="temp poster"
+                  ></img>
                 </div>
+                <div className="flex w-3/5 flex-col pt-1 pr-1 sm:w-auto sm:min-w-80 sm:border sm:border-[#dad7c2] sm:p-2">
+                  <div className="w-fill flex flex-row items-center">
+                    <div className="flex flex-row place-items-center sm:max-w-3/4">
+                      <p className="font-sans text-[#635e60]">
+                        {formatDate(show.date)}{' '}
+                      </p>
+                      <p className="ml-2 font-sans text-[#6f696b]">
+                        {show.doorsTime}
+                      </p>
+                    </div>
 
-                <div className="ml-8 flex h-fit w-fit flex-row border-2 border-[#4d5d53] sm:ml-20">
-                  {show.mobilityAccessible ? (
-                    <div className="bg-[#c1bd9a]">
-                      <MobilitySymbol />
-                    </div>
-                  ) : (
-                    <div className="bg-[#cf7c7c]">
-                      <MobilitySymbol />
-                    </div>
-                  )}
-                  {show.bathroomsNearby ? (
-                    <div className="bg-[#c1bd9a]">
-                      <BathroomSymbol />
-                    </div>
-                  ) : (
-                    <div className="bg-[#cf7c7c]">
-                      <BathroomSymbol />
-                    </div>
-                  )}
-                  {show.wheelchairAccessible ? (
-                    <div className="bg-[#c1bd9a]">
-                      <WheelchairSymbol />
-                    </div>
-                  ) : (
-                    <div className="bg-[#cf7c7c]">
-                      <WheelchairSymbol />
-                    </div>
-                  )}
-                </div>
-              </div>
-              <div>
-                <p>{show.performers}</p>
-              </div>
-              <div>
-                <h1>{show.locationName}</h1>
-              </div>
+                    <div className="ml-auto flex h-fit w-fit flex-row rounded-xs border border-[#4d5d53]">
+                      {show.mobilityAccessible ? (
+                        <div className="bg-[#c1bd9a]">
+                          <MobilitySymbol />
+                        </div>
+                      ) : (
+                        <div className="bg-[#cf7c7c]">
+                          <MobilitySymbol />
+                        </div>
+                      )}
 
-              {/* {show.description && <p>{show.description} </p>}
+                      {show.wheelchairAccessible ? (
+                        <div className="bg-[#c1bd9a]">
+                          <WheelchairSymbol />
+                        </div>
+                      ) : (
+                        <div className="bg-[#cf7c7c]">
+                          <WheelchairSymbol />
+                        </div>
+                      )}
+                      {show.bathroomsNearby ? (
+                        <div className="bg-[#c1bd9a]">
+                          <BathroomSymbol />
+                        </div>
+                      ) : (
+                        <div className="bg-[#cf7c7c]">
+                          <BathroomSymbol />
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                  <div className="">
+                    <div className="mt-2">
+                      <p className="text-base font-medium">{show.performers}</p>
+                    </div>
+                    <div className="mt-1">
+                      <p className="text-sm font-extralight">
+                        {show.locationName} - {show.price}
+                      </p>
+                    </div>
+                  </div>
+                  {/* {show.description && <p>{show.description} </p>}
 
             {show.setTimes && <p>Set times: {show.setTimes}</p>} */}
-              {/* 
+                  {/* 
             {show.noiseLevel === 'high' && (
               <p>Noise level: High (bring earplugs)</p>
             )} */}
-              {/* {show.noiseLevel === 'medium' && <p>Noise level: Medium</p>}
+                  {/* {show.noiseLevel === 'medium' && <p>Noise level: Medium</p>}
             {show.noiseLevel === 'low' && <p>Noise level: Low / safe</p>}
             {show.maxCapacity && <p>Max capacity: {show.maxCapacity} </p>} */}
-              {/* {/* {show.ticketsLink && (
+                  {/* {/* {show.ticketsLink && (
               <p>
                 Link to buy tickets: <a href={show.ticketsLink}>Here</a>
               </p>
             )}
             \*} */}
-              <div>
-                {isAuthenticated && (
-                  <div className="mt-2 flex flex-row sm:mt-16">
-                    <AlertDialog.Root>
-                      <AlertDialog.Trigger asChild>
-                        <button className="mr-2 inline-flex justify-center rounded-md bg-[#fcbdb3] p-1 text-xs font-medium text-black shadow-sm hover:bg-[#f5715c] sm:p-2 sm:text-sm">
-                          Delete show
-                        </button>
-                      </AlertDialog.Trigger>
-                      <AlertDialog.Portal>
-                        <AlertDialog.Overlay className="AlertDialogOverlay" />
-                        <AlertDialog.Content className="AlertDialogContent">
-                          <AlertDialog.Title className="AlertDialogTitle">
-                            Are you sure?
-                          </AlertDialog.Title>
-                          <AlertDialog.Description className="AlertDialogDescription">
-                            This action cannot be undone. This will permanently
-                            delete this show and its data from our server. If
-                            the show is cancelled please select cancel instead
-                            to notify attendees of the change.
-                          </AlertDialog.Description>
-                          <div
-                            style={{
-                              display: 'flex',
-                              gap: 25,
-                              justifyContent: 'flex-end',
-                            }}
-                          >
-                            <AlertDialog.Cancel asChild>
-                              <button className="Button mauve">Cancel</button>
-                            </AlertDialog.Cancel>
-                            <AlertDialog.Action asChild>
-                              <button
-                                className="rounded-sm bg-red-400 p-2"
-                                onClick={() => handleDeleteClick(show.id)}
+                  <div>
+                    {isAuthenticated && (
+                      <div className="mt-2 flex flex-row sm:mt-16">
+                        <AlertDialog.Root>
+                          <AlertDialog.Trigger asChild>
+                            <button className="mr-2 inline-flex justify-center rounded-md bg-[#fcbdb3] p-1 text-xs font-medium text-black shadow-sm hover:bg-[#f5715c] sm:p-2 sm:text-sm">
+                              Delete show
+                            </button>
+                          </AlertDialog.Trigger>
+                          <AlertDialog.Portal>
+                            <AlertDialog.Overlay className="AlertDialogOverlay" />
+                            <AlertDialog.Content className="AlertDialogContent">
+                              <AlertDialog.Title className="AlertDialogTitle">
+                                Are you sure?
+                              </AlertDialog.Title>
+                              <AlertDialog.Description className="AlertDialogDescription">
+                                This action cannot be undone. This will
+                                permanently delete this show and its data from
+                                our server. If the show is cancelled please
+                                select cancel instead to notify attendees of the
+                                change.
+                              </AlertDialog.Description>
+                              <div
+                                style={{
+                                  display: 'flex',
+                                  gap: 25,
+                                  justifyContent: 'flex-end',
+                                }}
                               >
-                                Yes, delete show
-                              </button>
-                            </AlertDialog.Action>
-                          </div>
-                        </AlertDialog.Content>
-                      </AlertDialog.Portal>
-                    </AlertDialog.Root>
-                    <br />
-                    <button
-                      className="inline-flex justify-center rounded-md bg-[#c1bd9a] p-1 text-sm font-medium text-black shadow-sm hover:bg-[#8f9779] sm:p-2 sm:text-sm"
-                      onClick={() => handleEditClick(show.id)}
-                    >
-                      Edit
-                    </button>
+                                <AlertDialog.Cancel asChild>
+                                  <button className="Button mauve">
+                                    Cancel
+                                  </button>
+                                </AlertDialog.Cancel>
+                                <AlertDialog.Action asChild>
+                                  <button
+                                    className="rounded-sm bg-red-400 p-2"
+                                    onClick={() => handleDeleteClick(show.id)}
+                                  >
+                                    Yes, delete show
+                                  </button>
+                                </AlertDialog.Action>
+                              </div>
+                            </AlertDialog.Content>
+                          </AlertDialog.Portal>
+                        </AlertDialog.Root>
+                        <br />
+                        <button
+                          className="inline-flex justify-center rounded-md bg-[#c1bd9a] p-1 text-sm font-medium text-black shadow-sm hover:bg-[#8f9779] sm:p-2 sm:text-sm"
+                          onClick={() => handleEditClick(show.id)}
+                        >
+                          Edit
+                        </button>
+                      </div>
+                    )}
                   </div>
-                )}
+                </div>
               </div>
             </div>
-          </div>
-        </div>
-      ))}
+          ))}
+      </div>
     </div>
   )
 }

@@ -160,6 +160,13 @@ textarea:focus {
   filter: brightness(0.9);
 }
 
+.SearchInput {
+  border: 0px;
+}
+.SearchButton {
+  background-color: #dad7c2;
+}
+
 @keyframes overlayShow {
   from {
     opacity: 0;
