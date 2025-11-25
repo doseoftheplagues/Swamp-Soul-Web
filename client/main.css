@@ -6,9 +6,6 @@ body {
   font-family: 'Poppins', sans-serif;
 }
 
-button {
-}
-
 input {
   background-color: #ffffff;
   border: 2px solid #000000;
@@ -125,6 +122,14 @@ textarea:focus {
   color: var(--mauve-11);
   font-size: 15px;
   line-height: 1.5;
+}
+
+.TooltipContent {
+  background-color: #f6f4e5;
+  border: 1px solid #8f9779b0;
+  border-radius: 4px;
+  padding: 4px;
+  outline: none;
 }
 
 .Button {
