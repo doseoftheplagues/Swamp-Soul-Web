@@ -53,6 +53,7 @@ function Header() {
           <h3 className="text-swamp-green-300">
             <Link to={'/'}>Swamp Soul </Link> {location.pathname}
           </h3>
+          <div></div>
         </div>
         <div className="flex w-1/4 justify-end sm:w-1/2"></div>
       </div>
