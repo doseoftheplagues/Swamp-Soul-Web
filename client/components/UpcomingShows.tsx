@@ -8,6 +8,7 @@ import { useAuth0 } from '@auth0/auth0-react'
 import * as AlertDialog from '@radix-ui/react-alert-dialog'
 import { Tooltip } from 'radix-ui'
 import { useState, useEffect } from 'react'
+import SearchBar from './SearchBar'
 
 export function UpcomingShows() {
   const { data, isLoading, isError } = useUpcomingShows()
@@ -15,6 +16,7 @@ export function UpcomingShows() {
   const { getAccessTokenSilently, isAuthenticated } = useAuth0()
   const navigate = useNavigate()
   const [currentData, setCurrentData] = useState<UpcomingShow[]>()
+  const [searchTerm, setSearchTerm] = useState<string>()
 
   useEffect(() => {
     if (data) {
@@ -188,29 +190,38 @@ export function UpcomingShows() {
     navigate(`/showeditform/${id}`)
   }
 
-  function handleSearch() {
-    console.log('searching! Yay!!')
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(e.target.value)
   }
 
-  function SearchBar() {
-    return (
-      <div className="ml-1 flex w-fit flex-row rounded-md border-2 border-black text-sm">
-        <form>
-          <input type="text" className="SearchInput rounded-bl-sm p-1"></input>
-          <button
-            onClick={() => handleSearch}
-            className="SearchButton rounded-r-sm p-1"
-          >
-            Search
-          </button>
-        </form>
-      </div>
-    )
+  function handleSearch(e: React.FormEvent) {
+    e.preventDefault()
+    if (data && searchTerm) {
+      const lowerCaseSearchTerm = searchTerm.toLowerCase()
+      const filteredData = data.filter(
+        (item: UpcomingShow) =>
+          item.locationName.toLowerCase().includes(lowerCaseSearchTerm) ||
+          item.date.toLowerCase().includes(lowerCaseSearchTerm) ||
+          item.performers.toLowerCase().includes(lowerCaseSearchTerm) ||
+          (item.description &&
+            item.description.toLowerCase().includes(lowerCaseSearchTerm)) ||
+          (item.ticketsLink &&
+            item.ticketsLink.toLowerCase().includes(lowerCaseSearchTerm)) ||
+          item.price.toLowerCase().includes(lowerCaseSearchTerm),
+      )
+      setCurrentData(filteredData)
+    } else if (data) {
+      setCurrentData(data)
+    }
   }
 
   return (
     <div>
-      <SearchBar />
+      <SearchBar
+        submitFunction={handleSearch}
+        changeFunction={handleChange}
+        searchTerm={searchTerm}
+      />
       <div className="upcomingShowsBox">
         {currentData &&
           currentData.map((show: UpcomingShow) => (
