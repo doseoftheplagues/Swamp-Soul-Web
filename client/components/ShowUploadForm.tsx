@@ -12,7 +12,7 @@ import DatePicker from 'react-date-picker'
 
 export function ShowUploadForm() {
   const navigate = useNavigate()
-  const { getAccessTokenSilently, isAuthenticated } = useAuth0()
+  const { getAccessTokenSilently, isAuthenticated, user } = useAuth0()
   const { data: userDb, isLoading: isUserLoading } = useUser()
 
   useEffect(() => {
@@ -36,6 +36,7 @@ export function ShowUploadForm() {
     ticketsLink: '',
     description: '',
     maxCapacity: '',
+    userId: '',
   })
 
   const addShowMutation = useAddUpcomingShow()
@@ -81,6 +82,7 @@ export function ShowUploadForm() {
       mobilityAccessible: formData.mobilityAccessible === 'true',
       bathroomsNearby: formData.bathroomsNearby === 'true',
       maxCapacity: parseInt(formData.maxCapacity, 10) || 0,
+      userId: user?.sub,
     }
     addShowMutation.mutate({ showData: submissionData, token })
     navigate('/upcomingshows')

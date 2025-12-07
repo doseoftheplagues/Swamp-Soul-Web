@@ -21,7 +21,10 @@ function SearchBar({
           className="SearchInput rounded-bl-sm p-1"
           placeholder="Search..."
         ></input>
-        <button type="submit" className="SearchButton rounded-r-sm p-1">
+        <button
+          type="submit"
+          className="SearchButton rounded-r-sm bg-[#dad7c2] p-1 hover:bg-[#e2e0cf] active:bg-[#c1bd9a]"
+        >
           Search
         </button>
       </form>

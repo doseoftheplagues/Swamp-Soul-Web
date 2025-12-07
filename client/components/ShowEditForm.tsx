@@ -11,11 +11,8 @@ import { useNavigate } from 'react-router'
 import { useAuth0 } from '@auth0/auth0-react'
 import * as Form from '@radix-ui/react-form'
 import * as Select from '@radix-ui/react-select'
-import {
-  CheckIcon,
-  ChevronDownIcon,
-  ChevronUpIcon,
-} from '@radix-ui/react-icons'
+import { ChevronDownIcon, ChevronUpIcon } from '@radix-ui/react-icons'
+import { LoadingSpinner } from './SmallerComponents/LoadingSpinner'
 
 export function ShowEditForm() {
   const params = useParams()
@@ -62,13 +59,13 @@ export function ShowEditForm() {
     if (data) {
       setFormData({
         date: data.date ? new Date(data.date) : new Date(),
-        doorsTime: data.doorsTime || '',
-        performers: data.performers || '',
-        locationName: data.locationName || '',
-        wheelchairAccessible: String(data.wheelchairAccessible) || '',
-        mobilityAccessible: String(data.mobilityAccessible) || '',
-        bathroomsNearby: String(data.bathroomsNearby) || '',
-        noiseLevel: data.noiseLevel || '',
+        doorsTime: data.doorsTime,
+        performers: data.performers,
+        locationName: data.locationName,
+        wheelchairAccessible: String(data.wheelchairAccessible),
+        mobilityAccessible: String(data.mobilityAccessible),
+        bathroomsNearby: String(data.bathroomsNearby),
+        noiseLevel: data.noiseLevel,
         locationCoords: data.locationCoords || '',
         setTimes: data.setTimes || '',
         ticketsLink: data.ticketsLink || '',
@@ -79,7 +76,7 @@ export function ShowEditForm() {
   }, [data])
 
   if (isLoading) {
-    return <p>loading...</p>
+    return <LoadingSpinner />
   }
   if (isError) {
     return <p>an error occured</p>
@@ -171,7 +168,7 @@ export function ShowEditForm() {
           </Form.Message>
           <Form.Control asChild>
             <input
-              className="focus:ring-opacity-50 mt-1 block w-full rounded-md border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200"
+              className="focus:ring-opacity-50 mt-1 block w-full rounded-md border-gray-300 px-3 py-2 shadow-sm focus:border-[#8f9779] focus:ring-[#8f9779]"
               type="text"
               name="performers"
               value={formData.performers}
@@ -198,7 +195,7 @@ export function ShowEditForm() {
               value={formData.locationName}
               onChange={handleChange}
               required
-              className="focus:ring-opacity-50 mt-1 block w-full rounded-md border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200"
+              className="focus:ring-opacity-50 mt-1 block w-full rounded-md border-gray-300 px-3 py-2 shadow-sm focus:border-[#8f9779] focus:ring-[#8f9779]"
             />
           </Form.Control>
         </Form.Field>
@@ -212,7 +209,7 @@ export function ShowEditForm() {
             onValueChange={handleSelectChange('noiseLevel')}
             required
           >
-            <Select.Trigger className="focus:ring-opacity-50 mt-1 flex w-full items-center justify-between rounded-md border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200">
+            <Select.Trigger className="focus:ring-opacity-50 mt-1 flex w-full items-center justify-between rounded-md border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm focus:border-[#8f9779] focus:ring-[#8f9779]">
               <Select.Value placeholder="Select noise level" />
               <Select.Icon className="h-4 w-4 text-gray-400">
                 <ChevronDownIcon />
@@ -247,7 +244,7 @@ export function ShowEditForm() {
             Is it wheelchair accessible? :
           </Form.Label>
           <Select.Root
-            value={String(formData.wheelchairAccessible)}
+            value={formData.wheelchairAccessible}
             onValueChange={handleSelectChange('wheelchairAccessible')}
             required
           >
@@ -286,7 +283,7 @@ export function ShowEditForm() {
             than a few minutes walk away select no):
           </Form.Label>
           <Select.Root
-            value={String(formData.bathroomsNearby)}
+            value={formData.bathroomsNearby}
             onValueChange={handleSelectChange('bathroomsNearby')}
             required
           >
@@ -325,7 +322,7 @@ export function ShowEditForm() {
             easily access?
           </Form.Label>
           <Select.Root
-            value={String(formData.mobilityAccessible)}
+            value={formData.mobilityAccessible}
             onValueChange={handleSelectChange('mobilityAccessible')}
             required
           >
