@@ -85,8 +85,26 @@ export function ShowUploadForm() {
       maxCapacity: parseInt(formData.maxCapacity, 10) || 0,
       userId: user?.sub,
     }
-    addShowMutation.mutate({ showData: submissionData, token })
-    navigate('/upcomingshows')
+    addShowMutation.mutate(
+      { showData: submissionData, token },
+      {
+        onSuccess: (data) => {
+          const newShowId = data?.id || data?.[0]?.id
+
+          if (newShowId) {
+            navigate(`/addpostertoshow/${newShowId}`)
+          } else {
+            console.error('Could not get new show ID from API response.')
+
+            navigate('/upcomingshows')
+          }
+        },
+        onError: (error) => {
+          console.error('Error adding show:', error)
+          alert('There was an error submitting the show. Please try again.')
+        },
+      },
+    )
   }
 
   const requiredFields: (keyof typeof formData)[] = [

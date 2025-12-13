@@ -44,8 +44,8 @@ router.post('/', checkJwt, async (req: JwtRequest, res) => {
       userId: userId,
     }
 
-    await db.addUpcomingShow(newShowData)
-    res.sendStatus(201)
+    const newShow = await db.addUpcomingShow(newShowData)
+    res.status(201).json(newShow)
   } catch (error) {
     console.log(error)
     res.status(500).json({ message: 'Something went wrong posting show' })
