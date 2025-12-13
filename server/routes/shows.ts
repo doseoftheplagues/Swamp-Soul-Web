@@ -1,6 +1,8 @@
 import { Router } from 'express'
+// import checkJwt, { JwtRequest } from '../../auth0.ts'
 
 import * as db from '../db/shows.ts'
+import checkJwt from '../../auth0.ts'
 
 interface ShowDbRow {
   showId: number
@@ -30,17 +32,43 @@ const router = Router()
 
 router.get('/', async (req, res) => {
   try {
-    // 1. Get the flat data from the DB
+    // get flat data from the DB
     const flatShows: ShowDbRow[] = await db.getAllShows()
 
-    // 2. Transform it into grouped data
+    // group it
     const groupedShows = groupShows(flatShows)
 
-    // 3. Send the correctly structured data to the client
+    // send the correctly structured data
     res.json({ shows: groupedShows })
   } catch (error) {
     console.log(error)
     res.status(500).json({ message: 'Something went wrong getting shows' })
+  }
+})
+
+router.post('/', checkJwt, async (req, res) => {
+  try {
+    const requestData = req.body
+    const showData = requestData.showData
+    const posterData = requestData.posterData
+    const postedShow = db.addShowWithPoster(showData, posterData)
+    res.json(postedShow)
+  } catch (error) {
+    console.log(error)
+    res
+      .status(500)
+      .json({ message: 'something went wrong posting show to archive' })
+  }
+})
+
+router.delete('/:id', async (req, res) => {
+  try {
+    const showId = Number(req.params)
+    const deletedShow = db.deleteArchiveShow(showId)
+    res.json(deletedShow)
+  } catch (error) {
+    console.log(error)
+    res.status(500).json({ message: 'Something went wrong deleting show' })
   }
 })
 

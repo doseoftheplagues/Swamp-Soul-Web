@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
-// import { shows } from '../../data/shows'
 import { useShows } from '../hooks/useShows'
 import showArchiveInfo from './ArchiveInfo'
+import SearchBar from './SearchBar'
 
 function Archive() {
   const [currentGigIndex, setCurrentGigIndex] = useState(0)
@@ -48,6 +48,7 @@ function Archive() {
 
   return (
     <div className="w-screen">
+      <SearchBar />
       <div className="flex w-full justify-center">
         <div className="flex w-screen flex-col justify-center sm:flex-row">
           <div className="flex align-middle">
@@ -90,5 +91,5 @@ function Archive() {
     </div>
   )
 }
-//
+
 export { Archive }

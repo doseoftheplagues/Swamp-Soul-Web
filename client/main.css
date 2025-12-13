@@ -6,9 +6,6 @@ body {
   font-family: 'Poppins', sans-serif;
 }
 
-button {
-}
-
 input {
   background-color: #ffffff;
   border: 2px solid #000000;
@@ -127,6 +124,14 @@ textarea:focus {
   line-height: 1.5;
 }
 
+.TooltipContent {
+  background-color: #f6f4e5;
+  border: 1px solid #8f9779b0;
+  border-radius: 4px;
+  padding: 4px;
+  outline: none;
+}
+
 .Button {
   display: inline-flex;
   align-items: center;
@@ -153,6 +158,20 @@ textarea:focus {
 }
 .Button:hover {
   filter: brightness(0.9);
+}
+
+.SearchInput {
+  border: 0px;
+}
+.SearchButton {
+}
+
+.clamped-text {
+  display: -webkit-box;
+  line-clamp: 3;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 @keyframes overlayShow {

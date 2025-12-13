@@ -9,6 +9,7 @@ export function up(knex) {
     table.string('bio')
     table.string('status')
     table.string('email')
+    table.boolean('admin').nullable
   })
 }
 

@@ -12,7 +12,7 @@ import DatePicker from 'react-date-picker'
 
 export function ShowUploadForm() {
   const navigate = useNavigate()
-  const { getAccessTokenSilently, isAuthenticated } = useAuth0()
+  const { getAccessTokenSilently, isAuthenticated, user } = useAuth0()
   const { data: userDb, isLoading: isUserLoading } = useUser()
 
   useEffect(() => {
@@ -36,6 +36,8 @@ export function ShowUploadForm() {
     ticketsLink: '',
     description: '',
     maxCapacity: '',
+    userId: '',
+    title: '',
   })
 
   const addShowMutation = useAddUpcomingShow()
@@ -81,6 +83,7 @@ export function ShowUploadForm() {
       mobilityAccessible: formData.mobilityAccessible === 'true',
       bathroomsNearby: formData.bathroomsNearby === 'true',
       maxCapacity: parseInt(formData.maxCapacity, 10) || 0,
+      userId: user?.sub,
     }
     addShowMutation.mutate({ showData: submissionData, token })
     navigate('/upcomingshows')
@@ -99,6 +102,10 @@ export function ShowUploadForm() {
 
   const isFormInvalid =
     requiredFields.some((field) => !formData[field]) || !formData.date
+
+  if (!isAuthenticated) {
+    return <p>Log in to submit shows</p>
+  }
 
   return (
     <div className="mx-auto max-w-md p-4">
@@ -360,6 +367,20 @@ export function ShowUploadForm() {
         </Form.Field>
 
         <h2 className="mt-6 mb-4 text-xl font-bold">Extra info (Optional)</h2>
+        <label
+          htmlFor="title"
+          className="mb-1 block text-sm font-medium text-gray-700"
+        >
+          Show name:
+        </label>
+        <input
+          type="text"
+          id="title"
+          name="title"
+          value={formData.title}
+          onChange={handleChange}
+          className="focus:ring-opacity-50 mt-1 block w-full rounded-md border-gray-300 px-3 py-2 shadow-sm"
+        />
         <label
           htmlFor="locationCoords"
           className="mb-1 block text-sm font-medium text-gray-700"

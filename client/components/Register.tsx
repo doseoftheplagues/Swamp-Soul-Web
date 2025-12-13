@@ -4,6 +4,7 @@ import { useUser } from '../hooks/useUsers'
 import { useNavigate } from 'react-router'
 import * as API from '../apis/users'
 import * as Form from '@radix-ui/react-form'
+import { LoadingSpinner } from './SmallerComponents/LoadingSpinner'
 
 export function Register() {
   const { isAuthenticated, user, getAccessTokenSilently } = useAuth0()
@@ -156,7 +157,7 @@ export function Register() {
   } else {
     return (
       <div>
-        <p>Loading registration page...</p>
+        <LoadingSpinner />
       </div>
     )
   }

@@ -26,6 +26,7 @@ export function up(knex) {
     table.string('description').nullable()
     table.integer('max_capacity').nullable()
     table.boolean('canceled').nullable()
+    table.string('name').nullable()
   })
 }
 
