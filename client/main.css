@@ -164,7 +164,14 @@ textarea:focus {
   border: 0px;
 }
 .SearchButton {
-  background-color: #dad7c2;
+}
+
+.clamped-text {
+  display: -webkit-box;
+  line-clamp: 3;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 @keyframes overlayShow {

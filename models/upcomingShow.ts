@@ -17,6 +17,7 @@ export interface UpcomingShowData {
   description?: string | null
   maxCapacity?: number | null
   canceled?: boolean | null
+  name?: string | null
 }
 
 export interface UpcomingShow extends UpcomingShowData {

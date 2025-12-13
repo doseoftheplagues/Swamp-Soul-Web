@@ -1,13 +1,10 @@
-import knexfile from './knexfile.js'
-import knex from 'knex'
 import connection from './connection.ts'
 
 const db = connection
 
 export function getAllShows() {
   return db('shows')
-    .join('shows_posters', 'shows.id', '=', 'shows_posters.show_id')
-    .join('posters', 'posters.id', '=', 'shows_posters.poster_id')
+    .join('posters', 'shows.id', '=', 'posters.show_id')
     .select(
       'posters.id as posterId',
       'performers',
@@ -52,9 +49,9 @@ export async function addShowWithPoster(
 ) {
   return db.transaction(async (trx) => {
     const newShow = await trx('shows').insert(showData).returning('id')
-    const showId = newShow[0]
+    const showId = newShow[0].id
     const newPoster = await trx('posters').insert(posterData).returning('id')
-    const posterId = newPoster[0]
+    const posterId = newPoster[0].id
     await trx('shows_posters').insert({
       poster_id: posterId,
       show_id: showId,
@@ -85,3 +82,5 @@ export async function addShowWithMultiplePosters(
     }
   })
 }
+
+export async function deleteArchiveShow(showId: number) {}

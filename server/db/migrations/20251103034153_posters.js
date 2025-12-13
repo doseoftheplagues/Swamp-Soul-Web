@@ -5,6 +5,7 @@
 export function up(knex) {
   return knex.schema.createTable('posters', (table) => {
     table.increments('id')
+    table.integer('show_id').references('shows.id')
     table.string('image')
     table.string('designer')
   })

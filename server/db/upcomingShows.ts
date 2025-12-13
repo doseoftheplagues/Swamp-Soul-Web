@@ -22,6 +22,7 @@ const showProperties = [
   'description',
   'max_capacity as maxCapacity',
   'canceled',
+  'name',
 ]
 
 //read
@@ -57,6 +58,7 @@ export async function addUpcomingShow(showData: UpcomingShowData) {
     description,
     maxCapacity,
     canceled,
+    name,
   } = showData
 
   const [result] = await db('upcoming_shows')
@@ -78,6 +80,7 @@ export async function addUpcomingShow(showData: UpcomingShowData) {
       description,
       max_capacity: maxCapacity,
       canceled,
+      name,
     })
     .returning([...showProperties])
 
@@ -107,6 +110,7 @@ export async function updateUpcomingShow(
     description,
     maxCapacity,
     canceled,
+    name,
   } = showData
   const snakeCaseShowData = {
     date,
@@ -125,6 +129,7 @@ export async function updateUpcomingShow(
     description,
     max_capacity: maxCapacity,
     canceled,
+    name,
   }
 
   return await db('upcoming_shows').where('id', id).update(snakeCaseShowData)

@@ -13,8 +13,12 @@ function App() {
 
   return (
     <div className="">
-      <Header />
-      <Outlet />
+      <div>
+        <Header />
+      </div>
+      <div className="sm:p-2">
+        <Outlet />
+      </div>
     </div>
   )
 }

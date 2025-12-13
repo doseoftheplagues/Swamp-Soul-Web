@@ -3,6 +3,7 @@ export interface UserData {
   bio: string
   status: string
   email: string
+  admin: boolean
 }
 
 export interface User extends UserData {

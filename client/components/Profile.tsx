@@ -15,8 +15,9 @@ const Profile = () => {
   return isAuthenticated && user ? (
     <div className="p-4">
       <div className="flex flex-row">
-        <p>{data?.username}</p>
+        <p>{data?.username} </p>
         <p className="pl-5 italic opacity-80">{user.email}</p>
+        {data?.admin && <p className="pl-5">Admin</p>}
       </div>
       <p className="text-sm">Bio</p>
       <p>{data?.bio}</p>

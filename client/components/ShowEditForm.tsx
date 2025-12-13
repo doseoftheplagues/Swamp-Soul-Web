@@ -1,4 +1,4 @@
-import DatePicker, { DatePickerProps } from 'react-date-picker'
+import DatePicker from 'react-date-picker'
 import { useEffect, useState, forwardRef } from 'react'
 import {
   useGetUpcomingShowById,
@@ -34,6 +34,7 @@ export function ShowEditForm() {
     ticketsLink: '',
     description: '',
     maxCapacity: '',
+    name: '',
   })
 
   const editShowMutation = useUpdateUpcomingShow()
@@ -71,6 +72,7 @@ export function ShowEditForm() {
         ticketsLink: data.ticketsLink || '',
         description: data.description || '',
         maxCapacity: String(data.maxCapacity) || '',
+        name: data.title || '',
       })
     }
   }, [data])
@@ -356,6 +358,20 @@ export function ShowEditForm() {
         </Form.Field>
 
         <h2 className="mt-6 mb-4 text-xl font-bold">Extra info (Optional)</h2>
+        <label
+          htmlFor="name"
+          className="mb-1 block text-sm font-medium text-gray-700"
+        >
+          Show name:
+        </label>
+        <input
+          type="text"
+          id="name"
+          name="name"
+          value={formData.name}
+          onChange={handleChange}
+          className="focus:ring-opacity-50 mt-1 block w-full rounded-md border-gray-300 px-3 py-2 shadow-sm"
+        />
         <label
           htmlFor="locationCoords"
           className="mb-1 block text-sm font-medium text-gray-700"

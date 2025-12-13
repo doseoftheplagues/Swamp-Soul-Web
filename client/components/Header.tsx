@@ -37,9 +37,9 @@ function Header() {
 
   if (!isAuthenticated) {
     return (
-      <div className="flex w-screen flex-row p-2">
+      <div className="flex w-screen flex-row p-1 text-sm sm:p-2 sm:text-base">
         <div className="flex w-3/4 sm:w-1/2">
-          <h1 className="text-swamp-green-300">
+          <h1 className="">
             <Link to={'/'}> Swamp Soul </Link>
             {displayPath !== '/' && (
               <Link to={displayPath}> {displayPath}</Link>
@@ -53,7 +53,7 @@ function Header() {
     )
   } else if (isAuthenticated && displayPath == '/profile') {
     return (
-      <div className="flex w-screen flex-row p-2">
+      <div className="flex w-screen flex-row p-1 text-sm sm:p-2 sm:text-base">
         <div className="flex w-3/4 sm:w-1/2">
           <h3 className="text-swamp-green-300">
             <Link to={'/'}> Swamp Soul </Link>{' '}
@@ -66,7 +66,7 @@ function Header() {
     )
   } else {
     return (
-      <div className="flex w-screen flex-row p-2">
+      <div className="flex w-screen flex-row p-1 text-sm sm:p-2 sm:text-base">
         <div className="flex w-3/4 sm:w-1/2">
           <h3 className="text-swamp-green-300">
             <Link to={'/'}> Swamp Soul </Link>{' '}

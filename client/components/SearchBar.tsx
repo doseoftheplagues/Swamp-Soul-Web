@@ -12,7 +12,7 @@ function SearchBar({
   searchTerm,
 }: SearchBarProps) {
   return (
-    <div className="ml-1 flex w-fit flex-row rounded-md border-2 border-black text-sm">
+    <div className="ml-1 flex w-fit flex-row rounded-md border-2 border-black text-xs sm:text-sm">
       <form onSubmit={submitFunction}>
         <input
           type="text"
