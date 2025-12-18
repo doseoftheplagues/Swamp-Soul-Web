@@ -1,3 +1,3 @@
 export interface ImageUpload {
-  image: string
+  image: File
 }

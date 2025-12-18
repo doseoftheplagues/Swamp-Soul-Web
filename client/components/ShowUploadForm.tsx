@@ -95,7 +95,6 @@ export function ShowUploadForm() {
             navigate(`/addpostertoshow/${newShowId}`)
           } else {
             console.error('Could not get new show ID from API response.')
-
             navigate('/upcomingshows')
           }
         },
@@ -449,6 +448,7 @@ export function ShowUploadForm() {
         </label>
         <input
           type="text"
+          maxLength={300}
           id="description"
           name="description"
           value={formData.description}

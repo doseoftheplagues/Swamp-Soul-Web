@@ -6,3 +6,4 @@ export async function getShows() {
   const response = await request.get(`${rootURL}/shows`)
   return response.body
 }
+

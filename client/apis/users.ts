@@ -40,9 +40,16 @@ export async function addUser({
     })
 }
 
+interface EditUserTemp {
+  username: string
+  bio: string
+  status: string
+  email: string
+}
+
 interface EditUserFunction {
   id: string
-  updatedUser: User
+  updatedUser: EditUserTemp
   token: string
 }
 
@@ -50,7 +57,7 @@ export async function editUser({
   id,
   updatedUser,
   token,
-}: EditUserFunction): Promise<User> {
+}: EditUserFunction): Promise<EditUserTemp> {
   return request
     .patch(`${rootURL}/users/edit-user/${id}`)
     .send(updatedUser)

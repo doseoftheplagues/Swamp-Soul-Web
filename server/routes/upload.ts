@@ -3,6 +3,7 @@ import multer from 'multer'
 import { S3Client } from '@aws-sdk/client-s3'
 import { Upload } from '@aws-sdk/lib-storage'
 import crypto from 'node:crypto'
+import checkJwt from '../../auth0'
 
 const S3 = new S3Client({
   region: 'auto',
@@ -37,7 +38,7 @@ const upload = multer({
 
 const router = Router()
 
-router.post('/', upload.single('image'), async (req, res) => {
+router.post('/', checkJwt, upload.single('image'), async (req, res) => {
   try {
     const file = req.file
 

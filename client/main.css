@@ -174,6 +174,15 @@ textarea:focus {
   overflow: hidden;
 }
 
+.responsiveTitleText {
+  font-size: clamp(1rem, 6rem, 8rem);
+  line-height: 0.9;
+}
+
+#maxHeight {
+  height: 100%;
+}
+
 @keyframes overlayShow {
   from {
     opacity: 0;

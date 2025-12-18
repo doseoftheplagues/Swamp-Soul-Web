@@ -3,15 +3,16 @@ import { useParams } from 'react-router'
 import { useGetUpcomingShowById } from '../hooks/useUpcomingShows'
 import { LoadingSpinner } from './SmallerComponents/LoadingSpinner'
 import { FileUploader } from './SmallerComponents/FileUploader'
+import { useState } from 'react'
 
 function AddPosterToShow() {
+  const [uploadedImageUrl, setUploadedImageUrl] = useState<string | null>(null)
   //check if user is logged in
   const { isAuthenticated, user } = useAuth0()
   // get show by useparams .id
   const params = useParams()
   const { data, isLoading, isError } = useGetUpcomingShowById(Number(params.id))
 
-  // feed fileuploader id as prop
   // onSubmit send patch request to show to update image
 
   // check if show.userId matches user.sub (prevent edits of shows user doesn't own)
@@ -34,7 +35,7 @@ function AddPosterToShow() {
   }
 
   if (!isAuthenticated) {
-    console.log(data.title)
+    console.log(data.performers + '= data performers')
     return <p>Log in to edit or add posters to shows</p>
   }
   if (!data) {
@@ -42,10 +43,17 @@ function AddPosterToShow() {
   }
 
   if (isAuthenticated && user?.sub != data.userId) {
-    console.log(user?.sub)
+    console.log(user?.sub + '= usersub')
     return (
       <p>You do not have permission to edit this show or add posters to it</p>
     )
+  }
+
+  const handleImageUrlReceived = (url: string) => {
+    console.log('Image uploaded successfully! URL:', url)
+    setUploadedImageUrl(url)
+    // call useEditShow hook
+    // update image with uploadedImageUrl
   }
 
   if (isAuthenticated && user?.sub === data.userId)
@@ -55,7 +63,7 @@ function AddPosterToShow() {
           <h1 className="mb-5">
             Step 2: Upload poster to {data.performers} - {formatDate(data.date)}
           </h1>
-          <FileUploader />
+          <FileUploader uploadSuccess={handleImageUrlReceived} />
         </div>
       </div>
     )
