@@ -5,6 +5,12 @@ export interface PosterData {
   archiveShowId: number
 }
 
+export interface UpcomingPosterData {
+  image: string
+  designer: string
+  upcomingShowId: number
+}
+
 export interface Poster extends PosterData {
   id: number
 }

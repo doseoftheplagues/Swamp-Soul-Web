@@ -9,7 +9,7 @@ interface UploadImageVariables {
 }
 
 interface FileUploaderProps {
-  uploadSuccess: (fileUrl: string) => void
+  uploadSuccess: (fileUrl: string, designer: string) => void
 }
 
 export function PosterUploader({ uploadSuccess }: FileUploaderProps) {
@@ -25,11 +25,15 @@ export function PosterUploader({ uploadSuccess }: FileUploaderProps) {
       queryClient.invalidateQueries({
         queryKey: ['imageUpload'],
       })
-      uploadSuccess(data.image)
+      uploadSuccess(data.url, designer)
+    },
+    onError: (error) => {
+      console.error('Image upload failed:', error)
     },
   })
 
   const handleUpload = async () => {
+    console.log('handleUpload started...')
     const token = await getAccessTokenSilently()
     if (file == null) {
       console.log('Image upload failed, no image found')
@@ -66,6 +70,7 @@ export function PosterUploader({ uploadSuccess }: FileUploaderProps) {
             <p>Size: {(file.size / 1024).toFixed(2)}</p>
             <p>Type: {file.type}</p>
             <button
+              type="button"
               className="rounded-xs border-2 bg-[#dad7c267] px-1 py-0.5 text-sm hover:bg-[#dad7c2c0] disabled:bg-[#bebebd99] disabled:text-[#aca7a7a9]"
               id="upload"
               onClick={handleUpload}

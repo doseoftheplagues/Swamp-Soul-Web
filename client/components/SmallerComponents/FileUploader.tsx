@@ -24,11 +24,15 @@ export function FileUploader({ uploadSuccess }: FileUploaderProps) {
       queryClient.invalidateQueries({
         queryKey: ['imageUpload'],
       })
-      uploadSuccess(data.image)
+      uploadSuccess(data.url)
+    },
+    onError: (error) => {
+      console.error('Image upload failed:', error)
     },
   })
 
   const handleUpload = async () => {
+    console.log('handleUpload started...')
     const token = await getAccessTokenSilently()
     if (file == null) {
       console.log('Image upload failed, no image found')
@@ -56,7 +60,9 @@ export function FileUploader({ uploadSuccess }: FileUploaderProps) {
             <p>Filename: {file.name}</p>
             <p>Size: {(file.size / 1024).toFixed(2)}</p>
             <p>Type: {file.type}</p>
-            <button onClick={handleUpload}>Upload</button>
+            <button type="button" onClick={handleUpload} disabled={!file}>
+              Upload
+            </button>
           </div>
         )}
       </form>

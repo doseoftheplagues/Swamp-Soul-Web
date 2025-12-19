@@ -1,3 +1,4 @@
 export interface ImageUpload {
-  image: File
+  message: string
+  url: string
 }

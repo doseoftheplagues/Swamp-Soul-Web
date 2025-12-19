@@ -1,17 +1,38 @@
 import { useAuth0 } from '@auth0/auth0-react'
-import { useParams } from 'react-router'
-import { useGetUpcomingShowById } from '../hooks/useUpcomingShows'
+import { useNavigate, useParams } from 'react-router'
+import {
+  useGetUpcomingShowById,
+  useUpdateUpcomingShow,
+} from '../hooks/useUpcomingShows'
 import { LoadingSpinner } from './SmallerComponents/LoadingSpinner'
-import { FileUploader } from './SmallerComponents/FileUploader'
-import { useState } from 'react'
+import { PosterUploader } from './SmallerComponents/PosterUploader'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { addPoster } from '../apis/posters'
+
+interface PosterVariables {
+  posterData: {
+    image: string
+    designer: string
+    upcomingShowId: number
+    archiveShowId: number | null
+  }
+  token: string
+}
 
 function AddPosterToShow() {
-  const [uploadedImageUrl, setUploadedImageUrl] = useState<string | null>(null)
-  //check if user is logged in
-  const { isAuthenticated, user } = useAuth0()
+  const queryClient = useQueryClient()
+  const { isAuthenticated, user, getAccessTokenSilently } = useAuth0()
+  const navigate = useNavigate()
   // get show by useparams .id
   const params = useParams()
   const { data, isLoading, isError } = useGetUpcomingShowById(Number(params.id))
+  const editShowMutation = useUpdateUpcomingShow()
+
+  const posterUploadMutation = useMutation({
+    mutationFn: ({ posterData, token }: PosterVariables) =>
+      addPoster(posterData, token),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['posters'] }),
+  })
 
   function formatDate(dateString: string) {
     return new Date(dateString).toLocaleDateString('en-NZ', {
@@ -29,7 +50,7 @@ function AddPosterToShow() {
   if (isError) {
     return <p>An error occured :(</p>
   }
-
+  //check if user is logged in
   // check if show.userId matches user.sub (prevent edits of shows user doesn't own)
   // if user authenticated and sub matches id display fileuploader
 
@@ -48,11 +69,34 @@ function AddPosterToShow() {
     )
   }
 
-  const handleImageUrlReceived = (url: string) => {
-    console.log('Image uploaded successfully! URL:', url)
-    setUploadedImageUrl(url)
-    // call useEditShow hook
-    // update image with uploadedImageUrl
+  const handleImageUrlReceived = async (url: string, designer: string) => {
+    try {
+      console.log('Image uploaded successfully! URL:', url)
+      const token = await getAccessTokenSilently()
+      const upcomingShowId = Number(params.id)
+      // use poster mutation to add poster
+      const newPosterId = await posterUploadMutation.mutateAsync({
+        posterData: {
+          image: url,
+          designer: designer,
+          upcomingShowId: upcomingShowId,
+          archiveShowId: null,
+        },
+        token: token,
+      })
+      const submissionData = {
+        posterId: newPosterId,
+      }
+      // update show with new posterId
+      editShowMutation.mutate({
+        id: upcomingShowId,
+        showData: submissionData,
+        token,
+      })
+      navigate(`/upcomingshows/${upcomingShowId}`)
+    } catch (error) {
+      console.error('Something went wrong', error)
+    }
   }
 
   if (isAuthenticated && user?.sub === data.userId)
@@ -62,7 +106,7 @@ function AddPosterToShow() {
           <h1 className="mb-5">
             Step 2: Upload poster to {data.performers} - {formatDate(data.date)}
           </h1>
-          <FileUploader uploadSuccess={handleImageUrlReceived} />
+          <PosterUploader uploadSuccess={handleImageUrlReceived} />
         </div>
       </div>
     )
