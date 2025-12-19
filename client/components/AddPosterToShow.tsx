@@ -13,10 +13,6 @@ function AddPosterToShow() {
   const params = useParams()
   const { data, isLoading, isError } = useGetUpcomingShowById(Number(params.id))
 
-  // onSubmit send patch request to show to update image
-
-  // check if show.userId matches user.sub (prevent edits of shows user doesn't own)
-  // if user authenticated and sub matches id display fileuploader
   function formatDate(dateString: string) {
     return new Date(dateString).toLocaleDateString('en-NZ', {
       month: 'long',
@@ -33,6 +29,9 @@ function AddPosterToShow() {
   if (isError) {
     return <p>An error occured :(</p>
   }
+
+  // check if show.userId matches user.sub (prevent edits of shows user doesn't own)
+  // if user authenticated and sub matches id display fileuploader
 
   if (!isAuthenticated) {
     console.log(data.performers + '= data performers')

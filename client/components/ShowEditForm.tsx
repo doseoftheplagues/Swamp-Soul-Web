@@ -14,6 +14,8 @@ import * as Select from '@radix-ui/react-select'
 import { ChevronDownIcon, ChevronUpIcon } from '@radix-ui/react-icons'
 import { LoadingSpinner } from './SmallerComponents/LoadingSpinner'
 
+type DatePickerValue = Date | null | [Date | null, Date | null]
+
 export function ShowEditForm() {
   const params = useParams()
   const navigate = useNavigate()
@@ -83,11 +85,12 @@ export function ShowEditForm() {
   if (isError) {
     return <p>an error occured</p>
   }
-  const handleDateChange = (newDate: Date | null) => {
-    if (newDate instanceof Date) {
+
+  const handleDateChange = (value: DatePickerValue) => {
+    if (value instanceof Date) {
       setFormData((prev) => ({
         ...prev,
-        date: newDate,
+        date: value,
       }))
     }
   }
@@ -98,6 +101,7 @@ export function ShowEditForm() {
     const token = await getAccessTokenSilently()
     const submissionData = {
       ...formData,
+      date: formData.date.toISOString(),
       wheelchairAccessible: formData.wheelchairAccessible === 'true',
       mobilityAccessible: formData.mobilityAccessible === 'true',
       bathroomsNearby: formData.bathroomsNearby === 'true',

@@ -16,7 +16,6 @@ export function getAllShows() {
     )
 }
 
-
 export async function addShowWithPoster(
   showData: { date: string; location: string; performers: string },
   posterData: { image: string; designer: string },
@@ -57,4 +56,4 @@ export async function addShowWithMultiplePosters(
   })
 }
 
-export async function deleteArchiveShow(showId: number) {}
+// export async function deleteArchiveShow(showId: number) {}

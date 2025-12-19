@@ -79,6 +79,7 @@ export function ShowUploadForm() {
     const token = await getAccessTokenSilently()
     const submissionData = {
       ...formData,
+      date: formData.date.toISOString(),
       wheelchairAccessible: formData.wheelchairAccessible === 'true',
       mobilityAccessible: formData.mobilityAccessible === 'true',
       bathroomsNearby: formData.bathroomsNearby === 'true',

@@ -15,7 +15,7 @@ export async function getUpcomingShowById(id: number) {
 
 export async function updateUpcomingShow(
   id: number,
-  showData: UpcomingShowData,
+  showData: Partial<UpcomingShowData>,
   token: string,
 ) {
   const response = await request

@@ -73,7 +73,7 @@ export function useDeleteUpcomingShow() {
 
 interface UpdateShowVariables {
   id: number
-  showData: UpcomingShowData
+  showData: Partial<UpcomingShowData>
   token: string
 }
 

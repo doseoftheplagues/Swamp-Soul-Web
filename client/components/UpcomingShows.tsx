@@ -21,14 +21,14 @@ export function UpcomingShows() {
     if (data) {
       const dataToMap = data
       const dataWithDateObjects = dataToMap.map((item: UpcomingShow) => {
-      return {
-        ...item,
-        date: new Date(item.date),
-      }
-    });
-    dataWithDateObjects.sort((a, b) => b.date.getTime() - a.date.getTime());
-    setCurrentData(dataWithDateObjects);
-  }
+        return {
+          ...item,
+          date: new Date(item.date),
+        }
+      })
+      dataWithDateObjects.sort((a, b) => b.date.getTime() - a.date.getTime())
+      setCurrentData(dataWithDateObjects)
+    }
   }, [data])
 
   if (isLoading) {
@@ -71,9 +71,6 @@ export function UpcomingShows() {
       setCurrentData(data)
     }
   }
-
-  
-  
 
   return (
     <div>
