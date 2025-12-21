@@ -4,17 +4,21 @@ import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router'
 import * as API from '../apis/users'
 import * as Form from '@radix-ui/react-form'
+import { LoadingSpinner } from './SmallerComponents/LoadingSpinner'
+import { FileUploader } from './SmallerComponents/FileUploader'
 
 const EditProfile = () => {
   const { user, isAuthenticated, isLoading, getAccessTokenSilently } =
     useAuth0()
   const { update, ...userDb } = useUser()
   const [userNameIsTaken, setUsernameIsTaken] = useState(false)
+  const [newProfilePicture, setNewProfilePicture] = useState<string>()
   const [formData, setFormData] = useState({
     username: '',
     bio: '',
     status: '',
     email: '',
+    profilePicture: newProfilePicture,
   })
 
   const navigate = useNavigate()
@@ -32,6 +36,7 @@ const EditProfile = () => {
         bio: userDb.data.bio,
         status: userDb.data.status,
         email: user.email,
+        profilePicture: userDb.data.profilePicture,
       })
     }
   }, [user, userDb.data])
@@ -80,8 +85,22 @@ const EditProfile = () => {
   }
 
   if (isLoading) {
-    return <div className="loading-text">Loading profile...</div>
+    return (
+      <div className="">
+        <LoadingSpinner />
+      </div>
+    )
   }
+
+  const handleImageUrlReceived = async (url: string) => {
+    try {
+      console.log('Image uploaded successfully! URL:', url)
+      setNewProfilePicture(url)
+    } catch (error) {
+      console.error('Something went wrong', error)
+    }
+  }
+
   if (isAuthenticated) {
     return (
       <div className="mx-auto max-w-md p-4">
@@ -90,8 +109,9 @@ const EditProfile = () => {
           {userNameIsTaken && <p>That username is already taken</p>}
           <Form.Field name="username">
             <div>
-              <Form.Label>Username</Form.Label>
-              <br />
+              <Form.Label className="block text-sm font-medium">
+                Username
+              </Form.Label>
               <Form.Message match="valueMissing">
                 Please enter your username
               </Form.Message>
@@ -99,7 +119,7 @@ const EditProfile = () => {
             <Form.Control asChild>
               <input
                 type="text"
-                className="w-full p-1"
+                className="w-full p-1 text-sm"
                 name="username"
                 value={formData.username}
                 onChange={handleChange}
@@ -107,11 +127,10 @@ const EditProfile = () => {
               />
             </Form.Control>
           </Form.Field>
-          <br />
+
           <Form.Field name="bio">
             <div>
-              <Form.Label>Bio</Form.Label>
-              <br />
+              <Form.Label className="block text-sm font-medium">Bio</Form.Label>
               <Form.Message match="valueMissing">
                 Please enter your bio
               </Form.Message>
@@ -170,3 +189,32 @@ const EditProfile = () => {
 }
 
 export default EditProfile
+
+// <div>
+//   <label htmlFor="about" className="block text-sm font-medium">
+//     About
+//   </label>
+//   <div className="mt-1">
+//     <textarea
+//       id="about"
+//       name="about"
+//       rows={3}
+//       className="mt-1 block w-full rounded-md border p-2 shadow-sm sm:text-sm"
+//       placeholder="you@example.com"
+//     ></textarea>
+//   </div>
+//   <p className="mt-2 text-sm text-gray-500">
+//     Brief description for your profile. URLs are hyperlinked.
+//   </p>
+// </div>
+
+{
+  /* <Form.Field name="profilePicture">
+            <Form.Label className="block text-sm font-medium">
+              Add profile picture
+            </Form.Label>
+            <Form.Control asChild>
+              <FileUploader uploadSuccess={handleImageUrlReceived} />
+            </Form.Control>
+          </Form.Field> */
+}

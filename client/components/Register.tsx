@@ -67,28 +67,26 @@ export function Register() {
 
   if (isAuthenticated) {
     return (
-      <div className="mx-auto max-w-md p-4">
+      <div className="mx-auto my-auto max-w-fit rounded-lg bg-[#dbdad4] p-4 text-left">
         <Form.Root className="FormRoot" onSubmit={handleSubmit}>
           {userNameIsTaken && (
             <p className="error-message">That username is already taken</p>
           )}
           <Form.Field className="FormField" name="username">
-            <div
-              style={{
-                display: 'flex',
-                alignItems: 'baseline',
-                justifyContent: 'space-between',
-              }}
-            >
+            <div>
               <Form.Label className="FormLabel">Username</Form.Label>
-              <Form.Message className="FormMessage" match="valueMissing">
+              <br />
+              <Form.Message
+                className="FormMessage text-sm"
+                match="valueMissing"
+              >
                 Username is required
               </Form.Message>
             </div>
             <Form.Control asChild>
               <input
                 name="username"
-                className="Input"
+                className="w-sm p-1"
                 type="text"
                 required
                 value={formData.username}
@@ -98,22 +96,20 @@ export function Register() {
           </Form.Field>
 
           <Form.Field className="FormField" name="bio">
-            <div
-              style={{
-                display: 'flex',
-                alignItems: 'baseline',
-                justifyContent: 'space-between',
-              }}
-            >
+            <div>
               <Form.Label className="FormLabel">Bio</Form.Label>
-              <Form.Message className="FormMessage" match="valueMissing">
+              <br />
+              <Form.Message
+                className="FormMessage text-sm"
+                match="valueMissing"
+              >
                 Bio is required
               </Form.Message>
             </div>
             <Form.Control asChild>
               <textarea
                 name="bio"
-                className="Textarea"
+                className="w-sm p-1"
                 required
                 value={formData.bio}
                 onChange={handleChange}
@@ -122,22 +118,20 @@ export function Register() {
           </Form.Field>
 
           <Form.Field className="FormField" name="status">
-            <div
-              style={{
-                display: 'flex',
-                alignItems: 'baseline',
-                justifyContent: 'space-between',
-              }}
-            >
+            <div>
               <Form.Label className="FormLabel">Status</Form.Label>
-              <Form.Message className="FormMessage" match="valueMissing">
+              <br></br>
+              <Form.Message
+                className="FormMessage text-sm"
+                match="valueMissing"
+              >
                 Status is required
               </Form.Message>
             </div>
             <Form.Control asChild>
               <input
                 name="status"
-                className="Input"
+                className="w-sm p-1"
                 type="text"
                 required
                 value={formData.status}
@@ -147,7 +141,7 @@ export function Register() {
           </Form.Field>
 
           <Form.Submit asChild>
-            <button className="Button submitButton" style={{ marginTop: 10 }}>
+            <button className="mt-6 inline-flex justify-center rounded-md border border-transparent bg-[#dad7c2] px-4 py-2 text-sm font-medium text-[#000000] shadow-sm focus:border-[#d1d5c7] focus:bg-[#c1bd9a] focus:ring-[#8f9779] focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50">
               Submit
             </button>
           </Form.Submit>

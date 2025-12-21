@@ -45,6 +45,7 @@ interface EditUserTemp {
   bio: string
   status: string
   email: string
+  profilePicture: string
 }
 
 interface EditUserFunction {

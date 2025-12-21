@@ -4,6 +4,7 @@ export interface UserData {
   status: string
   email: string
   admin: boolean
+  profilePicture: string
 }
 
 export interface User extends UserData {

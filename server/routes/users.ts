@@ -29,7 +29,8 @@ router.get('/check-username/:username', async (req, res) => {
     res.status(500).json({ message: 'Something went wrong checking username' })
   }
 })
-// get localhost:3000/api/v1/users/edit-user/:username
+
+// get localhost:3000/api/v1/users/edit-user/:id
 router.patch('/edit-user/:id', async (req, res) => {
   try {
     const userData = req.body

@@ -8,27 +8,26 @@ body {
 
 input {
   background-color: #ffffff;
-  border: 2px solid #000000;
+  border: 1.5px solid #212121;
   border-radius: 3px;
 }
 
 textarea {
   background-color: #ffffff;
-  border: 2px solid #000000;
+  border: 1.5px solid #000000;
   border-radius: 3px;
 }
 
 input[type='text']:focus,
 textarea:focus {
   border-color: #8f9779;
-  box-shadow: 0 0 8px #ffffff;
   outline: none;
 }
 
 input[type='number']:focus,
 textarea:focus {
   border-color: #8f9779;
-  box-shadow: 0 0 8px #ffffff;
+
   outline: none;
 }
 

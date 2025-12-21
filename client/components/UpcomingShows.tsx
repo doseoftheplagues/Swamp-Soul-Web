@@ -3,7 +3,7 @@ import { UpcomingShow } from '../../models/upcomingShow'
 import { Link } from 'react-router'
 
 import { useState, useEffect } from 'react'
-import SearchBar from './SearchBar'
+import SearchBar from './SmallerComponents/SearchBar'
 import { LoadingSpinner } from './SmallerComponents/LoadingSpinner'
 import {
   BathroomSymbol,

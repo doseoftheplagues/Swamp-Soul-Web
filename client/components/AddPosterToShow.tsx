@@ -14,7 +14,6 @@ interface PosterVariables {
     image: string
     designer: string
     upcomingShowId: number
-    archiveShowId: number | null
   }
   token: string
 }
@@ -80,7 +79,6 @@ function AddPosterToShow() {
           image: url,
           designer: designer,
           upcomingShowId: upcomingShowId,
-          archiveShowId: null,
         },
         token: token,
       })
