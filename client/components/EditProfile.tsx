@@ -5,20 +5,22 @@ import { useNavigate } from 'react-router'
 import * as API from '../apis/users'
 import * as Form from '@radix-ui/react-form'
 import { LoadingSpinner } from './SmallerComponents/LoadingSpinner'
-import { FileUploader } from './SmallerComponents/FileUploader'
 
-const EditProfile = () => {
+interface EditProfileProps {
+  setEditDetailsIsHidden: (isHidden: boolean) => void
+}
+
+const EditProfile = ({ setEditDetailsIsHidden }: EditProfileProps) => {
   const { user, isAuthenticated, isLoading, getAccessTokenSilently } =
     useAuth0()
   const { update, ...userDb } = useUser()
   const [userNameIsTaken, setUsernameIsTaken] = useState(false)
-  const [newProfilePicture, setNewProfilePicture] = useState<string>()
   const [formData, setFormData] = useState({
     username: '',
     bio: '',
     status: '',
     email: '',
-    profilePicture: newProfilePicture,
+    profilePicture: '',
   })
 
   const navigate = useNavigate()
@@ -30,7 +32,7 @@ const EditProfile = () => {
   }, [userDb.isLoading, userDb.data, navigate])
 
   useEffect(() => {
-    if (user && userDb.data) {
+    if (user && userDb.data && user.email) {
       setFormData({
         username: userDb.data.username,
         bio: userDb.data.bio,
@@ -59,13 +61,19 @@ const EditProfile = () => {
         console.error('Could not find user ID to update.')
         return
       }
-      update.mutate({
-        id: userId,
-        updatedUser: formData,
-        token,
-      })
-      setUsernameIsTaken(false)
-      navigate('/profile')
+      update.mutate(
+        {
+          id: userId,
+          updatedUser: formData,
+          token,
+        },
+        {
+          onSuccess: () => {
+            setUsernameIsTaken(false)
+            setEditDetailsIsHidden(true)
+          },
+        },
+      )
     } catch (error) {
       console.error('Failed to get access token:', error)
     }
@@ -90,15 +98,6 @@ const EditProfile = () => {
         <LoadingSpinner />
       </div>
     )
-  }
-
-  const handleImageUrlReceived = async (url: string) => {
-    try {
-      console.log('Image uploaded successfully! URL:', url)
-      setNewProfilePicture(url)
-    } catch (error) {
-      console.error('Something went wrong', error)
-    }
   }
 
   if (isAuthenticated) {
@@ -137,7 +136,7 @@ const EditProfile = () => {
             </div>
             <Form.Control asChild>
               <textarea
-                className="w-full p-1"
+                className="w-full p-1 text-sm"
                 rows={3}
                 name="bio"
                 value={formData.bio}
@@ -146,10 +145,10 @@ const EditProfile = () => {
               />
             </Form.Control>
           </Form.Field>
-          <br />
+
           <Form.Field name="status">
             <div>
-              <Form.Label>Status</Form.Label>
+              <Form.Label className="text-sm">Status</Form.Label>
               <br />
               <Form.Message match="valueMissing">
                 Please enter your status
@@ -158,7 +157,7 @@ const EditProfile = () => {
             <Form.Control asChild>
               <input
                 type="text"
-                className="w-full p-1"
+                className="w-full p-1 text-sm"
                 name="status"
                 value={formData.status}
                 onChange={handleChange}
@@ -166,7 +165,7 @@ const EditProfile = () => {
               />
             </Form.Control>
           </Form.Field>
-          <br />
+
           <Form.Submit asChild>
             <button
               className="text-md mt-6 inline-flex w-full justify-center rounded-md border-2 border-black bg-[#dad7c2] px-4 py-2 font-medium text-black shadow-sm focus:ring-offset-2 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"

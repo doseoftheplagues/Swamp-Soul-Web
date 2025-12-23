@@ -10,7 +10,12 @@ const router = Router()
 router.get('/', checkJwt, async (req: JwtRequest, res) => {
   try {
     const auth0Id = req.auth?.sub
-    const user = await db.getUserById(auth0Id as string)
+
+    if (!auth0Id) {
+      return res.status(401).json({ message: 'Unauthorized: Missing Auth0 ID' })
+    }
+
+    const user = await db.getUserById(auth0Id)
     res.json({ user })
   } catch (error) {
     console.log(error)

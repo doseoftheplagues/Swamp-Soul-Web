@@ -50,7 +50,7 @@ interface EditUserTemp {
 
 interface EditUserFunction {
   id: string
-  updatedUser: EditUserTemp
+  updatedUser: Partial<EditUserTemp>
   token: string
 }
 
@@ -58,7 +58,7 @@ export async function editUser({
   id,
   updatedUser,
   token,
-}: EditUserFunction): Promise<EditUserTemp> {
+}: EditUserFunction): Promise<Partial<EditUserTemp>> {
   return request
     .patch(`${rootURL}/users/edit-user/${id}`)
     .send(updatedUser)
