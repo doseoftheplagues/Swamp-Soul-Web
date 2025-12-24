@@ -27,6 +27,17 @@ router.get('/:id', async (req, res) => {
   }
 })
 
+router.get('/user/:id', async (req, res) => {
+  try {
+    const id = req.params.id
+    const showById = await db.getUpcomingShowsByUserId(id)
+    res.json(showById)
+  } catch (error) {
+    console.log(error)
+    res.status(500).json({ message: 'Something went wrong getting show' })
+  }
+})
+
 // POST localhost:3000/api/v1/upcomingShows
 router.post('/', checkJwt, async (req: JwtRequest, res) => {
   try {

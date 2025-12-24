@@ -13,6 +13,11 @@ export async function getUpcomingShowById(id: number) {
   return response.body
 }
 
+export async function getUpcomingShowsByUserId(id: string) {
+  const response = await request.get(`${rootURL}/upcomingshows/user/${id}`)
+  return response.body
+}
+
 export async function updateUpcomingShow(
   id: number,
   showData: Partial<UpcomingShowData>,

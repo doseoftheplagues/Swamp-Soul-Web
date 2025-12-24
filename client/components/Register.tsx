@@ -17,6 +17,8 @@ export function Register() {
     bio: '',
     status: '',
     email: '',
+    admin: false,
+    profilePicture: 'Public/assets/default.jpeg',
   })
 
   useEffect(() => {

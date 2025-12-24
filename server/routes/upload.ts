@@ -1,6 +1,6 @@
 import { Router } from 'express'
 import multer from 'multer'
-import { S3Client } from '@aws-sdk/client-s3'
+import { S3Client, DeleteObjectCommand } from '@aws-sdk/client-s3'
 import { Upload } from '@aws-sdk/lib-storage'
 import crypto from 'node:crypto'
 import checkJwt from '../../auth0'
@@ -77,8 +77,32 @@ router.post('/', checkJwt, upload.single('image'), async (req, res) => {
   }
 })
 
-router.get('/', async (req, res) => {
-  res.send('This is the upload route. Use POST to upload files.')
+router.delete('/', checkJwt, async (req, res) => {
+  try {
+    const { url } = req.body
+    if (!url) {
+      return res.status(400).json({ message: 'Image URL is required.' })
+    }
+
+    const key = url.split('/').pop()
+    if (!key) {
+      return res.status(400).json({ message: 'Invalid Image URL provided.' })
+    }
+
+    const decodedKey = decodeURIComponent(key)
+
+    const deleteParams = {
+      Bucket: process.env.R2_BUCKET_NAME,
+      Key: decodedKey,
+    }
+
+    await S3.send(new DeleteObjectCommand(deleteParams))
+
+    res.status(200).json({ message: 'File deleted successfully.' })
+  } catch (err) {
+    console.error('Error deleting file:', err)
+    res.status(500).json({ message: 'Error deleting file.' })
+  }
 })
 
 export default router

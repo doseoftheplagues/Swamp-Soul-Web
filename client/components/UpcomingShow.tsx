@@ -8,6 +8,7 @@ import { LoadingSpinner } from './SmallerComponents/LoadingSpinner'
 import { useAuth0 } from '@auth0/auth0-react'
 import * as AlertDialog from '@radix-ui/react-alert-dialog'
 import { useEffect, useState } from 'react'
+import { usePosters, useDeletePoster } from '../hooks/usePosters'
 
 export function UpcomingShow() {
   const [titleBackHeight, setTitleBackHeight] = useState('')
@@ -15,8 +16,14 @@ export function UpcomingShow() {
   const [titleWrap, setTitleWrap] = useState('')
   const params = useParams()
   const { data, isLoading, isError } = useGetUpcomingShowById(Number(params.id))
-  const { isAuthenticated, getAccessTokenSilently, user } = useAuth0()
+  const { isAuthenticated, getAccessTokenSilently } = useAuth0()
+  const {
+    data: poster,
+    isLoading: posterIsLoading,
+    isError: posterIsError,
+  } = usePosters(Number(params.id))
   const deleteShowMutation = useDeleteUpcomingShow()
+  const deletePosterMutation = useDeletePoster()
   const navigate = useNavigate()
 
   const editShowMutation = useUpdateUpcomingShow()
@@ -33,6 +40,9 @@ export function UpcomingShow() {
   if (isError) {
     return <p>an error occured</p>
   }
+  if (posterIsError) {
+    return <p>an error occured</p>
+  }
 
   function formatDate(dateString: string) {
     return new Date(dateString).toLocaleDateString('en-NZ', {
@@ -42,13 +52,37 @@ export function UpcomingShow() {
     })
   }
 
-  async function handleDeleteClick(id: number) {
+  async function handleDeleteClick(showId: number) {
     const token = await getAccessTokenSilently()
     if (!isAuthenticated) {
-      alert('You need to log in to delete shows')
+      return alert('You need to log in to delete shows')
     }
-    deleteShowMutation.mutate({ id, token })
-    navigate('/upcomingshows')
+
+    const posterToDelete = poster?.[0]
+
+    const performDeleteShow = () => {
+      deleteShowMutation.mutate(
+        { id: showId, token },
+        {
+          onSuccess: () => {
+            navigate('/upcomingshows')
+          },
+        },
+      )
+    }
+
+    if (posterToDelete) {
+      deletePosterMutation.mutate(
+        { id: posterToDelete.id, token },
+        {
+          onSuccess: () => {
+            performDeleteShow()
+          },
+        },
+      )
+    } else {
+      performDeleteShow()
+    }
   }
 
   const handleEditClick = (id: number) => {
@@ -125,17 +159,96 @@ export function UpcomingShow() {
 
   return (
     <div>
-      <div className="large-screen hidden min-h-[calc(100vh-4rem)] w-screen flex-row sm:flex">
-        <div className="infoDiv flex w-1/2 flex-col lg:w-3/5">
+      <div className="large-screen hidden min-h-[calc(100vh-4rem)] flex-row sm:flex">
+        {isAuthenticated && (
+          <div className="absolute top-10 left-2 z-100 w-fit rounded-md border-2 bg-[#ffffff] shadow-lg shadow-black/20">
+            <div className="rounded-t-md border-b-2 bg-[#d9d7c0] px-2 py-0.5">
+              <p>Tools</p>
+            </div>
+            <div className="rounded-b-md">
+              <AlertDialog.Root>
+                <AlertDialog.Trigger asChild>
+                  <button className="w-full bg-[#f7f9ef] px-2 py-0.5 text-left hover:bg-[#d8d9b2b6] active:bg-[#d8d9b2]">
+                    Delete show
+                  </button>
+                </AlertDialog.Trigger>
+                <AlertDialog.Portal>
+                  <AlertDialog.Overlay className="AlertDialogOverlay" />
+                  <AlertDialog.Content className="AlertDialogContent">
+                    <AlertDialog.Title className="AlertDialogTitle">
+                      Are you sure?
+                    </AlertDialog.Title>
+                    <AlertDialog.Description className="AlertDialogDescription">
+                      This action cannot be undone. This will permanently delete
+                      this show and its data from our server. If the show is
+                      cancelled please select cancel instead to notify attendees
+                      of the change.
+                    </AlertDialog.Description>
+                    <div
+                      style={{
+                        display: 'flex',
+                        gap: 25,
+                        justifyContent: 'flex-end',
+                      }}
+                    >
+                      <AlertDialog.Cancel asChild>
+                        <button className="Button mauve">Cancel</button>
+                      </AlertDialog.Cancel>
+                      <AlertDialog.Action asChild>
+                        <button
+                          className="rounded-sm bg-red-400 p-2"
+                          onClick={() => handleDeleteClick(data.id)}
+                        >
+                          Yes, delete show
+                        </button>
+                      </AlertDialog.Action>
+                    </div>
+                  </AlertDialog.Content>
+                </AlertDialog.Portal>
+              </AlertDialog.Root>
+              <br />
+              <button
+                onClick={() => handleEditClick(data.id)}
+                className="w-full bg-[#e9ecdf] px-2 py-0.5 text-left hover:bg-[#d8d9b2b6] active:bg-[#d8d9b2]"
+              >
+                Edit Show
+              </button>
+              {data.canceled ? (
+                <button
+                  className="w-full rounded-b-md bg-[#f7f9ef] px-2 py-0.5 text-left hover:bg-[#d8d9b2b6] active:bg-[#d8d9b2]"
+                  onClick={() => handleCancelClick(data.id, true)}
+                >
+                  Uncancel show
+                </button>
+              ) : (
+                <button
+                  className="w-full rounded-b-md bg-[#f7f9ef] px-2 py-0.5 text-left hover:bg-[#d8d9b2b6] active:bg-[#d8d9b2]"
+                  onClick={() => handleCancelClick(data.id, false)}
+                >
+                  Cancel show
+                </button>
+              )}
+            </div>
+          </div>
+        )}
+        <div className="infoDiv flex grow flex-col lg:min-w-3/5">
           <div className={` ${titleBackHeight}`}>
             <div>
-              <div className="performerNameHeader absolute top-11 left-2 z-10 w-5/6">
+              <div className="performerNameHeader absolute top-11 left-2 z-10 w-6/6 lg:w-5/6">
                 <div className="w-5/6">
-                  <h2 className={`${titleTextSize} text-wrap ${titleWrap}`}>
-                    {data.performers}
-                  </h2>
+                  {data.title ? (
+                    <h2 className={`${titleTextSize} text-wrap ${titleWrap}`}>
+                      {' '}
+                      {data.title}
+                    </h2>
+                  ) : (
+                    <h2 className={`${titleTextSize} text-wrap ${titleWrap}`}>
+                      {' '}
+                      {data.performers}
+                    </h2>
+                  )}
                 </div>
-                <div className="w-1/2 wrap-anywhere md:w-3/5">
+                <div className="sm:w-1/2 lg:w-6/9">
                   <div className="mt-4 ml-1">
                     <h3 className="text-xl lg:text-2xl">
                       {data.locationName}{' '}
@@ -146,7 +259,7 @@ export function UpcomingShow() {
                   </div>
                   {data.description && (
                     <div className="mt-2 ml-1">
-                      <h3 className="text-lg lg:text-xl">{data.description}</h3>
+                      <h3 className="text-sm lg:text-xl">{data.description}</h3>
                     </div>
                   )}
                 </div>
@@ -159,6 +272,7 @@ export function UpcomingShow() {
               <div className="mt-2 flex w-1/2 flex-col border-2 border-[#dad7c2] bg-[#eaeae066] p-2">
                 <p className="text-[#414141e8]">Doors </p>
                 <p className="my-1"> {data.doorsTime} </p>
+
                 {data.setTimes && (
                   <div>
                     <p className="text-[#414141e8]">Set times </p>
@@ -188,7 +302,19 @@ export function UpcomingShow() {
           </div>
         </div>
 
-        <div className="posterDiv flex h-auto w-1/2 bg-amber-500 lg:w-2/5"></div>
+        <div className="posterDiv flex w-1/2 lg:w-fit">
+          {posterIsLoading ? (
+            <div className="flex h-full items-center justify-center">
+              <LoadingSpinner />
+            </div>
+          ) : (
+            <img
+              className="block h-[calc(100vh-4rem)] min-w-0 object-contain wrap-break-word whitespace-normal"
+              src={poster[0]?.image || 'Public/assets/defaultPoster.jpg'}
+              alt={`Poster for ${data.performers}`}
+            ></img>
+          )}
+        </div>
       </div>
       <div className="phone-screen flex sm:hidden">
         <p>Smallscreen</p>

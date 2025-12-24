@@ -10,6 +10,7 @@ import {
   addUpcomingShow,
   deleteUpcomingShow,
   updateUpcomingShow,
+  getUpcomingShowsByUserId,
 } from '../apis/upcomingShows'
 import { UpcomingShowData } from '../../models/upcomingShow'
 
@@ -27,6 +28,17 @@ export function useGetUpcomingShowById(id: number) {
   const query = useQuery({
     queryKey: [`upcoming-show-${id}`],
     queryFn: () => getUpcomingShowById(id),
+  })
+  return {
+    ...query,
+  }
+}
+
+export function useGetUpcomingShowsByUserId(id: string | undefined) {
+  const query = useQuery({
+    queryKey: ['upcoming_shows', { userId: id }],
+    queryFn: () => getUpcomingShowsByUserId(id!),
+    enabled: !!id,
   })
   return {
     ...query,

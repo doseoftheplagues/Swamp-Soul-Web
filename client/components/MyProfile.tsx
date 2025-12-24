@@ -4,16 +4,31 @@ import { ProfilePlaceholder } from './SmallerComponents/ProfilePlaceholder'
 import { useState } from 'react'
 import { FileUploader } from './SmallerComponents/FileUploader'
 import EditProfile from './EditProfile'
+import { useImage } from '../hooks/useImage'
+import { useGetUpcomingShowsByUserId } from '../hooks/useUpcomingShows'
+import { UpcomingShow } from '../../models/upcomingShow'
+import UpcomingShowCard from './SmallerComponents/UpcomingShowCard'
+import { LoadingSpinner } from './SmallerComponents/LoadingSpinner'
 
 const Profile = () => {
+  const { deleteImage } = useImage()
   const [editPfpIsHidden, setEditPfpIsHidden] = useState(true)
   const [editDetailsIsHidden, setEditDetailsIsHidden] = useState(true)
   const { user, isAuthenticated, isLoading, getAccessTokenSilently } =
     useAuth0()
   const { data, update } = useUser()
+  const userLoaded = user?.sub
+  const {
+    data: userShows,
+    isLoading: showsAreLoading,
+    isError: showsAreError,
+  } = useGetUpcomingShowsByUserId(userLoaded)
 
   if (isLoading) {
     return <div className="loading-text">Loading profile...</div>
+  }
+  if (showsAreError) {
+    console.log('Something went wrong loading your shows')
   }
   if (!isAuthenticated) {
     return <p>Log in to view your profile</p>
@@ -29,8 +44,13 @@ const Profile = () => {
 
   const handleImageUrlReceived = async (url: string) => {
     try {
-      console.log('updating pfp to ' + url)
       const token = await getAccessTokenSilently()
+      console.log('deleting old pfp')
+      if (data?.profilePicture !== undefined) {
+        const mutationVariables = { url: data?.profilePicture, token: token }
+        deleteImage.mutate(mutationVariables)
+      }
+      console.log('updating pfp to ' + url)
       if (user?.sub !== undefined) {
         const userId = user.sub
 
@@ -63,7 +83,7 @@ const Profile = () => {
   }
 
   return isAuthenticated && user ? (
-    <div className="p-2">
+    <div className="flex flex-col p-2">
       <div className="flex flex-col rounded-md border bg-[#e9e6d6ac] md:w-4/9 lg:w-2/9">
         {!editDetailsIsHidden && (
           <div>
@@ -97,13 +117,17 @@ const Profile = () => {
                 <FileUploader uploadSuccess={handleImageUrlReceived} />
               </div>
               <div
-                className={`place-content-center pl-0.5 ${!editPfpIsHidden && 'hidden'}`}
+                className={`place-content-center pr-1 pl-0.5 ${!editPfpIsHidden && 'hidden'}`}
               >
                 <div className="flex flex-row">
                   <p className="text-xl font-bold">{data?.username} </p>
-                  <p className="text-md mt-[3px] ml-2">{data?.status}</p>
+                  <p className="text-md mt-[3px] ml-2 wrap-anywhere">
+                    {data?.status}
+                  </p>
                 </div>
-                <p className="-mt-1 italic opacity-80">{user.email}</p>
+                <p className="-mt-1 wrap-anywhere italic opacity-80">
+                  {user.email}
+                </p>
               </div>
             </div>
             <div className="p-2">
@@ -116,13 +140,24 @@ const Profile = () => {
           </div>
         )}
         <div className="BUTTONDIV p-2">
-          <button
-            className="mt-1 mr-2 inline-flex w-fit justify-center rounded-sm border border-black bg-[#faf8f1] p-1 text-sm font-medium text-black shadow-sm focus:ring-offset-2 focus:outline-none disabled:border-neutral-300 disabled:text-gray-300"
-            disabled={!editPfpIsHidden || (!editDetailsIsHidden && true)}
-            onClick={() => handleEditDetailsCLick()}
-          >
-            Edit Details
-          </button>
+          {editDetailsIsHidden && (
+            <button
+              className="mt-1 mr-2 inline-flex w-fit justify-center rounded-sm border border-black bg-[#faf8f1] p-1 text-sm font-medium text-black shadow-sm focus:ring-offset-2 focus:outline-none disabled:border-neutral-300 disabled:text-gray-300"
+              disabled={!editPfpIsHidden || (!editDetailsIsHidden && true)}
+              onClick={() => handleEditDetailsCLick()}
+            >
+              Edit Details
+            </button>
+          )}
+
+          {!editDetailsIsHidden && (
+            <button
+              className="mt-1 mr-2 inline-flex w-fit justify-center rounded-sm border border-black bg-[#faf8f1] p-1 text-sm font-medium text-black shadow-sm focus:ring-offset-2 focus:outline-none"
+              onClick={() => handleEditDetailsCLick()}
+            >
+              Cancel
+            </button>
+          )}
 
           {editPfpIsHidden && (
             <button
@@ -141,6 +176,16 @@ const Profile = () => {
               Cancel
             </button>
           )}
+        </div>
+      </div>
+      <div className="mt-5 flex w-fit flex-col rounded-md border bg-[#e9e6d6ac]">
+        <h1>Your Shows</h1>
+        <div className="upcomingShowsBox mt-1">
+          {showsAreLoading && <LoadingSpinner />}
+          {userShows &&
+            userShows.map((show: UpcomingShow) => (
+              <UpcomingShowCard key={show.id} show={show} />
+            ))}
         </div>
       </div>
     </div>

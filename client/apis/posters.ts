@@ -19,3 +19,10 @@ export async function addPoster(posterData: UpcomingPosterData, token: string) {
     .set('Authorization', `Bearer ${token}`)
   return response.body
 }
+
+export async function deletePoster(id: number, token: string) {
+  const response = await request
+    .delete(`${rootURL}/posters/${id}`)
+    .set('Authorization', `Bearer ${token}`)
+  return response.body
+}

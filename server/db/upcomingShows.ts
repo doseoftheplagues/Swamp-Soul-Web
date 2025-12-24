@@ -38,6 +38,13 @@ export async function getUpcomingShowById(id: number) {
   return result[0] as UpcomingShow
 }
 
+export async function getUpcomingShowsByUserId(id: string) {
+  const result = await db('upcoming_shows')
+    .where('user_id', id)
+    .select(...showProperties)
+  return result
+}
+
 //create
 export async function addUpcomingShow(showData: UpcomingShowData) {
   const {

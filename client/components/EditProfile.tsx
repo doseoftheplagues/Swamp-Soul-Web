@@ -102,12 +102,12 @@ const EditProfile = ({ setEditDetailsIsHidden }: EditProfileProps) => {
 
   if (isAuthenticated) {
     return (
-      <div className="mx-auto max-w-md p-4">
-        <h2 className="mb-2 text-xl">Edit Profile</h2>
+      <div className="mx-auto max-w-md p-2">
+        <h2 className="text-md mb-2">Edit Details</h2>
         <Form.Root onSubmit={handleSubmit}>
           {userNameIsTaken && <p>That username is already taken</p>}
           <Form.Field name="username">
-            <div>
+            <div className="">
               <Form.Label className="block text-sm font-medium">
                 Username
               </Form.Label>
@@ -118,7 +118,7 @@ const EditProfile = ({ setEditDetailsIsHidden }: EditProfileProps) => {
             <Form.Control asChild>
               <input
                 type="text"
-                className="w-full p-1 text-sm"
+                className="mb-2 w-full p-1 text-sm"
                 name="username"
                 value={formData.username}
                 onChange={handleChange}
@@ -168,7 +168,7 @@ const EditProfile = ({ setEditDetailsIsHidden }: EditProfileProps) => {
 
           <Form.Submit asChild>
             <button
-              className="text-md mt-6 inline-flex w-full justify-center rounded-md border-2 border-black bg-[#dad7c2] px-4 py-2 font-medium text-black shadow-sm focus:ring-offset-2 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+              className="mt-2 inline-flex justify-center rounded-md border-2 border-black bg-[#ead2d2be] px-2 py-1 text-sm font-medium text-black hover:bg-[#e1bebef5] focus:ring-offset-2 focus:outline-none active:bg-[#e1bebe] disabled:cursor-not-allowed disabled:opacity-50"
               disabled={
                 update.isPending ||
                 !formData.username ||
@@ -188,32 +188,3 @@ const EditProfile = ({ setEditDetailsIsHidden }: EditProfileProps) => {
 }
 
 export default EditProfile
-
-// <div>
-//   <label htmlFor="about" className="block text-sm font-medium">
-//     About
-//   </label>
-//   <div className="mt-1">
-//     <textarea
-//       id="about"
-//       name="about"
-//       rows={3}
-//       className="mt-1 block w-full rounded-md border p-2 shadow-sm sm:text-sm"
-//       placeholder="you@example.com"
-//     ></textarea>
-//   </div>
-//   <p className="mt-2 text-sm text-gray-500">
-//     Brief description for your profile. URLs are hyperlinked.
-//   </p>
-// </div>
-
-{
-  /* <Form.Field name="profilePicture">
-            <Form.Label className="block text-sm font-medium">
-              Add profile picture
-            </Form.Label>
-            <Form.Control asChild>
-              <FileUploader uploadSuccess={handleImageUrlReceived} />
-            </Form.Control>
-          </Form.Field> */
-}

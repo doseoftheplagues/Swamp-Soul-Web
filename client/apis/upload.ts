@@ -19,3 +19,11 @@ export async function uploadImage(
     .set('Authorization', `Bearer ${token}`)
   return response.body
 }
+
+export async function deleteImage(url: string, token: string) {
+  const response = await request
+    .delete(rootURL)
+    .send({ url: url }) // Corrected: Send as a JSON object
+    .set('Authorization', `Bearer ${token}`)
+  return response.body
+}
