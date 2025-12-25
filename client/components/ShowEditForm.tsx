@@ -108,7 +108,7 @@ export function ShowEditForm() {
       maxCapacity: parseInt(formData.maxCapacity, 10) || null,
     }
     editShowMutation.mutate({ id: currentId, showData: submissionData, token })
-    navigate(`/upcomingshows/${currentId}`)
+    navigate(-1)
   }
 
   const requiredFields: (keyof typeof formData)[] = [

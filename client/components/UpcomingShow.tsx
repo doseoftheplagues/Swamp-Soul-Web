@@ -7,10 +7,15 @@ import {
 import { LoadingSpinner } from './SmallerComponents/LoadingSpinner'
 import { useAuth0 } from '@auth0/auth0-react'
 import * as AlertDialog from '@radix-ui/react-alert-dialog'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { usePosters, useDeletePoster } from '../hooks/usePosters'
+import { gsap } from 'gsap/dist/gsap'
+import { Draggable } from 'gsap/dist/Draggable'
+
+gsap.registerPlugin(Draggable)
 
 export function UpcomingShow() {
+  const draggableRef = useRef(null)
   const [titleBackHeight, setTitleBackHeight] = useState('')
   const [titleTextSize, setTitleTextSize] = useState('')
   const [titleWrap, setTitleWrap] = useState('')
@@ -27,6 +32,23 @@ export function UpcomingShow() {
   const navigate = useNavigate()
 
   const editShowMutation = useUpdateUpcomingShow()
+
+  useEffect(() => {
+    if (draggableRef.current) {
+      Draggable.create(draggableRef.current, {
+        type: 'x,y',
+        bounds: 'body',
+        trigger: "[data-drag-trigger='true']",
+
+        onPress: function () {
+          this.target.style.cursor = 'grabbing'
+        },
+        onRelease: function () {
+          this.target.style.cursor = 'grab'
+        },
+      })
+    }
+  }, [])
 
   useEffect(() => {
     if (data) {
@@ -65,7 +87,7 @@ export function UpcomingShow() {
         { id: showId, token },
         {
           onSuccess: () => {
-            navigate('/upcomingshows')
+            navigate(-1)
           },
         },
       )
@@ -102,7 +124,7 @@ export function UpcomingShow() {
       token,
       showData: showData,
     })
-    navigate(`/upcomingshows`)
+    navigate(-1)
   }
 
   const lengthDisplayCheck = (input: string) => {
@@ -155,14 +177,36 @@ export function UpcomingShow() {
     }
   }
 
-  // NOTE performers text breaks at 20-23 max
+  // NOTE TO SELF -- performers text breaks at 20-23 max
 
   return (
     <div>
+      {/* <div
+        
+        style={{
+          position: 'absolute',
+          top: '200px',
+          left: '200px',
+          width: '100px',
+          height: '100px',
+          backgroundColor: 'red',
+          zIndex: 10000,
+          cursor: 'grab',
+        }}
+      >
+        Drag Me
+      </div> */}
       <div className="large-screen hidden min-h-[calc(100vh-4rem)] flex-row sm:flex">
         {isAuthenticated && (
-          <div className="absolute top-10 left-2 z-100 w-fit rounded-md border-2 bg-[#ffffff] shadow-lg shadow-black/20">
-            <div className="rounded-t-md border-b-2 bg-[#d9d7c0] px-2 py-0.5">
+          <div
+            ref={draggableRef}
+            className="absolute top-10 left-2 z-100 w-fit rounded-md border-2 bg-[#ffffff] shadow-lg shadow-black/20"
+          >
+            <div
+              data-drag-trigger="true"
+              className="rounded-t-md border-b-2 bg-[#d9d7c0] px-2 py-0.5"
+              style={{ cursor: 'grab' }}
+            >
               <p>Tools</p>
             </div>
             <div className="rounded-b-md">
