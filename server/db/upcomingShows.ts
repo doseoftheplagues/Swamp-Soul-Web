@@ -144,6 +144,9 @@ export async function updateUpcomingShow(
 
 //delete
 
-export async function deleteUpcomingShow(id: number) {
-  return await db('upcoming_shows').where('id', id).delete()
+export async function deleteUpcomingShow(id: number, authId: string) {
+  return await db('upcoming_shows')
+    .where('id', id)
+    .where('user_id', authId)
+    .delete()
 }

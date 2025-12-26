@@ -33,7 +33,9 @@ export async function usernameTakenCheck(username: string) {
 
 export async function editUser(userData: Partial<User>, userId: string) {
   const { profilePicture, ...rest } = userData
-  const userToUpdate: { [key: string]: any } = { ...rest }
+  const userToUpdate: { [key: string]: string | boolean | undefined } = {
+    ...rest,
+  }
 
   if (profilePicture !== undefined) {
     userToUpdate.profile_picture = profilePicture

@@ -77,10 +77,23 @@ router.patch('/:id', checkJwt, async (req, res) => {
 })
 
 // DELETE localhost:3000/api/v1/upcomingShows/:id
-router.delete('/:id', checkJwt, async (req, res) => {
+router.delete('/:id', checkJwt, async (req: JwtRequest, res) => {
   try {
     const showId = Number(req.params.id)
-    await db.deleteUpcomingShow(showId)
+    const authId = req.auth?.sub
+
+    if (!authId) {
+      return res.status(401).json({ message: 'Unauthorized' })
+    }
+
+    const rowsDeleted = await db.deleteUpcomingShow(showId, authId)
+
+    if (rowsDeleted === 0) {
+      return res
+        .status(401)
+        .json({ message: 'Unauthorized: You can only delete your own shows.' })
+    }
+
     res.sendStatus(204)
   } catch (error) {
     console.log(error)

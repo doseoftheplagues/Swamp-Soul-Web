@@ -133,6 +133,10 @@ textarea:focus {
   outline: none;
 }
 
+.DropdownMenuItem {
+  background-color: #f6f4e5;
+}
+
 .Button {
   display: inline-flex;
   align-items: center;
