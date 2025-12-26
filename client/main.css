@@ -18,6 +18,12 @@ textarea {
   border-radius: 3px;
 }
 
+img {
+  text-align: center;
+  overflow: hidden;
+  white-space: pre-wrap;
+}
+
 input[type='text']:focus,
 textarea:focus {
   border-color: #8f9779;

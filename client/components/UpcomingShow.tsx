@@ -20,6 +20,7 @@ import { usePosters, useDeletePoster } from '../hooks/usePosters'
 import { gsap } from 'gsap/dist/gsap'
 import { Draggable } from 'gsap/dist/Draggable'
 import { ToolsSymbol } from './SmallerComponents/SymbolSvgs'
+import { PosterUploader } from './SmallerComponents/PosterUploader'
 
 gsap.registerPlugin(Draggable)
 
@@ -28,6 +29,7 @@ export function UpcomingShow() {
   const [titleBackHeight, setTitleBackHeight] = useState('')
   const [titleTextSize, setTitleTextSize] = useState('')
   const [titleWrap, setTitleWrap] = useState('')
+  const [addPosterIsHidden, setAddPosterIsHidden] = useState(true)
   const params = useParams()
   const { data, isLoading, isError } = useGetUpcomingShowById(Number(params.id))
   const { isAuthenticated, getAccessTokenSilently, user } = useAuth0()
@@ -140,6 +142,44 @@ export function UpcomingShow() {
     navigate(-1)
   }
 
+  function handleAddClick() {
+    if (addPosterIsHidden == true) {
+      setAddPosterIsHidden(false)
+    } else {
+      setAddPosterIsHidden(true)
+    }
+  }
+
+  async function handleUploadSuccess(url: string, designer: string) {
+    try {
+      console.log('Image uploaded successfully! URL:', url)
+      const token = await getAccessTokenSilently()
+      const upcomingShowId = data.id
+      // use poster mutation to add poster
+      const newPosterId = await posterUploadMutation.mutateAsync({
+        posterData: {
+          image: url,
+          designer: designer,
+          upcomingShowId: upcomingShowId,
+        },
+        token: token,
+      })
+      const submissionData = {
+        posterId: newPosterId,
+      }
+      // update show with new posterId
+      editShowMutation.mutate({
+        id: upcomingShowId,
+        showData: submissionData,
+        token,
+      })
+      navigate(`/upcomingshows/${upcomingShowId}`)
+    } catch (error) {
+      console.error('Something went wrong', error)
+    }
+  }
+
+  // RESPONSIVE TITLE STUFF
   const lengthDisplayCheck = (input: string) => {
     // number > 23 background 28 text 8
     const length = input.length
@@ -202,16 +242,16 @@ export function UpcomingShow() {
           >
             <div
               data-drag-trigger="true"
-              className="flex flex-row items-center rounded-t-sm border-b-2 bg-[#d9d7c0] py-0.5"
+              className="flex min-w-40 flex-row items-center rounded-t-sm border-b-2 bg-[#d9d7c0] py-0.5"
               style={{ cursor: 'grab' }}
             >
               <ToolsSymbol className="h-8" />
               <p>Tools</p>
             </div>
-            <div className="rounded-b-md">
+            <div className="flex flex-col rounded-b-md">
               <AlertDialog.Root>
                 <AlertDialog.Trigger asChild>
-                  <button className="w-full bg-[#f7f9ef] px-2 py-0.5 text-left hover:bg-[#d8d9b2b6] active:bg-[#d8d9b2]">
+                  <button className="w-full bg-[#f7f9ef] px-1 py-0.5 text-left hover:bg-[#d8d9b2b6] active:bg-[#d8d9b2]">
                     Delete show
                   </button>
                 </AlertDialog.Trigger>
@@ -249,28 +289,42 @@ export function UpcomingShow() {
                   </AlertDialog.Content>
                 </AlertDialog.Portal>
               </AlertDialog.Root>
-              <br />
+
               <button
                 onClick={() => handleEditClick(data.id)}
-                className="w-full bg-[#e9ecdf] px-2 py-0.5 text-left hover:bg-[#d8d9b2b6] active:bg-[#d8d9b2]"
+                className="w-full bg-[#e9ecdf] px-1 py-0.5 text-left hover:bg-[#d8d9b2b6] active:bg-[#d8d9b2]"
               >
-                Edit Show
+                Edit details
               </button>
               {data.canceled ? (
                 <button
-                  className="w-full rounded-b-md bg-[#f7f9ef] px-2 py-0.5 text-left hover:bg-[#d8d9b2b6] active:bg-[#d8d9b2]"
+                  className="w-full bg-[#f7f9ef] px-1 py-0.5 text-left hover:bg-[#d8d9b2b6] active:bg-[#d8d9b2]"
                   onClick={() => handleCancelClick(data.id, true)}
                 >
                   Uncancel show
                 </button>
               ) : (
                 <button
-                  className="w-full rounded-b-md bg-[#f7f9ef] px-2 py-0.5 text-left hover:bg-[#d8d9b2b6] active:bg-[#d8d9b2]"
+                  className="w-full bg-[#f7f9ef] px-1 py-0.5 text-left hover:bg-[#d8d9b2b6] active:bg-[#d8d9b2]"
                   onClick={() => handleCancelClick(data.id, false)}
                 >
                   Cancel show
                 </button>
               )}
+              <button
+                onClick={handleAddClick}
+                className="w-full bg-[#e9ecdf] px-1 py-0.5 text-left hover:bg-[#d8d9b2b6] active:bg-[#d8d9b2]"
+              >
+                Add alt poster
+              </button>
+              {addPosterIsHidden == false && (
+                <div className="absolute top-31 -right-60 w-60 rounded-sm border-2 bg-[#e9ecdf] px-1 py-0.5 shadow-sm shadow-black/10">
+                  <PosterUploader uploadSuccess={handleUploadSuccess} />
+                </div>
+              )}
+              <button className="w-ful rounded-b-md bg-[#f7f9ef] px-1 py-0.5 text-left hover:bg-[#d8d9b2b6] active:bg-[#d8d9b2]">
+                Replace poster
+              </button>
             </div>
           </div>
         )}

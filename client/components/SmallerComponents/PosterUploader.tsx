@@ -51,19 +51,26 @@ export function PosterUploader({ uploadSuccess }: FileUploaderProps) {
 
   return (
     <div>
-      <form className="flex w-2/6 flex-col">
-        <label htmlFor="designer">Designer:</label>
+      <form className="flex flex-col">
+        <label htmlFor="designer" className="text-md">
+          Designer:
+        </label>
         <input
           type="text"
           name="designer"
           id="designer"
+          className="mb-2"
           value={designer}
           onChange={(e) => setDesigner(e.target.value)}
         ></input>
         <label htmlFor="image" className="sr-only">
           Poster
         </label>
-        <input type="file" onChange={handleFileChange} className="p-1" />
+        <input
+          type="file"
+          onChange={handleFileChange}
+          className="max-w file:text-md w-[102px] px-1"
+        />
         {file && (
           <div>
             <p>Filename: {file.name}</p>

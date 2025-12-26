@@ -91,7 +91,7 @@ const Profile = () => {
           <DropdownMenu.Root>
             <DropdownMenu.Trigger asChild>
               <button className="IconButton" aria-label="Customise options">
-                <ToolsSymbol className="h-11" />
+                <ToolsSymbol className="h-11 hover:p-1" />
               </button>
             </DropdownMenu.Trigger>
             <DropdownMenu.Portal>
@@ -99,7 +99,7 @@ const Profile = () => {
                 <DropdownMenu.Item className="DropdownMenuItem">
                   {editDetailsIsHidden && (
                     <button
-                      className="w-full rounded-t-md bg-[#e9ecdf] px-1 py-0.5 text-left text-sm hover:bg-[#d8d9b2b6] active:bg-[#d8d9b2] disabled:border-neutral-300 disabled:text-gray-300"
+                      className="w-full bg-[#e9ecdf] px-1 py-0.5 text-left text-sm hover:bg-[#d8d9b2b6] active:bg-[#d8d9b2] disabled:border-neutral-300 disabled:text-gray-300"
                       disabled={
                         !editPfpIsHidden || (!editDetailsIsHidden && true)
                       }

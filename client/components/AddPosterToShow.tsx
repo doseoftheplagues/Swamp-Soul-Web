@@ -102,7 +102,7 @@ function AddPosterToShow() {
       <div>
         <div className="mx-auto max-w-lg p-4 text-center">
           <h1 className="mb-5">
-            Step 2: Upload poster to {data.performers} - {formatDate(data.date)}
+            Upload poster to {data.performers} - {formatDate(data.date)}
           </h1>
           <PosterUploader uploadSuccess={handleImageUrlReceived} />
         </div>

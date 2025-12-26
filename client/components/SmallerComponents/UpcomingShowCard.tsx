@@ -7,6 +7,7 @@ import {
   WheelchairSymbol,
 } from './AccessiblitySymbols'
 import { LoadingSpinner } from './LoadingSpinner'
+import { AlertSymbol } from './SymbolSvgs'
 
 interface Props {
   show: UpcomingShow
@@ -28,8 +29,6 @@ export function UpcomingShowCard({ show }: Props) {
   }
 
   if (posterIsError) {
-    // You can decide how to handle a missing poster
-    // For now, we'll just log it and show a placeholder or nothing
     console.error(`Error loading poster for show ID: ${show.id}`)
   }
 
@@ -47,7 +46,7 @@ export function UpcomingShowCard({ show }: Props) {
               </div>
             ) : (
               <img
-                className="block h-50 min-w-0 object-contain wrap-break-word whitespace-normal"
+                className="block h-50 max-w-36 min-w-0 object-contain wrap-break-word whitespace-normal"
                 src={poster[0]?.image || 'Public/assets/defaultPoster.jpg'}
                 alt={`Poster for ${show.performers}`}
               ></img>
@@ -56,8 +55,9 @@ export function UpcomingShowCard({ show }: Props) {
 
           <div className="flex w-3/5 max-w-80 flex-col sm:w-auto sm:min-w-80 sm:border sm:border-[#dad7c2]">
             {Boolean(show.canceled) && (
-              <div className="w-full bg-[#f68484] p-1">
-                This show has been cancelled
+              <div className="flex w-full flex-row items-center bg-[#fd7979] p-1">
+                <AlertSymbol className="h-7" />
+                <p className="pl-1">This show has been cancelled</p>
               </div>
             )}
 

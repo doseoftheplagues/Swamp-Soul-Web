@@ -64,10 +64,14 @@ router.post('/', checkJwt, async (req: JwtRequest, res) => {
 })
 
 // PATCH localhost:3000/api/v1/upcomingShows/:id
-router.patch('/:id', checkJwt, async (req, res) => {
+router.patch('/:id', checkJwt, async (req: JwtRequest, res) => {
   try {
     const showData = req.body
     const showId = Number(req.params.id)
+    const authId = req.auth?.sub
+    if (!authId) {
+      return res.status(401).json({ message: 'Unauthorized' })
+    }
     await db.updateUpcomingShow(showId, showData)
     res.sendStatus(200)
   } catch (error) {
