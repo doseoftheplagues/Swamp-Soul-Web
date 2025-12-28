@@ -113,6 +113,17 @@ textarea:focus {
   outline: none;
   z-index: 1000;
 }
+
+.ManagePostersContent {
+  border-radius: 6px;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  animation: contentShow 150ms cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 2000;
+}
+
 .AlertDialogContent:focus {
   outline: none;
 }
@@ -175,6 +186,7 @@ textarea:focus {
   border: 0px;
 }
 .SearchButton {
+  padding: 0;
 }
 
 .clamped-text {

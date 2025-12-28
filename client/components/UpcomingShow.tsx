@@ -25,6 +25,9 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { addPoster } from '../apis/posters'
 import { Toast } from 'radix-ui'
 import React from 'react'
+import { useImage } from '../hooks/useImage'
+import { Poster } from '../../models/poster'
+import { Cross1Icon } from '@radix-ui/react-icons'
 
 gsap.registerPlugin(Draggable)
 
@@ -39,13 +42,14 @@ interface PosterVariables {
 
 export function UpcomingShow() {
   const draggableRef = useRef(null)
+  const { deleteImage } = useImage()
   const [titleBackHeight, setTitleBackHeight] = useState('')
   const [titleTextSize, setTitleTextSize] = useState('')
   const [titleWrap, setTitleWrap] = useState('')
   const [open, setOpen] = React.useState(false)
   const timerRef = React.useRef(0)
   const [addPosterIsHidden, setAddPosterIsHidden] = useState(true)
-  const [replacePosterIsHidden, setReplacePosterIsHidden] = useState(true)
+  const [managePosterIsHidden, setManagePosterIsHidden] = useState(true)
   const queryClient = useQueryClient()
   const posterUploadMutation = useMutation({
     mutationFn: ({ posterData, token }: PosterVariables) =>
@@ -170,8 +174,8 @@ export function UpcomingShow() {
   }
 
   function handleAddClick() {
-    if (replacePosterIsHidden == false) {
-      setReplacePosterIsHidden(true)
+    if (managePosterIsHidden == false) {
+      setManagePosterIsHidden(true)
     }
     if (addPosterIsHidden == true) {
       setAddPosterIsHidden(false)
@@ -180,14 +184,14 @@ export function UpcomingShow() {
     }
   }
 
-  function handleReplaceClick() {
+  function handleManageClick() {
     if (addPosterIsHidden == false) {
       setAddPosterIsHidden(true)
     }
-    if (replacePosterIsHidden == true) {
-      setReplacePosterIsHidden(false)
+    if (managePosterIsHidden == true) {
+      setManagePosterIsHidden(false)
     } else {
-      setReplacePosterIsHidden(true)
+      setManagePosterIsHidden(true)
     }
   }
 
@@ -225,7 +229,12 @@ export function UpcomingShow() {
     }
   }
 
-  async function handleReplacePosterSuccess() {
+  async function handleManagePosterSuccess() {
+    console.log('deleting old poster')
+    const token = await getAccessTokenSilently()
+    const mutationVariables = { url: poster.image, token: token }
+    deleteImage.mutate(mutationVariables)
+
     console.log('wow!')
   }
 
@@ -292,10 +301,43 @@ export function UpcomingShow() {
             </Toast.Title>
           </Toast.Root>
           <Toast.Viewport className="ToastViewport" />
+          {managePosterIsHidden == false && (
+            <div className="AlertDialogOverlay mx-auto">
+              <div className="ManagePostersContent flex h-fit w-200 cursor-default flex-row flex-wrap items-center rounded-sm border-2 bg-[#f7f9ef] p-1 align-middle shadow-sm shadow-black/10">
+                <div className="mb-1 flex w-full justify-end">
+                  <button
+                    className="rounded-md border bg-[#f49292] p-1 shadow"
+                    onClick={handleManageClick}
+                  >
+                    <Cross1Icon />
+                  </button>
+                </div>
+
+                {poster &&
+                  poster.map((poster: Poster) => (
+                    <div
+                      key={poster.id}
+                      className="group relative m-1 h-56 w-fit min-w-36"
+                    >
+                      <img
+                        alt={'poster by' + poster.designer}
+                        src={poster.image}
+                        className="h-full w-full rounded-sm border-[1.5px] bg-white object-contain"
+                      ></img>
+                      <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/50 opacity-0 transition-opacity group-hover:opacity-100">
+                        <button className="rounded-sm border-[1.5px] bg-[#fe4242] px-1 py-0.5 text-white active:bg-[#f75353]">
+                          Delete
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+              </div>
+            </div>
+          )}
           {isAuthenticated && data?.userId == user?.sub && (
             <div
               ref={draggableRef}
-              className="absolute top-10 left-2 z-100 w-fit rounded-md border-2 bg-[#ffffff] shadow-lg shadow-black/20"
+              className="absolute top-10 left-2 z-50 w-fit rounded-md border-2 bg-[#ffffff] shadow-lg shadow-black/20"
             >
               <div
                 data-drag-trigger="true"
@@ -375,25 +417,17 @@ export function UpcomingShow() {
                   Add alt poster
                 </button>
                 {addPosterIsHidden == false && (
-                  <div className="absolute top-31 -right-60 flex w-60 flex-col rounded-sm border-2 bg-[#e9ecdf] px-1 py-0.5 shadow-sm shadow-black/10">
+                  <div className="absolute top-30 -right-63 flex w-60 flex-col rounded-sm border-2 bg-[#e9ecdf] px-1 py-0.5 shadow-sm shadow-black/10">
                     <p className="mb-1">Add poster</p>
                     <PosterUploader uploadSuccess={handleAddAltPosterSuccess} />
                   </div>
                 )}
                 <button
-                  onClick={handleReplaceClick}
+                  onClick={handleManageClick}
                   className="w-ful rounded-b-md bg-[#f7f9ef] px-1 py-0.5 text-left hover:bg-[#d8d9b2b6] active:bg-[#d8d9b2]"
                 >
-                  Replace poster
+                  Manage posters
                 </button>
-                {replacePosterIsHidden == false && (
-                  <div className="absolute top-38 -right-60 flex w-60 flex-col rounded-sm border-2 bg-[#f7f9ef] px-1 py-0.5 shadow-sm shadow-black/10">
-                    <p className="mb-1">Replace poster</p>
-                    <PosterUploader
-                      uploadSuccess={handleReplacePosterSuccess}
-                    />
-                  </div>
-                )}
               </div>
             </div>
           )}

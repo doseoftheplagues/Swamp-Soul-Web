@@ -63,18 +63,17 @@ export function PosterUploader({ uploadSuccess }: FileUploaderProps) {
           value={designer}
           onChange={(e) => setDesigner(e.target.value)}
         ></input>
-        <label htmlFor="image" className="sr-only">
-          Poster
+        <label htmlFor="image" className="text-sm">
+          Poster:
         </label>
         <input
           type="file"
           onChange={handleFileChange}
-          className="max-w file:text-md w-[102px] px-1"
+          className="max-w file:text-md mb-1 w-[102px] px-1"
         />
         {file && (
           <div className="p-0.5 text-sm">
             <p className="mb-1">Selected: {file.name}</p>
-
             <button
               type="button"
               className="rounded-xs border-2 bg-[#dad7c267] px-1 py-0.5 text-sm hover:bg-[#dad7c2c0] disabled:bg-[#bebebd99] disabled:text-[#aca7a7a9]"

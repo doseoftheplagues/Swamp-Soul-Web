@@ -1,6 +1,6 @@
-import toolsSymbolUrl from '/public/symbols/tools.svg?url'
-import magnifierSymbolUrl from '/public/symbols/magnifier.svg'
-import alertSymbolUrl from '/public/symbols/alert.svg'
+import toolsSymbolUrl from '/symbols/tools.svg?url'
+import magnifierSymbolUrl from '/symbols/magnifier.svg'
+import alertSymbolUrl from '/symbols/alert.svg'
 
 interface ToolsSymbolProps {
   className?: string
