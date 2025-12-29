@@ -10,9 +10,13 @@ interface UploadImageVariables {
 
 interface FileUploaderProps {
   uploadSuccess: (fileUrl: string, designer: string) => void
+  currentNumberOfPosters: number
 }
 
-export function PosterUploader({ uploadSuccess }: FileUploaderProps) {
+export function PosterUploader({
+  uploadSuccess,
+  currentNumberOfPosters,
+}: FileUploaderProps) {
   const queryClient = useQueryClient()
   const [designer, setDesigner] = useState('')
   const { getAccessTokenSilently } = useAuth0()
@@ -49,43 +53,51 @@ export function PosterUploader({ uploadSuccess }: FileUploaderProps) {
     }
   }
 
-  return (
-    <div>
-      <form className="flex flex-col">
-        <label htmlFor="designer" className="mb-0.5 text-sm">
-          Designer:
-        </label>
-        <input
-          type="text"
-          name="designer"
-          id="designer"
-          className="mb-2 px-1 py-0.5"
-          value={designer}
-          onChange={(e) => setDesigner(e.target.value)}
-        ></input>
-        <label htmlFor="image" className="text-sm">
-          Poster:
-        </label>
-        <input
-          type="file"
-          onChange={handleFileChange}
-          className="max-w file:text-md mb-1 w-[102px] px-1"
-        />
-        {file && (
-          <div className="p-0.5 text-sm">
-            <p className="mb-1">Selected: {file.name}</p>
-            <button
-              type="button"
-              className="rounded-xs border-2 bg-[#dad7c267] px-1 py-0.5 text-sm hover:bg-[#dad7c2c0] disabled:bg-[#bebebd99] disabled:text-[#aca7a7a9]"
-              id="upload"
-              onClick={handleUpload}
-              disabled={designer.trim() === ''}
-            >
-              Upload
-            </button>
-          </div>
-        )}
-      </form>
-    </div>
-  )
+  if (currentNumberOfPosters < 5) {
+    return (
+      <div>
+        <form className="flex flex-col">
+          <label htmlFor="designer" className="mb-0.5 text-sm">
+            Designer:
+          </label>
+          <input
+            type="text"
+            name="designer"
+            id="designer"
+            className="mb-2 px-1 py-0.5"
+            value={designer}
+            onChange={(e) => setDesigner(e.target.value)}
+          ></input>
+          <label htmlFor="image" className="text-sm">
+            Poster:
+          </label>
+          <input
+            type="file"
+            onChange={handleFileChange}
+            className="max-w file:text-md mb-1 w-[102px] px-1"
+          />
+          {file && (
+            <div className="p-0.5 text-sm">
+              <p className="mb-1">Selected: {file.name}</p>
+              <button
+                type="button"
+                className="rounded-xs border-2 bg-[#dad7c267] px-1 py-0.5 text-sm hover:bg-[#dad7c2c0] disabled:bg-[#bebebd99] disabled:text-[#aca7a7a9]"
+                id="upload"
+                onClick={handleUpload}
+                disabled={designer.trim() === ''}
+              >
+                Upload
+              </button>
+            </div>
+          )}
+        </form>
+      </div>
+    )
+  } else {
+    return (
+      <div className="rounded-sm border border-[#dbd7cf] bg-[#f7f9ef] px-1 py-0.5">
+        <p>This show has hit the 5 poster limit.</p>
+      </div>
+    )
+  }
 }

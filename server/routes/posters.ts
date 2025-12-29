@@ -26,8 +26,16 @@ router.get('/archiveshow/:showid', async (req, res) => {
 router.post('/', checkJwt, async (req, res) => {
   try {
     const posterData = req.body
-    const posterAdded = await db.addPoster(posterData)
-    res.status(201).json(posterAdded)
+    const posterUpcomingShowId = posterData.upcomingShowId
+    const associatedShowPosters =
+      await db.getPostersByUpcomingShowId(posterUpcomingShowId)
+    if (associatedShowPosters.length < 5) {
+      const posterAdded = await db.addPoster(posterData)
+      res.status(201).json(posterAdded)
+    } else {
+      console.log('Show has reached max 5 posters')
+      res.sendStatus(400)
+    }
   } catch (error) {
     console.log(error)
     res.status(500).json({ message: 'Something went wrong adding poster' })

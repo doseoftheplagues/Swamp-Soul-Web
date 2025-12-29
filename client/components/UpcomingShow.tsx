@@ -77,7 +77,7 @@ export function UpcomingShow() {
 
   useEffect(() => {
     let draggables: Draggable[] = []
-    if (draggableRef.current && data) {
+    if (draggableRef.current && data && managePosterIsHidden == true) {
       draggables = Draggable.create(draggableRef.current, {
         type: 'x,y',
         bounds: 'body',
@@ -94,7 +94,7 @@ export function UpcomingShow() {
     return () => {
       draggables.forEach((d) => d.kill())
     }
-  }, [isAuthenticated, data])
+  }, [isAuthenticated, data, managePosterIsHidden])
 
   useEffect(() => {
     if (data) {
@@ -303,10 +303,14 @@ export function UpcomingShow() {
           <Toast.Viewport className="ToastViewport" />
           {managePosterIsHidden == false && (
             <div className="AlertDialogOverlay mx-auto">
-              <div className="ManagePostersContent flex h-fit w-200 cursor-default flex-row flex-wrap items-center rounded-sm border-2 bg-[#f7f9ef] p-1 align-middle shadow-sm shadow-black/10">
-                <div className="mb-1 flex w-full justify-end">
+              <div className="ManagePostersContent flex h-fit w-250 cursor-default flex-wrap items-center justify-center rounded-sm border-2 bg-[#f7f9ef] shadow-sm shadow-black/10">
+                <div className="mb-1 flex w-full items-center justify-between rounded-t-sm border-b-[1.5px] border-b-[#0202025f] bg-[#d9d7c0] p-1">
+                  <div className="flex flex-row items-center">
+                    <ToolsSymbol className="mr-0.5 h-8" />
+                    <p> Manage posters</p>
+                  </div>
                   <button
-                    className="rounded-md border bg-[#f49292] p-1 shadow"
+                    className="shadow-black-20 h-fit rounded-md border bg-[#fa9292] p-1 shadow-md hover:bg-[#f87070] active:bg-[#fa4c4c]"
                     onClick={handleManageClick}
                   >
                     <Cross1Icon />
@@ -324,7 +328,7 @@ export function UpcomingShow() {
                         src={poster.image}
                         className="h-full w-full rounded-sm border-[1.5px] bg-white object-contain"
                       ></img>
-                      <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/50 opacity-0 transition-opacity group-hover:opacity-100">
+                      <div className="absolute inset-0 flex h-56 flex-col items-center justify-center rounded-sm bg-black/50 opacity-0 transition-opacity group-hover:opacity-100">
                         <button className="rounded-sm border-[1.5px] bg-[#fe4242] px-1 py-0.5 text-white active:bg-[#f75353]">
                           Delete
                         </button>
@@ -334,103 +338,125 @@ export function UpcomingShow() {
               </div>
             </div>
           )}
-          {isAuthenticated && data?.userId == user?.sub && (
-            <div
-              ref={draggableRef}
-              className="absolute top-10 left-2 z-50 w-fit rounded-md border-2 bg-[#ffffff] shadow-lg shadow-black/20"
-            >
+          {isAuthenticated &&
+            data?.userId == user?.sub &&
+            managePosterIsHidden == true && (
               <div
-                data-drag-trigger="true"
-                className="flex min-w-40 flex-row items-center rounded-t-sm border-b-2 bg-[#d9d7c0] py-0.5"
-                style={{ cursor: 'grab' }}
+                ref={draggableRef}
+                className="absolute top-10 left-2 z-50 w-fit rounded-md border-2 bg-[#ffffff] shadow-lg shadow-black/20"
               >
-                <ToolsSymbol className="h-8" />
-                <p>Tools</p>
-              </div>
-              <div className="flex flex-col rounded-b-md">
-                <AlertDialog.Root>
-                  <AlertDialog.Trigger asChild>
-                    <button className="w-full bg-[#f7f9ef] px-1 py-0.5 text-left hover:bg-[#d8d9b2b6] active:bg-[#d8d9b2]">
-                      Delete show
-                    </button>
-                  </AlertDialog.Trigger>
-                  <AlertDialog.Portal>
-                    <AlertDialog.Overlay className="AlertDialogOverlay" />
-                    <AlertDialog.Content className="AlertDialogContent">
-                      <AlertDialog.Title className="AlertDialogTitle">
-                        Are you sure?
-                      </AlertDialog.Title>
-                      <AlertDialog.Description className="AlertDialogDescription">
-                        This action cannot be undone. This will permanently
-                        delete this show and its data from our server. If the
-                        show is cancelled please select cancel instead to notify
-                        attendees of the change.
-                      </AlertDialog.Description>
-                      <div
-                        style={{
-                          display: 'flex',
-                          gap: 25,
-                          justifyContent: 'flex-end',
-                        }}
-                      >
-                        <AlertDialog.Cancel asChild>
-                          <button className="Button mauve">Cancel</button>
-                        </AlertDialog.Cancel>
-                        <AlertDialog.Action asChild>
-                          <button
-                            className="rounded-sm bg-red-400 p-2"
-                            onClick={() => handleDeleteClick(data.id)}
-                          >
-                            Yes, delete show
-                          </button>
-                        </AlertDialog.Action>
-                      </div>
-                    </AlertDialog.Content>
-                  </AlertDialog.Portal>
-                </AlertDialog.Root>
+                <div
+                  data-drag-trigger="true"
+                  className="flex min-w-40 flex-row items-center rounded-t-sm border-b-2 bg-[#d9d7c0] py-0.5"
+                  style={{ cursor: 'grab' }}
+                >
+                  <ToolsSymbol className="h-8" />
+                  <p>Tools</p>
+                </div>
+                <div className="flex flex-col rounded-b-md">
+                  <AlertDialog.Root>
+                    <AlertDialog.Trigger asChild>
+                      <button className="w-full bg-[#f7f9ef] px-1 py-0.5 text-left hover:bg-[#d8d9b2b6] active:bg-[#d8d9b2]">
+                        Delete show
+                      </button>
+                    </AlertDialog.Trigger>
+                    <AlertDialog.Portal>
+                      <AlertDialog.Overlay className="AlertDialogOverlay" />
+                      <AlertDialog.Content className="AlertDialogContent">
+                        <AlertDialog.Title className="AlertDialogTitle">
+                          Are you sure?
+                        </AlertDialog.Title>
+                        <AlertDialog.Description className="AlertDialogDescription">
+                          This action cannot be undone. This will permanently
+                          delete this show and its data from our server. If the
+                          show is cancelled please select cancel instead to
+                          notify attendees of the change.
+                        </AlertDialog.Description>
+                        <div
+                          style={{
+                            display: 'flex',
+                            gap: 25,
+                            justifyContent: 'flex-end',
+                          }}
+                        >
+                          <AlertDialog.Cancel asChild>
+                            <button className="Button mauve">Cancel</button>
+                          </AlertDialog.Cancel>
+                          <AlertDialog.Action asChild>
+                            <button
+                              className="rounded-sm bg-red-400 p-2"
+                              onClick={() => handleDeleteClick(data.id)}
+                            >
+                              Yes, delete show
+                            </button>
+                          </AlertDialog.Action>
+                        </div>
+                      </AlertDialog.Content>
+                    </AlertDialog.Portal>
+                  </AlertDialog.Root>
 
-                <button
-                  onClick={() => handleEditClick(data.id)}
-                  className="w-full bg-[#e9ecdf] px-1 py-0.5 text-left hover:bg-[#d8d9b2b6] active:bg-[#d8d9b2]"
-                >
-                  Edit details
-                </button>
-                {data.canceled ? (
                   <button
-                    className="w-full bg-[#f7f9ef] px-1 py-0.5 text-left hover:bg-[#d8d9b2b6] active:bg-[#d8d9b2]"
-                    onClick={() => handleCancelClick(data.id, true)}
+                    onClick={() => handleEditClick(data.id)}
+                    className="w-full bg-[#e9ecdf] px-1 py-0.5 text-left hover:bg-[#d8d9b2b6] active:bg-[#d8d9b2]"
                   >
-                    Uncancel show
+                    Edit details
                   </button>
-                ) : (
+                  {data.canceled ? (
+                    <button
+                      className="w-full bg-[#f7f9ef] px-1 py-0.5 text-left hover:bg-[#d8d9b2b6] active:bg-[#d8d9b2]"
+                      onClick={() => handleCancelClick(data.id, true)}
+                    >
+                      Uncancel show
+                    </button>
+                  ) : (
+                    <button
+                      className="w-full bg-[#f7f9ef] px-1 py-0.5 text-left hover:bg-[#d8d9b2b6] active:bg-[#d8d9b2]"
+                      onClick={() => handleCancelClick(data.id, false)}
+                    >
+                      Cancel show
+                    </button>
+                  )}
                   <button
-                    className="w-full bg-[#f7f9ef] px-1 py-0.5 text-left hover:bg-[#d8d9b2b6] active:bg-[#d8d9b2]"
-                    onClick={() => handleCancelClick(data.id, false)}
+                    onClick={handleAddClick}
+                    className="w-full bg-[#e9ecdf] px-1 py-0.5 text-left hover:bg-[#d8d9b2b6] active:bg-[#d8d9b2]"
                   >
-                    Cancel show
+                    Add alt poster
                   </button>
-                )}
-                <button
-                  onClick={handleAddClick}
-                  className="w-full bg-[#e9ecdf] px-1 py-0.5 text-left hover:bg-[#d8d9b2b6] active:bg-[#d8d9b2]"
-                >
-                  Add alt poster
-                </button>
-                {addPosterIsHidden == false && (
-                  <div className="absolute top-30 -right-63 flex w-60 flex-col rounded-sm border-2 bg-[#e9ecdf] px-1 py-0.5 shadow-sm shadow-black/10">
-                    <p className="mb-1">Add poster</p>
-                    <PosterUploader uploadSuccess={handleAddAltPosterSuccess} />
-                  </div>
-                )}
-                <button
-                  onClick={handleManageClick}
-                  className="w-ful rounded-b-md bg-[#f7f9ef] px-1 py-0.5 text-left hover:bg-[#d8d9b2b6] active:bg-[#d8d9b2]"
-                >
-                  Manage posters
-                </button>
+                  {addPosterIsHidden == false && (
+                    <div className="absolute top-30 -right-63 flex w-60 flex-col rounded-sm border-2 bg-[#e9ecdf] px-1 py-0.5 shadow-sm shadow-black/10">
+                      <p className="mb-1 px-0.5">Add alt poster</p>
+                      <PosterUploader
+                        uploadSuccess={handleAddAltPosterSuccess}
+                        currentNumberOfPosters={poster.length}
+                      />
+                      {addPosterIsHidden == false && poster.length >= 5 && (
+                        <div className="">
+                          <p className="mb-1 px-0.5">
+                            If you would like to remove any use the
+                            <span>
+                              <button
+                                onClick={handleManageClick}
+                                className="w-ful mr-0.5 rounded-md border-[1.5px] border-[#d8d8d7] bg-[#f7f9ef] px-1 py-0.5 text-left hover:bg-[#d8d9b2b6] active:bg-[#d8d9b2]"
+                              >
+                                Manage posters
+                              </button>
+                            </span>
+                            tool.
+                          </p>
+                        </div>
+                      )}
+                    </div>
+                  )}
+
+                  <button
+                    onClick={handleManageClick}
+                    className="w-ful rounded-b-md bg-[#f7f9ef] px-1 py-0.5 text-left hover:bg-[#d8d9b2b6] active:bg-[#d8d9b2]"
+                  >
+                    Manage posters
+                  </button>
+                </div>
               </div>
-            </div>
-          )}
+            )}
           <div className="infoDiv flex grow flex-col lg:min-w-3/5">
             <div className={` ${titleBackHeight}`}>
               <div>
