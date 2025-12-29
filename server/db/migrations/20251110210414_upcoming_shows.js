@@ -22,7 +22,7 @@ export function up(knex) {
       .integer('poster_id')
       .references('posters.id')
       .nullable()
-      .onDelete('CASCADE')
+      .onDelete('SET NULL')
     table.string('description').nullable()
     table.integer('max_capacity').nullable()
     table.boolean('canceled').nullable()

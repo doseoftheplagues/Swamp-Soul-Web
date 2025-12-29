@@ -46,6 +46,7 @@ export function UpcomingShow() {
   const [titleBackHeight, setTitleBackHeight] = useState('')
   const [titleTextSize, setTitleTextSize] = useState('')
   const [titleWrap, setTitleWrap] = useState('')
+  const [toolsHiddenClass, setToolsHiddenClass] = useState('')
   const [open, setOpen] = React.useState(false)
   const timerRef = React.useRef(0)
   const [addPosterIsHidden, setAddPosterIsHidden] = useState(true)
@@ -229,13 +230,13 @@ export function UpcomingShow() {
     }
   }
 
-  async function handleManagePosterSuccess() {
+  async function handleManagePosterClick(poster: Poster) {
     console.log('deleting old poster')
     const token = await getAccessTokenSilently()
+
     const mutationVariables = { url: poster.image, token: token }
     deleteImage.mutate(mutationVariables)
-
-    console.log('wow!')
+    deletePosterMutation.mutate({ id: poster.id, token })
   }
 
   // RESPONSIVE TITLE STUFF
@@ -303,7 +304,7 @@ export function UpcomingShow() {
           <Toast.Viewport className="ToastViewport" />
           {managePosterIsHidden == false && (
             <div className="AlertDialogOverlay mx-auto">
-              <div className="ManagePostersContent flex h-fit w-250 cursor-default flex-wrap items-center justify-center rounded-sm border-2 bg-[#f7f9ef] shadow-sm shadow-black/10">
+              <div className="ManagePostersContent flex h-fit w-fit cursor-default flex-wrap items-center justify-center rounded-sm border-2 bg-[#f7f9ef] shadow-sm shadow-black/10">
                 <div className="mb-1 flex w-full items-center justify-between rounded-t-sm border-b-[1.5px] border-b-[#0202025f] bg-[#d9d7c0] p-1">
                   <div className="flex flex-row items-center">
                     <ToolsSymbol className="mr-0.5 h-8" />
@@ -317,7 +318,7 @@ export function UpcomingShow() {
                   </button>
                 </div>
 
-                {poster &&
+                {poster.length > 0 &&
                   poster.map((poster: Poster) => (
                     <div
                       key={poster.id}
@@ -329,12 +330,20 @@ export function UpcomingShow() {
                         className="h-full w-full rounded-sm border-[1.5px] bg-white object-contain"
                       ></img>
                       <div className="absolute inset-0 flex h-56 flex-col items-center justify-center rounded-sm bg-black/50 opacity-0 transition-opacity group-hover:opacity-100">
-                        <button className="rounded-sm border-[1.5px] bg-[#fe4242] px-1 py-0.5 text-white active:bg-[#f75353]">
+                        <button
+                          onClick={() => handleManagePosterClick(poster)}
+                          className="rounded-sm border-[1.5px] bg-[#fe4242] px-1 py-0.5 text-white active:bg-[#f75353]"
+                        >
                           Delete
                         </button>
                       </div>
                     </div>
                   ))}
+                {poster.length == 0 && (
+                  <p className="my-24 text-xl">
+                    This show doesn&apos;t have any posters yet!
+                  </p>
+                )}
               </div>
             </div>
           )}
@@ -343,7 +352,7 @@ export function UpcomingShow() {
             managePosterIsHidden == true && (
               <div
                 ref={draggableRef}
-                className="absolute top-10 left-2 z-50 w-fit rounded-md border-2 bg-[#ffffff] shadow-lg shadow-black/20"
+                className={`absolute top-10 left-2 z-50 ${toolsHiddenClass} w-fit rounded-md border-2 bg-[#ffffff] shadow-lg shadow-black/20`}
               >
                 <div
                   data-drag-trigger="true"
@@ -356,7 +365,10 @@ export function UpcomingShow() {
                 <div className="flex flex-col rounded-b-md">
                   <AlertDialog.Root>
                     <AlertDialog.Trigger asChild>
-                      <button className="w-full bg-[#f7f9ef] px-1 py-0.5 text-left hover:bg-[#d8d9b2b6] active:bg-[#d8d9b2]">
+                      <button
+                        onClick={() => setToolsHiddenClass('hidden')}
+                        className="w-full bg-[#f7f9ef] px-1 py-0.5 text-left hover:bg-[#d8d9b2b6] active:bg-[#d8d9b2]"
+                      >
                         Delete show
                       </button>
                     </AlertDialog.Trigger>
@@ -364,13 +376,11 @@ export function UpcomingShow() {
                       <AlertDialog.Overlay className="AlertDialogOverlay" />
                       <AlertDialog.Content className="AlertDialogContent">
                         <AlertDialog.Title className="AlertDialogTitle">
-                          Are you sure?
+                          Delete show?
                         </AlertDialog.Title>
                         <AlertDialog.Description className="AlertDialogDescription">
-                          This action cannot be undone. This will permanently
-                          delete this show and its data from our server. If the
-                          show is cancelled please select cancel instead to
-                          notify attendees of the change.
+                          This cannot be undone. Shows can be canceled instead
+                          to alert attendees.
                         </AlertDialog.Description>
                         <div
                           style={{
@@ -380,14 +390,19 @@ export function UpcomingShow() {
                           }}
                         >
                           <AlertDialog.Cancel asChild>
-                            <button className="Button mauve">Cancel</button>
+                            <button
+                              onClick={() => setToolsHiddenClass('')}
+                              className="rounded-md border border-[#c6c6c6] px-1 shadow-md hover:bg-[#faf8f1]"
+                            >
+                              Cancel
+                            </button>
                           </AlertDialog.Cancel>
                           <AlertDialog.Action asChild>
                             <button
-                              className="rounded-sm bg-red-400 p-2"
+                              className="rounded-md border border-[#e6e6e6] bg-[#fa3131] p-2 px-1 text-[#faf8f1] shadow-md hover:bg-[#fd7474]"
                               onClick={() => handleDeleteClick(data.id)}
                             >
-                              Yes, delete show
+                              Delete
                             </button>
                           </AlertDialog.Action>
                         </div>

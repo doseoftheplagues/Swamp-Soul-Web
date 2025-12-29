@@ -104,7 +104,10 @@ function AddPosterToShow() {
           <h1 className="mb-5">
             Upload poster to {data.performers} - {formatDate(data.date)}
           </h1>
-          <PosterUploader uploadSuccess={handleImageUrlReceived} />
+          <PosterUploader
+            uploadSuccess={handleImageUrlReceived}
+            currentNumberOfPosters={0}
+          />
         </div>
       </div>
     )
