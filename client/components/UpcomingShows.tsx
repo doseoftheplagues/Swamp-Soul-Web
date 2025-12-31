@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import SearchBar from './SmallerComponents/SearchBar'
 import { LoadingSpinner } from './SmallerComponents/LoadingSpinner'
 import { UpcomingShowCard } from './SmallerComponents/UpcomingShowCard'
+import { UpcomingPosterData } from '../../models/poster'
 
 export function UpcomingShows() {
   const { data, isLoading, isError } = useUpcomingShows()
@@ -21,7 +22,12 @@ export function UpcomingShows() {
         }
       })
       dataWithDateObjects.sort((a, b) => a.date.getTime() - b.date.getTime())
-      setCurrentData(dataWithDateObjects)
+      const currentDate = new Date()
+      const dateFilteredShows = dataWithDateObjects.filter(
+        (show) => show.date >= currentDate,
+      )
+
+      setCurrentData(dateFilteredShows)
     }
   }, [data])
 

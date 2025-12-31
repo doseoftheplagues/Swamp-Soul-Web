@@ -37,7 +37,7 @@ export function ShowUploadForm() {
     description: '',
     maxCapacity: '',
     userId: '',
-    title: '',
+    name: '',
   })
 
   const addShowMutation = useAddUpcomingShow()
