@@ -18,11 +18,11 @@ const showProperties = [
   'location_coords as locationCoords',
   'set_times as setTimes',
   'tickets_link as ticketsLink',
-  'poster_id as posterId',
   'description',
   'max_capacity as maxCapacity',
   'canceled',
   'name',
+  'city',
 ]
 
 //read
@@ -61,7 +61,7 @@ export async function addUpcomingShow(showData: UpcomingShowData) {
     locationCoords,
     setTimes,
     ticketsLink,
-    posterId,
+
     description,
     maxCapacity,
     canceled,
@@ -83,7 +83,7 @@ export async function addUpcomingShow(showData: UpcomingShowData) {
       location_coords: locationCoords,
       set_times: setTimes,
       tickets_link: ticketsLink,
-      poster_id: posterId,
+
       description,
       max_capacity: maxCapacity,
       canceled,
@@ -113,7 +113,7 @@ export async function updateUpcomingShow(
     locationCoords,
     setTimes,
     ticketsLink,
-    posterId,
+
     description,
     maxCapacity,
     canceled,
@@ -132,7 +132,6 @@ export async function updateUpcomingShow(
     location_coords: locationCoords,
     set_times: setTimes,
     tickets_link: ticketsLink,
-    poster_id: posterId,
     description,
     max_capacity: maxCapacity,
     canceled,

@@ -20,10 +20,10 @@ export async function seed(knex) {
       location_coords: null,
       set_times: null,
       tickets_link: null,
-      poster_id: null,
       description: null,
       max_capacity: null,
       canceled: null,
+      city: null,
     },
     {
       id: 2,
@@ -39,10 +39,11 @@ export async function seed(knex) {
       location_coords: null,
       set_times: null,
       tickets_link: null,
-      poster_id: null,
+
       description: null,
       max_capacity: null,
       canceled: null,
+      city: null,
     },
     {
       id: 3,
@@ -58,11 +59,12 @@ export async function seed(knex) {
       location_coords: '-36.8575,174.7621',
       set_times: '7:00 PM - Glass Mirage, 8:30 PM - Echo Valley',
       tickets_link: 'https://tickets.glassmirage.com/event/feb15',
-      poster_id: null,
+
       description:
         'An intimate evening of ambient dream pop and experimental folk in the heart of Karangahape Road.',
       max_capacity: 80,
       canceled: false,
+      city: null,
     },
   ])
 }

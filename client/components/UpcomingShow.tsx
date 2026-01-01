@@ -378,9 +378,16 @@ export function UpcomingShow() {
                     </div>
                   ))}
                 {poster.length == 0 && (
-                  <p className="my-24 text-xl">
-                    This show doesn&apos;t have any posters yet!
-                  </p>
+                  <div className="flex flex-col items-center justify-center">
+                    <p className="mt-2 text-xl">
+                      This show doesn&apos;t have any posters yet!
+                    </p>
+                    <img
+                      className="h-28 md:h-96"
+                      src="/assets/Im-working-on-it.png"
+                      alt="Bleb painting a poster"
+                    ></img>
+                  </div>
                 )}
               </div>
             </div>
@@ -710,9 +717,16 @@ export function UpcomingShow() {
                     </div>
                   ))}
                 {poster.length == 0 && (
-                  <p className="my-24 text-xl">
-                    This show doesn&apos;t have any posters yet!
-                  </p>
+                  <div className="flex flex-col items-center justify-center p-2">
+                    <p className="mb-1 text-center text-base">
+                      This show doesn&apos;t have any posters yet!
+                    </p>
+                    <img
+                      className="h-52 md:h-96"
+                      src="/assets/Im-working-on-it.png"
+                      alt="Bleb painting a poster"
+                    ></img>
+                  </div>
                 )}
               </div>
             </div>
@@ -879,7 +893,7 @@ export function UpcomingShow() {
             </div>
           )}
         {data.canceled == true && (
-          <div className="w-full bg-[#fb5d5d] px-1.5 py-1">
+          <div className="mb-2 w-full bg-[#f97373] px-1.5 py-1">
             <p className="text-center">This show has been canceled</p>
           </div>
         )}

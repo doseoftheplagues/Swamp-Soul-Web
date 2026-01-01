@@ -85,7 +85,7 @@ const Profile = () => {
   }
 
   return isAuthenticated && user ? (
-    <div className="flex flex-col p-2">
+    <div className="flex w-screen flex-row items-start justify-center">
       <div className="relative flex flex-col rounded-md border-[1.5px] bg-[#e9e6d6ac] md:w-4/9 lg:w-2/9">
         <div className="dropdo2n absolute right-0">
           <DropdownMenu.Root>
@@ -239,9 +239,11 @@ const Profile = () => {
           )}
         </div> */}
       </div>
-      <div className="mt-5 flex w-fit flex-col rounded-md border bg-[#e9e6d6ac]">
-        <h1 className="px-2 py-1 font-bold">Your Shows</h1>
-        <div className="upcomingShowsBox mt-1">
+      <div className="ml-5 flex w-fit min-w-1/5 flex-col rounded-md border bg-[#e9e6d6ac]">
+        <div className="mb-1 flex w-full items-center justify-between rounded-t-sm border-b-[1.5px] border-b-[#0202025f] bg-[#d9d7c0] p-1">
+          <p className="font-bold"> Activity</p>
+        </div>
+        <div className="upcomingShowsBox mt-1 p-2">
           {showsAreLoading && <LoadingSpinner />}
           {userShows &&
             userShows.map((show: UpcomingShow) => (
@@ -254,42 +256,3 @@ const Profile = () => {
 }
 
 export default Profile
-
-// import { DropdownMenu } from "radix-ui";
-
-// export default () => (
-// 	<DropdownMenu.Root>
-// 		<DropdownMenu.Trigger />
-
-// 		<DropdownMenu.Portal>
-// 			<DropdownMenu.Content>
-// 				<DropdownMenu.Label />
-// 				<DropdownMenu.Item />
-
-// 				<DropdownMenu.Group>
-// 					<DropdownMenu.Item />
-// 				</DropdownMenu.Group>
-
-// 				<DropdownMenu.CheckboxItem>
-// 					<DropdownMenu.ItemIndicator />
-// 				</DropdownMenu.CheckboxItem>
-
-// 				<DropdownMenu.RadioGroup>
-// 					<DropdownMenu.RadioItem>
-// 						<DropdownMenu.ItemIndicator />
-// 					</DropdownMenu.RadioItem>
-// 				</DropdownMenu.RadioGroup>
-
-// 				<DropdownMenu.Sub>
-// 					<DropdownMenu.SubTrigger />
-// 					<DropdownMenu.Portal>
-// 						<DropdownMenu.SubContent />
-// 					</DropdownMenu.Portal>
-// 				</DropdownMenu.Sub>
-
-// 				<DropdownMenu.Separator />
-// 				<DropdownMenu.Arrow />
-// 			</DropdownMenu.Content>
-// 		</DropdownMenu.Portal>
-// 	</DropdownMenu.Root>
-// );

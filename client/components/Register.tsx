@@ -69,85 +69,82 @@ export function Register() {
 
   if (isAuthenticated) {
     return (
-      <div className="mx-auto my-auto max-w-fit rounded-lg bg-[#dbdad4] p-4 text-left">
-        <Form.Root className="FormRoot" onSubmit={handleSubmit}>
-          {userNameIsTaken && (
-            <p className="error-message">That username is already taken</p>
-          )}
-          <Form.Field className="FormField" name="username">
-            <div>
-              <Form.Label className="FormLabel">Username</Form.Label>
-              <br />
-              <Form.Message
-                className="FormMessage text-sm"
-                match="valueMissing"
-              >
-                Username is required
-              </Form.Message>
-            </div>
-            <Form.Control asChild>
-              <input
-                name="username"
-                className="w-sm p-1"
-                type="text"
-                required
-                value={formData.username}
-                onChange={handleChange}
-              />
-            </Form.Control>
-          </Form.Field>
+      <div className="flex items-center justify-center p-5">
+        <div className="mt-10 h-fit w-full rounded-lg border-2 bg-[#dad8cb53] text-left md:w-88">
+          <div className="rounded-t-md border-b-[1.5px] border-b-[#0202025f] bg-[#dad8cb] px-1.5 py-1">
+            Register your account
+          </div>
+          <div className="p-4">
+            <Form.Root className="FormRoot" onSubmit={handleSubmit}>
+              {userNameIsTaken && (
+                <p className="error-message">That username is already taken</p>
+              )}
+              <Form.Field className="FormField" name="username">
+                <div>
+                  <Form.Label className="FormLabel">Username</Form.Label>
+                  <br />
+                  <Form.Message
+                    className="FormMessage text-sm text-red-500"
+                    match="valueMissing"
+                  >
+                    Username is required
+                  </Form.Message>
+                </div>
+                <Form.Control asChild>
+                  <input
+                    className="mb-1.5 w-full p-1"
+                    name="username"
+                    type="text"
+                    required
+                    value={formData.username}
+                    onChange={handleChange}
+                  />
+                </Form.Control>
+              </Form.Field>
 
-          <Form.Field className="FormField" name="bio">
-            <div>
-              <Form.Label className="FormLabel">Bio</Form.Label>
-              <br />
-              <Form.Message
-                className="FormMessage text-sm"
-                match="valueMissing"
-              >
-                Bio is required
-              </Form.Message>
-            </div>
-            <Form.Control asChild>
-              <textarea
-                name="bio"
-                className="w-sm p-1"
-                required
-                value={formData.bio}
-                onChange={handleChange}
-              />
-            </Form.Control>
-          </Form.Field>
+              <Form.Field className="FormField" name="bio">
+                <div>
+                  <Form.Label className="FormLabel">Bio</Form.Label>
+                  <br />
+                </div>
+                <Form.Control asChild>
+                  <textarea
+                    name="bio"
+                    className="w-full p-1"
+                    required
+                    value={formData.bio}
+                    onChange={handleChange}
+                  />
+                </Form.Control>
+              </Form.Field>
 
-          <Form.Field className="FormField" name="status">
-            <div>
-              <Form.Label className="FormLabel">Status</Form.Label>
-              <br></br>
-              <Form.Message
-                className="FormMessage text-sm"
-                match="valueMissing"
-              >
-                Status is required
-              </Form.Message>
-            </div>
-            <Form.Control asChild>
-              <input
-                name="status"
-                className="w-sm p-1"
-                type="text"
-                required
-                value={formData.status}
-                onChange={handleChange}
-              />
-            </Form.Control>
-          </Form.Field>
+              <Form.Field className="FormField" name="status">
+                <div>
+                  <Form.Label className="FormLabel">Status</Form.Label>
+                  <br></br>
+                </div>
+                <Form.Control asChild>
+                  <input
+                    name="status"
+                    className="w-full p-1"
+                    type="text"
+                    required
+                    value={formData.status}
+                    onChange={handleChange}
+                  />
+                </Form.Control>
+              </Form.Field>
 
-          <Form.Submit asChild>
-            <button className="mt-6 inline-flex justify-center rounded-md border border-transparent bg-[#dad7c2] px-4 py-2 text-sm font-medium text-[#000000] shadow-sm focus:border-[#d1d5c7] focus:bg-[#c1bd9a] focus:ring-[#8f9779] focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50">
-              Submit
-            </button>
-          </Form.Submit>
-        </Form.Root>
+              <Form.Submit asChild>
+                <div className="flex justify-end">
+                  <button className="mt-6 inline-flex rounded-md border border-transparent bg-[#dad7c2] px-4 py-2 text-sm font-medium text-[#000000] shadow-sm focus:border-[#d1d5c7] focus:bg-[#c1bd9a] focus:ring-[#8f9779] focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50">
+                    Submit
+                  </button>
+                </div>
+              </Form.Submit>
+            </Form.Root>
+          </div>
+        </div>
       </div>
     )
   } else {

@@ -74,7 +74,7 @@ export function ShowEditForm() {
         ticketsLink: data.ticketsLink || '',
         description: data.description || '',
         maxCapacity: String(data.maxCapacity) || '',
-        name: data.title || '',
+        name: data.name || '',
       })
     }
   }, [data])
