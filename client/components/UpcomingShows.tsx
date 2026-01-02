@@ -23,6 +23,7 @@ export function UpcomingShows() {
       })
       dataWithDateObjects.sort((a, b) => a.date.getTime() - b.date.getTime())
       const currentDate = new Date()
+      currentDate.setHours(0, 0, 0, 0)
       const dateFilteredShows = dataWithDateObjects.filter(
         (show) => show.date >= currentDate,
       )

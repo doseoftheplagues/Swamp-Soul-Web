@@ -239,9 +239,9 @@ const Profile = () => {
           )}
         </div> */}
       </div>
-      <div className="ml-5 flex w-fit min-w-1/5 flex-col rounded-md border bg-[#e9e6d6ac]">
-        <div className="mb-1 flex w-full items-center justify-between rounded-t-sm border-b-[1.5px] border-b-[#0202025f] bg-[#d9d7c0] p-1">
-          <p className="font-bold"> Activity</p>
+      <div className="ml-5 flex w-fit min-w-2/5 flex-col rounded-md border bg-[#e9e6d6ac]">
+        <div className="mb-1 flex w-full items-center justify-between rounded-t-sm border-b-[1.5px] border-b-[#0202025f] bg-[#d9d7c0d6] p-1">
+          <p className=""> Your Shows</p>
         </div>
         <div className="upcomingShowsBox mt-1 p-2">
           {showsAreLoading && <LoadingSpinner />}
