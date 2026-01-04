@@ -18,7 +18,7 @@ export function Register() {
     status: '',
     email: '',
     admin: false,
-    profilePicture: 'Public/assets/default.jpeg',
+    profilePicture: '/assets/default.jpeg',
   })
 
   useEffect(() => {

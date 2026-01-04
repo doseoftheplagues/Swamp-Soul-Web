@@ -39,7 +39,8 @@ export async function getCommentsByParentId(parentId: number) {
 //POST
 
 export async function addComment(commentData: Comment) {
-  const { upcomingShowId, archiveShowId, postId, userId, content } = commentData
+  const { upcomingShowId, archiveShowId, postId, userId, content, parent } =
+    commentData
   const [result] = await db('comments').insert({
     upcoming_show_id: upcomingShowId,
     archive_show_id: archiveShowId,

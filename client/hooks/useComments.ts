@@ -7,7 +7,7 @@ import {
   addComment as addCommentApi,
   deleteComment as deleteCommentApi,
 } from '../apis/comments'
-import { Comment } from '../../models/comment'
+import { CommentData } from '../../models/comment'
 
 interface UseCommentsParams {
   upcomingShowId?: number
@@ -29,10 +29,7 @@ export function useComments({
     isLoading,
     isError,
   } = useQuery({
-    queryKey: [
-      'comments',
-      { upcomingShowId, archiveShowId, postId, parentId },
-    ],
+    queryKey: ['comments', { upcomingShowId, archiveShowId, postId, parentId }],
     queryFn: () => {
       if (upcomingShowId) return getCommentsByUpcomingShowId(upcomingShowId)
       if (archiveShowId) return getCommentsByArchiveShowId(archiveShowId)
@@ -44,7 +41,7 @@ export function useComments({
   })
 
   const addCommentMutation = useMutation({
-    mutationFn: ({ comment, token }: { comment: Comment; token:string }) =>
+    mutationFn: ({ comment, token }: { comment: CommentData; token: string }) =>
       addCommentApi({ comment, token }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['comments'] })
@@ -52,13 +49,8 @@ export function useComments({
   })
 
   const deleteCommentMutation = useMutation({
-    mutationFn: ({
-      commentId,
-      token,
-    }: {
-      commentId: number
-      token: string
-    }) => deleteCommentApi({ commentId, token }),
+    mutationFn: ({ commentId, token }: { commentId: number; token: string }) =>
+      deleteCommentApi({ commentId, token }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['comments'] })
     },

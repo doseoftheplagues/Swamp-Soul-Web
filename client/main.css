@@ -219,6 +219,11 @@ textarea:focus {
   height: 100%;
 }
 
+.commentInput {
+  border: 0px;
+  background-color: #fff0;
+}
+
 @keyframes overlayShow {
   from {
     opacity: 0;
