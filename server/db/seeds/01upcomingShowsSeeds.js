@@ -8,7 +8,7 @@ export async function seed(knex) {
   await knex('upcoming_shows').insert([
     {
       id: 1,
-      date: '2025-12-14',
+      date: '2026-12-14',
       doors_time: '7:00 PM',
       price: 'koha',
       performers: 'The Velvet Swamps, Crooked Halo',
@@ -22,7 +22,7 @@ export async function seed(knex) {
       tickets_link: null,
       description: null,
       max_capacity: null,
-      canceled: null,
+      canceled: false,
       city: null,
     },
     {
@@ -42,7 +42,7 @@ export async function seed(knex) {
 
       description: null,
       max_capacity: null,
-      canceled: null,
+      canceled: false,
       city: null,
     },
     {

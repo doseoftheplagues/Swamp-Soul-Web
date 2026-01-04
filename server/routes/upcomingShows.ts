@@ -1,5 +1,6 @@
 import { Router } from 'express'
 import * as db from '../db/upcomingShows.ts'
+import * as userDb from '../db/users.ts'
 import checkJwt, { JwtRequest } from '../../auth0.ts'
 
 const router = Router()
@@ -90,12 +91,19 @@ router.delete('/:id', checkJwt, async (req: JwtRequest, res) => {
       return res.status(401).json({ message: 'Unauthorized' })
     }
 
-    const rowsDeleted = await db.deleteUpcomingShow(showId, authId)
+    const user = await userDb.getUserById(authId)
+    let rowsDeleted = 0
+
+    if (user && user.admin) {
+      rowsDeleted = await db.deleteUpcomingShow(showId)
+    } else {
+      rowsDeleted = await db.deleteUpcomingShow(showId, authId)
+    }
 
     if (rowsDeleted === 0) {
-      return res
-        .status(401)
-        .json({ message: 'Unauthorized: You can only delete your own shows.' })
+      return res.status(403).json({
+        message: 'Forbidden: You do not have permission to delete this show.',
+      })
     }
 
     res.sendStatus(204)

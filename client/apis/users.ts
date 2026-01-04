@@ -20,6 +20,22 @@ export async function getUser({
     })
 }
 
+interface GetUserByIdFunction {
+  id: string
+}
+
+export async function getUserById({
+  id,
+}: GetUserByIdFunction): Promise<User | null> {
+  return await request
+    .get(`${rootURL}/users/${id}`)
+    .then((res) => (res.body.user ? res.body.user : null))
+    .catch((err) => {
+      console.error(err)
+      throw err
+    })
+}
+
 interface AddUserFunction {
   newUser: UserData
   token: string

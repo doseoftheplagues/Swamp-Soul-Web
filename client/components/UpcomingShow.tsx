@@ -28,6 +28,8 @@ import React from 'react'
 import { useImage } from '../hooks/useImage'
 import { Poster } from '../../models/poster'
 import { Cross1Icon } from '@radix-ui/react-icons'
+import { useComments } from '../hooks/useComments'
+import { CommentSection } from './SmallerComponents/CommentSection'
 
 gsap.registerPlugin(Draggable)
 
@@ -63,6 +65,11 @@ export function UpcomingShow() {
   })
   const params = useParams()
   const { data, isLoading, isError } = useGetUpcomingShowById(Number(params.id))
+  const {
+    comments,
+    isLoading: commentsIsLoading,
+    isError: commentsIsError,
+  } = useComments({ upcomingShowId: Number(params.id) })
   const { isAuthenticated, getAccessTokenSilently, user } = useAuth0()
   const {
     data: poster,
@@ -324,345 +331,365 @@ export function UpcomingShow() {
 
   return (
     <div>
-      <div className="large-screen hidden min-h-[calc(100vh-4rem)] flex-row sm:flex">
-        {data.canceled == true && (
-          <div className="absolute top-10 right-2 z-20 h-fit w-fit rounded-md border-2 bg-[#fa7676] px-1.5 py-1">
-            <p className="text-center text-lg">This show has been canceled</p>
-          </div>
-        )}
-        <Toast.Provider swipeDirection="right">
-          <Toast.Root className="ToastRoot" open={open} onOpenChange={setOpen}>
-            <Toast.Title className="ToastTitle">
-              Poster added successfully
-            </Toast.Title>
-          </Toast.Root>
-          <Toast.Viewport className="ToastViewport" />
-          {managePosterIsHidden == false && (
-            <div className="AlertDialogOverlay mx-auto">
-              <div className="ManagePostersContent flex h-fit w-fit cursor-default flex-wrap items-center justify-center rounded-sm border-2 bg-[#f7f9ef] shadow-sm shadow-black/10">
-                <div className="mb-1 flex w-full items-center justify-between rounded-t-sm border-b-[1.5px] border-b-[#0202025f] bg-[#d9d7c0] p-1">
-                  <div className="flex flex-row items-center">
-                    <ToolsSymbol className="mr-0.5 h-8" />
-                    <p> Manage posters</p>
-                  </div>
-                  <button
-                    className="shadow-black-20 h-fit rounded-md border bg-[#fa9292] p-1 shadow-md hover:bg-[#f87070] active:bg-[#fa4c4c]"
-                    onClick={handleManageClick}
-                  >
-                    <Cross1Icon />
-                  </button>
-                </div>
-
-                {poster.length > 0 &&
-                  poster.map((poster: Poster) => (
-                    <div
-                      key={poster.id}
-                      className="group relative m-1 my-5 h-56 w-fit min-w-36"
-                    >
-                      <img
-                        alt={'poster by' + poster.designer}
-                        src={poster.image}
-                        className="h-full w-full rounded-sm border-[1.5px] bg-white object-contain"
-                      ></img>
-                      <div className="absolute inset-0 flex h-56 flex-col items-center justify-center rounded-sm bg-black/50 opacity-0 transition-opacity group-hover:opacity-100">
-                        <p className="p-2 text-center text-white">
-                          Designer: {poster.designer}
-                        </p>
-                        <button
-                          onClick={() => handleManagePosterClick(poster)}
-                          className="rounded-sm border-[1.5px] bg-[#fe4242] px-1 py-0.5 text-white active:bg-[#f75353]"
-                        >
-                          Delete
-                        </button>
-                      </div>
-                    </div>
-                  ))}
-                {poster.length == 0 && (
-                  <div className="flex flex-col items-center justify-center">
-                    <p className="mt-2 text-xl">
-                      This show doesn&apos;t have any posters yet!
-                    </p>
-                    <img
-                      className="h-28 md:h-96"
-                      src="/assets/Im-working-on-it.png"
-                      alt="Bleb painting a poster"
-                    ></img>
-                  </div>
-                )}
-              </div>
+      <div className="large-screen hidden min-h-[calc(100vh-4rem)] flex-col sm:flex">
+        <div className="MainContentContainer flex flex-row">
+          {data.canceled == true && (
+            <div className="absolute top-10 right-2 z-20 h-fit w-fit rounded-md border-2 bg-[#fa7676] px-1.5 py-1">
+              <p className="text-center text-lg">This show has been canceled</p>
             </div>
           )}
-          {isAuthenticated &&
-            data?.userId == user?.sub &&
-            managePosterIsHidden == true && (
-              <div
-                ref={draggableRef}
-                className={`absolute top-10 left-2 z-50 ${toolsHiddenClass} w-fit rounded-md border-2 bg-[#ffffff] shadow-lg shadow-black/20`}
-              >
-                <div
-                  data-drag-trigger="true"
-                  className="flex min-w-40 flex-row items-center rounded-t-sm border-b-2 bg-[#d9d7c0] py-0.5"
-                  style={{ cursor: 'grab' }}
-                >
-                  <ToolsSymbol className="h-8" />
-                  <p>Tools</p>
-                </div>
-                <div className="flex flex-col rounded-b-md">
-                  <AlertDialog.Root>
-                    <AlertDialog.Trigger asChild>
-                      <button
-                        onClick={() => setToolsHiddenClass('hidden')}
-                        className="w-full bg-[#f7f9ef] px-1 py-0.5 text-left hover:bg-[#d8d9b2b6] active:bg-[#d8d9b2]"
-                      >
-                        Delete show
-                      </button>
-                    </AlertDialog.Trigger>
-                    <AlertDialog.Portal>
-                      <AlertDialog.Overlay className="AlertDialogOverlay" />
-                      <AlertDialog.Content className="AlertDialogContent">
-                        <AlertDialog.Title className="AlertDialogTitle">
-                          Delete show?
-                        </AlertDialog.Title>
-                        <AlertDialog.Description className="AlertDialogDescription">
-                          This cannot be undone. Shows can be canceled instead
-                          to alert attendees.
-                        </AlertDialog.Description>
-                        <div
-                          style={{
-                            display: 'flex',
-                            gap: 25,
-                            justifyContent: 'flex-end',
-                          }}
-                        >
-                          <AlertDialog.Cancel asChild>
-                            <button
-                              onClick={() => setToolsHiddenClass('')}
-                              className="rounded-md border border-[#c6c6c6] px-1 shadow-md hover:bg-[#faf8f1]"
-                            >
-                              Cancel
-                            </button>
-                          </AlertDialog.Cancel>
-                          <AlertDialog.Action asChild>
-                            <button
-                              className="rounded-md border border-[#e6e6e6] bg-[#fa3131] p-2 px-1 text-[#faf8f1] shadow-md hover:bg-[#fd7474]"
-                              onClick={() => handleDeleteClick(data.id)}
-                            >
-                              Delete
-                            </button>
-                          </AlertDialog.Action>
-                        </div>
-                      </AlertDialog.Content>
-                    </AlertDialog.Portal>
-                  </AlertDialog.Root>
+          <Toast.Provider swipeDirection="right">
+            <Toast.Root
+              className="ToastRoot"
+              open={open}
+              onOpenChange={setOpen}
+            >
+              <Toast.Title className="ToastTitle">
+                Poster added successfully
+              </Toast.Title>
+            </Toast.Root>
+            <Toast.Viewport className="ToastViewport" />
+            {managePosterIsHidden == false && (
+              <div className="AlertDialogOverlay mx-auto">
+                <div className="ManagePostersContent flex h-fit w-fit cursor-default flex-wrap items-center justify-center rounded-sm border-2 bg-[#f7f9ef] shadow-sm shadow-black/10">
+                  <div className="mb-1 flex w-full items-center justify-between rounded-t-sm border-b-[1.5px] border-b-[#0202025f] bg-[#d9d7c0] p-1">
+                    <div className="flex flex-row items-center">
+                      <ToolsSymbol className="mr-0.5 h-8" />
+                      <p> Manage posters</p>
+                    </div>
+                    <button
+                      className="shadow-black-20 h-fit rounded-md border bg-[#fa9292] p-1 shadow-md hover:bg-[#f87070] active:bg-[#fa4c4c]"
+                      onClick={handleManageClick}
+                    >
+                      <Cross1Icon />
+                    </button>
+                  </div>
 
-                  <button
-                    onClick={() => handleEditClick(data.id)}
-                    className="w-full bg-[#e9ecdf] px-1 py-0.5 text-left hover:bg-[#d8d9b2b6] active:bg-[#d8d9b2]"
-                  >
-                    Edit details
-                  </button>
-                  {data.canceled ? (
-                    <button
-                      className="w-full bg-[#f7f9ef] px-1 py-0.5 text-left hover:bg-[#d8d9b2b6] active:bg-[#d8d9b2]"
-                      onClick={() => handleCancelClick(data.id, true)}
-                    >
-                      Uncancel show
-                    </button>
-                  ) : (
-                    <button
-                      className="w-full bg-[#f7f9ef] px-1 py-0.5 text-left hover:bg-[#d8d9b2b6] active:bg-[#d8d9b2]"
-                      onClick={() => handleCancelClick(data.id, false)}
-                    >
-                      Cancel show
-                    </button>
+                  {poster.length > 0 &&
+                    poster.map((poster: Poster) => (
+                      <div
+                        key={poster.id}
+                        className="group relative m-1 my-5 h-56 w-fit min-w-36"
+                      >
+                        <img
+                          alt={'poster by' + poster.designer}
+                          src={poster.image}
+                          className="h-full w-full rounded-sm border-[1.5px] bg-white object-contain"
+                        ></img>
+                        <div className="absolute inset-0 flex h-56 flex-col items-center justify-center rounded-sm bg-black/50 opacity-0 transition-opacity group-hover:opacity-100">
+                          <p className="p-2 text-center text-white">
+                            Designer: {poster.designer}
+                          </p>
+                          <button
+                            onClick={() => handleManagePosterClick(poster)}
+                            className="rounded-sm border-[1.5px] bg-[#fe4242] px-1 py-0.5 text-white active:bg-[#f75353]"
+                          >
+                            Delete
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                  {poster.length == 0 && (
+                    <div className="flex flex-col items-center justify-center">
+                      <p className="mt-2 text-xl">
+                        This show doesn&apos;t have any posters yet!
+                      </p>
+                      <img
+                        className="h-28 md:h-96"
+                        src="/assets/Im-working-on-it.png"
+                        alt="Bleb painting a poster"
+                      ></img>
+                    </div>
                   )}
-                  <button
-                    onClick={handleAddClick}
-                    className="w-full bg-[#e9ecdf] px-1 py-0.5 text-left hover:bg-[#d8d9b2b6] active:bg-[#d8d9b2]"
+                </div>
+              </div>
+            )}
+            {isAuthenticated &&
+              data?.userId == user?.sub &&
+              managePosterIsHidden == true && (
+                <div
+                  ref={draggableRef}
+                  className={`absolute top-10 left-2 z-50 ${toolsHiddenClass} w-fit rounded-md border-2 bg-[#ffffff] shadow-lg shadow-black/20`}
+                >
+                  <div
+                    data-drag-trigger="true"
+                    className="flex min-w-40 flex-row items-center rounded-t-sm border-b-2 bg-[#d9d7c0] py-0.5"
+                    style={{ cursor: 'grab' }}
                   >
-                    Add alt poster
-                  </button>
-                  {addPosterIsHidden == false && (
-                    <div className="absolute top-30 -right-63 flex w-60 flex-col rounded-sm border-2 bg-[#e9ecdf] px-1 py-0.5 shadow-sm shadow-black/10">
-                      <p className="mb-1 px-0.5">Add alt poster</p>
-                      <PosterUploader
-                        uploadSuccess={handleAddAltPosterSuccess}
-                        currentNumberOfPosters={poster.length}
-                      />
-                      {addPosterIsHidden == false && poster.length >= 5 && (
-                        <div className="">
-                          <p className="mb-1 px-0.5">
-                            If you would like to remove any use the
-                            <span>
+                    <ToolsSymbol className="h-8" />
+                    <p>Tools</p>
+                  </div>
+                  <div className="flex flex-col rounded-b-md">
+                    <AlertDialog.Root>
+                      <AlertDialog.Trigger asChild>
+                        <button
+                          onClick={() => setToolsHiddenClass('hidden')}
+                          className="w-full bg-[#f7f9ef] px-1 py-0.5 text-left hover:bg-[#d8d9b2b6] active:bg-[#d8d9b2]"
+                        >
+                          Delete show
+                        </button>
+                      </AlertDialog.Trigger>
+                      <AlertDialog.Portal>
+                        <AlertDialog.Overlay className="AlertDialogOverlay" />
+                        <AlertDialog.Content className="AlertDialogContent">
+                          <AlertDialog.Title className="AlertDialogTitle">
+                            Delete show?
+                          </AlertDialog.Title>
+                          <AlertDialog.Description className="AlertDialogDescription">
+                            This cannot be undone. Shows can be canceled instead
+                            to alert attendees.
+                          </AlertDialog.Description>
+                          <div
+                            style={{
+                              display: 'flex',
+                              gap: 25,
+                              justifyContent: 'flex-end',
+                            }}
+                          >
+                            <AlertDialog.Cancel asChild>
                               <button
-                                onClick={handleManageClick}
-                                className="w-ful mr-0.5 rounded-md border-[1.5px] border-[#d8d8d7] bg-[#f7f9ef] px-1 py-0.5 text-left hover:bg-[#d8d9b2b6] active:bg-[#d8d9b2]"
+                                onClick={() => setToolsHiddenClass('')}
+                                className="rounded-md border border-[#c6c6c6] px-1 shadow-md hover:bg-[#faf8f1]"
                               >
-                                Manage posters
+                                Cancel
                               </button>
+                            </AlertDialog.Cancel>
+                            <AlertDialog.Action asChild>
+                              <button
+                                className="rounded-md border border-[#e6e6e6] bg-[#fa3131] p-2 px-1 text-[#faf8f1] shadow-md hover:bg-[#fd7474]"
+                                onClick={() => handleDeleteClick(data.id)}
+                              >
+                                Delete
+                              </button>
+                            </AlertDialog.Action>
+                          </div>
+                        </AlertDialog.Content>
+                      </AlertDialog.Portal>
+                    </AlertDialog.Root>
+
+                    <button
+                      onClick={() => handleEditClick(data.id)}
+                      className="w-full bg-[#e9ecdf] px-1 py-0.5 text-left hover:bg-[#d8d9b2b6] active:bg-[#d8d9b2]"
+                    >
+                      Edit details
+                    </button>
+                    {data.canceled ? (
+                      <button
+                        className="w-full bg-[#f7f9ef] px-1 py-0.5 text-left hover:bg-[#d8d9b2b6] active:bg-[#d8d9b2]"
+                        onClick={() => handleCancelClick(data.id, true)}
+                      >
+                        Uncancel show
+                      </button>
+                    ) : (
+                      <button
+                        className="w-full bg-[#f7f9ef] px-1 py-0.5 text-left hover:bg-[#d8d9b2b6] active:bg-[#d8d9b2]"
+                        onClick={() => handleCancelClick(data.id, false)}
+                      >
+                        Cancel show
+                      </button>
+                    )}
+                    <button
+                      onClick={handleAddClick}
+                      className="w-full bg-[#e9ecdf] px-1 py-0.5 text-left hover:bg-[#d8d9b2b6] active:bg-[#d8d9b2]"
+                    >
+                      Add alt poster
+                    </button>
+                    {addPosterIsHidden == false && (
+                      <div className="absolute top-30 -right-63 flex w-60 flex-col rounded-sm border-2 bg-[#e9ecdf] px-1 py-0.5 shadow-sm shadow-black/10">
+                        <p className="mb-1 px-0.5">Add alt poster</p>
+                        <PosterUploader
+                          uploadSuccess={handleAddAltPosterSuccess}
+                          currentNumberOfPosters={poster.length}
+                        />
+                        {addPosterIsHidden == false && poster.length >= 5 && (
+                          <div className="">
+                            <p className="mb-1 px-0.5">
+                              If you would like to remove any use the
+                              <span>
+                                <button
+                                  onClick={handleManageClick}
+                                  className="w-ful mr-0.5 rounded-md border-[1.5px] border-[#d8d8d7] bg-[#f7f9ef] px-1 py-0.5 text-left hover:bg-[#d8d9b2b6] active:bg-[#d8d9b2]"
+                                >
+                                  Manage posters
+                                </button>
+                              </span>
+                              tool.
+                            </p>
+                          </div>
+                        )}
+                      </div>
+                    )}
+
+                    <button
+                      onClick={handleManageClick}
+                      className="w-ful rounded-b-md bg-[#f7f9ef] px-1 py-0.5 text-left hover:bg-[#d8d9b2b6] active:bg-[#d8d9b2]"
+                    >
+                      Manage posters
+                    </button>
+                  </div>
+                </div>
+              )}
+            <div className="infoDiv flex grow flex-col lg:min-w-3/5">
+              <div className={` ${titleBackHeight}`}>
+                <div>
+                  <div className="performerNameHeader absolute top-11 left-2 z-10 w-6/6 lg:w-5/6">
+                    <div className="w-5/6">
+                      {data.name ? (
+                        <h2
+                          className={`${titleTextSize} text-wrap ${titleWrap}`}
+                        >
+                          {data.name}: {data.performers}
+                        </h2>
+                      ) : (
+                        <h2
+                          className={`${titleTextSize} text-wrap ${titleWrap}`}
+                        >
+                          {' '}
+                          {data.performers}
+                        </h2>
+                      )}
+                    </div>
+                    <div className="sm:w-1/2 lg:w-6/9">
+                      <div className="mt-4 ml-1">
+                        <div className="flex flex-row items-center">
+                          <h3 className="text-xl lg:text-2xl">
+                            {data.locationName}{' '}
+                          </h3>
+                          {data.locationCoords && (
+                            <span className="ml-2 text-base text-[#6d6c6cca] italic md:text-lg">
+                              <a
+                                className="wrap-anywhere hover:text-[#9fab7e]"
+                                href={`https://www.google.com/maps/@${data.locationCoords}`}
+                              >
+                                {' '}
+                                {data.locationCoords}
+                              </a>
                             </span>
-                            tool.
+                          )}
+                        </div>
+                        <h3 className="text-xl lg:text-2xl">
+                          {formatDate(data.date)}
+                        </h3>
+                      </div>
+                      {data.description && (
+                        <div className="mt-2 ml-1">
+                          <h3 className="text-sm lg:text-xl">
+                            {data.description}
+                          </h3>
+                        </div>
+                      )}
+                      {data.ticketsLink && (
+                        <div className="mt-2 ml-1 flex flex-row">
+                          <p className="text-md lg:text-lg">
+                            Online tickets available{' '}
+                            <a
+                              href={data.ticketsLink}
+                              className="text-md underline lg:text-lg"
+                            >
+                              here
+                            </a>{' '}
                           </p>
                         </div>
                       )}
                     </div>
-                  )}
-
-                  <button
-                    onClick={handleManageClick}
-                    className="w-ful rounded-b-md bg-[#f7f9ef] px-1 py-0.5 text-left hover:bg-[#d8d9b2b6] active:bg-[#d8d9b2]"
-                  >
-                    Manage posters
-                  </button>
+                  </div>
                 </div>
               </div>
-            )}
-          <div className="infoDiv flex grow flex-col lg:min-w-3/5">
-            <div className={` ${titleBackHeight}`}>
-              <div>
-                <div className="performerNameHeader absolute top-11 left-2 z-10 w-6/6 lg:w-5/6">
-                  <div className="w-5/6">
-                    {data.name ? (
-                      <h2 className={`${titleTextSize} text-wrap ${titleWrap}`}>
-                        {data.name}: {data.performers}
-                      </h2>
-                    ) : (
-                      <h2 className={`${titleTextSize} text-wrap ${titleWrap}`}>
-                        {' '}
-                        {data.performers}
-                      </h2>
+
+              <div className="basicInfo mt-auto text-lg">
+                <div className="flex flex-row">
+                  <div className="mt-2 flex w-1/2 flex-col border-2 border-[#dad7c2d0] bg-[#eaeae066] p-2">
+                    <p className="text-[#414141e8]">Doors </p>
+                    <p className="my-1"> {data.doorsTime} </p>
+
+                    {data.setTimes && (
+                      <div>
+                        <p className="text-[#414141e8]">Set times </p>
+                        <p className="my-1"> {data.setTimes} </p>
+                      </div>
+                    )}
+                    <p className="text-[#414141e8]">Entry </p>
+                    <p className="my-1"> {data.price} </p>
+                    {data.maxCapacity && (
+                      <div>
+                        <p className="text-[#414141e8]">Max capacity</p>
+                        <p className="my-1"> {data.maxCapacity} </p>
+                      </div>
                     )}
                   </div>
-                  <div className="sm:w-1/2 lg:w-6/9">
-                    <div className="mt-4 ml-1">
-                      <div className="flex flex-row items-center">
-                        <h3 className="text-xl lg:text-2xl">
-                          {data.locationName}{' '}
-                        </h3>
-                        {data.locationCoords && (
-                          <span className="ml-2 text-base text-[#6d6c6cca] italic md:text-lg">
-                            <a
-                              className="wrap-anywhere hover:text-[#9fab7e]"
-                              href={`https://www.google.com/maps/@${data.locationCoords}`}
-                            >
-                              {' '}
-                              {data.locationCoords}
-                            </a>
-                          </span>
-                        )}
-                      </div>
-                      <h3 className="text-xl lg:text-2xl">
-                        {formatDate(data.date)}
-                      </h3>
-                    </div>
-                    {data.description && (
-                      <div className="mt-2 ml-1">
-                        <h3 className="text-sm lg:text-xl">
-                          {data.description}
-                        </h3>
-                      </div>
-                    )}
-                    {data.ticketsLink && (
-                      <div className="mt-2 ml-1 flex flex-row">
-                        <p className="text-md lg:text-lg">
-                          Online tickets available{' '}
-                          <a
-                            href={data.ticketsLink}
-                            className="text-md underline lg:text-lg"
-                          >
-                            here
-                          </a>{' '}
-                        </p>
-                      </div>
-                    )}
+                  <div className="mt-2 flex w-1/2 flex-col border-t-2 border-r-2 border-b-2 border-[#eae7d2ac] p-2 text-right">
+                    <p className="text-[#414141e8]">Noise level</p>
+                    <p className="my-1">[ {data.noiseLevel} ]</p>
+                    <p className="text-[#414141e8]">Bathrooms nearby?</p>
+                    <p className="my-1">
+                      [ {data.bathroomsNearby ? 'Yes' : 'No'} ]
+                    </p>
+                    <p className="text-[#414141e8]">Wheelchair access?</p>
+                    <p className="my-1">
+                      [ {data.wheelchairAccessible ? 'Yes' : 'No'} ]
+                    </p>
+                    <p className="text-[#414141e8]">Limited mobility access?</p>
+                    <p className="my-1">
+                      [ {data.mobilityAccessible ? 'Yes' : 'No'} ]
+                    </p>
                   </div>
                 </div>
               </div>
             </div>
 
-            <div className="basicInfo mt-auto text-lg">
-              <div className="flex flex-row">
-                <div className="mt-2 flex w-1/2 flex-col border-2 border-[#dad7c2d0] bg-[#eaeae066] p-2">
-                  <p className="text-[#414141e8]">Doors </p>
-                  <p className="my-1"> {data.doorsTime} </p>
-
-                  {data.setTimes && (
-                    <div>
-                      <p className="text-[#414141e8]">Set times </p>
-                      <p className="my-1"> {data.setTimes} </p>
-                    </div>
-                  )}
-                  <p className="text-[#414141e8]">Entry </p>
-                  <p className="my-1"> {data.price} </p>
-                  <p className="text-[#414141e8]">Max capacity</p>
-                  <p className="my-1"> {data.maxCapacity} </p>
+            <div className="posterDiv flex w-1/2 lg:w-fit">
+              {posterIsLoading && (
+                <div className="flex h-full items-center justify-center">
+                  <LoadingSpinner />
                 </div>
-                <div className="mt-2 flex w-1/2 flex-col border-t-2 border-r-2 border-b-2 border-[#eae7d2ac] p-2 text-right">
-                  <p className="text-[#414141e8]">Noise level</p>
-                  <p className="my-1">[ {data.noiseLevel} ]</p>
-                  <p className="text-[#414141e8]">Bathrooms nearby?</p>
-                  <p className="my-1">
-                    [ {data.bathroomsNearby ? 'Yes' : 'No'} ]
-                  </p>
-                  <p className="text-[#414141e8]">Wheelchair access?</p>
-                  <p className="my-1">
-                    [ {data.wheelchairAccessible ? 'Yes' : 'No'} ]
-                  </p>
-                  <p className="text-[#414141e8]">Limited mobility access?</p>
-                  <p className="my-1">
-                    [ {data.mobilityAccessible ? 'Yes' : 'No'} ]
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
+              )}
 
-          <div className="posterDiv flex w-1/2 lg:w-fit">
-            {posterIsLoading && (
-              <div className="flex h-full items-center justify-center">
-                <LoadingSpinner />
-              </div>
-            )}
-
-            {!posterIsLoading && poster.length == 1 && (
-              <img
-                className="block h-[calc(100vh-4rem)] min-w-0 object-contain wrap-break-word whitespace-normal"
-                src={poster[0]?.image || 'Public/assets/defaultPoster.jpg'}
-                alt={`Poster for ${data.performers}`}
-              ></img>
-            )}
-            {!posterIsLoading && poster.length > 1 && (
-              <div className="relative">
+              {!posterIsLoading && poster.length == 1 && (
                 <img
                   className="block h-[calc(100vh-4rem)] min-w-0 object-contain wrap-break-word whitespace-normal"
-                  src={
-                    poster[currentPosterIndex]?.image ||
-                    'Public/assets/defaultPoster.jpg'
-                  }
+                  src={poster[0]?.image || 'Public/assets/defaultPoster.jpg'}
                   alt={`Poster for ${data.performers}`}
                 ></img>
-                <div className="absolute bottom-0 left-0 flex flex-row items-center rounded-r-sm border-t-2 border-r-2 border-b-2 border-[#eae7d2e2] bg-[#dad7c2] opacity-80">
-                  <button
-                    onClick={prevPoster}
-                    className="rounded-sm px-2 py-0.5 text-black"
-                  >
-                    &#10094;
-                  </button>
-                  <p>
-                    {currentPosterIndex + 1} / {poster.length}
-                  </p>
-                  <button
-                    onClick={nextPoster}
-                    className="rounded-sm px-2 py-0.5 text-black"
-                  >
-                    &#10095;
-                  </button>
+              )}
+              {!posterIsLoading && poster.length > 1 && (
+                <div className="relative">
+                  <img
+                    className="block h-[calc(100vh-4rem)] min-w-0 object-contain wrap-break-word whitespace-normal"
+                    src={
+                      poster[currentPosterIndex]?.image ||
+                      'Public/assets/defaultPoster.jpg'
+                    }
+                    alt={`Poster for ${data.performers}`}
+                  ></img>
+                  <div className="absolute bottom-0 left-0 flex flex-row items-center rounded-r-sm border-t-2 border-r-2 border-b-2 border-[#eae7d2e2] bg-[#dad7c2] opacity-80">
+                    <button
+                      onClick={prevPoster}
+                      className="rounded-sm px-2 py-0.5 text-black"
+                    >
+                      &#10094;
+                    </button>
+                    <p>
+                      {currentPosterIndex + 1} / {poster.length}
+                    </p>
+                    <button
+                      onClick={nextPoster}
+                      className="rounded-sm px-2 py-0.5 text-black"
+                    >
+                      &#10095;
+                    </button>
+                  </div>
                 </div>
-              </div>
-            )}
-          </div>
-        </Toast.Provider>
+              )}
+            </div>
+          </Toast.Provider>
+        </div>
+        <CommentSection
+          comments={comments}
+          originIdType={'upcomingShowId'}
+          originId={data.id}
+        />
       </div>
+
       {/* phone size starts */}
       {/* phone
       phone

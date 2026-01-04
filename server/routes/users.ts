@@ -23,6 +23,22 @@ router.get('/', checkJwt, async (req: JwtRequest, res) => {
   }
 })
 
+// GET localhost:3000/api/v1/users/:id
+router.get('/:id', async (req: JwtRequest, res) => {
+  try {
+    const id = req.params.id
+
+    const user = await db.getUserById(id)
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' })
+    }
+    res.json({ user })
+  } catch (error) {
+    console.log(error)
+    res.status(500).json({ message: 'Something went wrong getting user' })
+  }
+})
+
 // get localhost:3000/api/v1/users/check-username/:username
 router.get('/check-username/:username', async (req, res) => {
   try {

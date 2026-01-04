@@ -122,7 +122,11 @@ export function ShowUploadForm() {
     requiredFields.some((field) => !formData[field]) || !formData.date
 
   if (!isAuthenticated) {
-    return <p>Log in to submit shows</p>
+    return (
+      <div className="flex h-[calc(100vh-4rem)] w-full">
+        <p className="mx-auto my-auto text-lg">Log in to submit shows</p>
+      </div>
+    )
   }
 
   return (
