@@ -26,3 +26,29 @@ export default function buildCommentTree(
 
   return rootComments
 }
+
+import { formatDistanceToNowStrict, format, isBefore, subDays } from 'date-fns'
+
+interface TimeDisplayProps {
+  timestamp: string
+}
+
+export function TimeDisplay({ timestamp }: TimeDisplayProps) {
+  const dateString = String(timestamp)
+  const utcTimestamp = dateString.endsWith('Z')
+    ? dateString
+    : `${dateString.replace(' ', 'T')}Z`
+  const date = new Date(utcTimestamp)
+  const now = new Date()
+  const oneWeekAgo = subDays(now, 7)
+
+  let formattedTime: string
+
+  if (isBefore(date, oneWeekAgo)) {
+    formattedTime = format(date, 'MMM d, yyyy')
+  } else {
+    formattedTime = formatDistanceToNowStrict(date, { addSuffix: true })
+  }
+
+  return <span title={date.toLocaleString()}>{formattedTime}</span>
+}

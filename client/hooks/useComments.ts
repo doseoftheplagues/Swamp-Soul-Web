@@ -4,6 +4,7 @@ import {
   getCommentsByArchiveShowId,
   getCommentsByPostId,
   getCommentsByParentId,
+  apiGetCommentsByUserId,
   addComment as addCommentApi,
   deleteComment as deleteCommentApi,
 } from '../apis/comments'
@@ -14,6 +15,7 @@ interface UseCommentsParams {
   archiveShowId?: number
   postId?: number
   parentId?: number
+  userId?: string
 }
 
 export function useComments({
@@ -21,6 +23,7 @@ export function useComments({
   archiveShowId,
   postId,
   parentId,
+  userId,
 }: UseCommentsParams = {}) {
   const queryClient = useQueryClient()
 
@@ -29,15 +32,16 @@ export function useComments({
     isLoading,
     isError,
   } = useQuery({
-    queryKey: ['comments', { upcomingShowId, archiveShowId, postId, parentId }],
+    queryKey: ['comments', { upcomingShowId, archiveShowId, postId, parentId, userId }],
     queryFn: () => {
       if (upcomingShowId) return getCommentsByUpcomingShowId(upcomingShowId)
       if (archiveShowId) return getCommentsByArchiveShowId(archiveShowId)
       if (postId) return getCommentsByPostId(postId)
       if (parentId) return getCommentsByParentId(parentId)
+      if (userId) return apiGetCommentsByUserId(userId)
       return Promise.resolve([])
     },
-    enabled: !!(upcomingShowId || archiveShowId || postId || parentId),
+    enabled: !!(upcomingShowId || archiveShowId || postId || parentId || userId),
   })
 
   const addCommentMutation = useMutation({

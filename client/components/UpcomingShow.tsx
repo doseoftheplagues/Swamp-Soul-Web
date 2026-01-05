@@ -643,11 +643,18 @@ export function UpcomingShow() {
                   <LoadingSpinner />
                 </div>
               )}
+              {!posterIsLoading && poster.length == 0 && (
+                <img
+                  className="block h-[calc(100vh-4rem)] min-w-0 object-contain wrap-break-word whitespace-normal"
+                  src={poster[0]?.image}
+                  alt={`Poster for ${data.performers}`}
+                ></img>
+              )}
 
               {!posterIsLoading && poster.length == 1 && (
                 <img
                   className="block h-[calc(100vh-4rem)] min-w-0 object-contain wrap-break-word whitespace-normal"
-                  src={poster[0]?.image || 'Public/assets/defaultPoster.jpg'}
+                  src={poster[0]?.image}
                   alt={`Poster for ${data.performers}`}
                 ></img>
               )}
@@ -948,7 +955,7 @@ export function UpcomingShow() {
           {!posterIsLoading && poster.length == 1 && (
             <img
               className="block min-w-0 object-contain wrap-break-word whitespace-normal"
-              src={poster[0]?.image || 'Public/assets/defaultPoster.jpg'}
+              src={poster[0]?.image}
               alt={`Poster for ${data.performers}`}
             ></img>
           )}

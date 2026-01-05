@@ -11,6 +11,9 @@ import UpcomingShowCard from './SmallerComponents/UpcomingShowCard'
 import { LoadingSpinner } from './SmallerComponents/LoadingSpinner'
 import { DropdownMenu } from 'radix-ui'
 import { ToolsSymbol } from './SmallerComponents/SymbolSvgs'
+import { useComments } from '../hooks/useComments'
+import { Comment } from './SmallerComponents/Comment'
+import { Link } from 'react-router'
 
 const Profile = () => {
   const { deleteImage } = useImage()
@@ -20,11 +23,20 @@ const Profile = () => {
     useAuth0()
   const { data, update } = useUser()
   const userLoaded = user?.sub
+
+  // Fetch user's upcoming shows
   const {
     data: userShows,
     isLoading: showsAreLoading,
     isError: showsAreError,
   } = useGetUpcomingShowsByUserId(userLoaded)
+
+  // Fetch user's comments and replies to them
+  const {
+    comments: userCommentsAndReplies,
+    isLoading: commentsAreLoading,
+    isError: commentsAreError,
+  } = useComments({ userId: userLoaded })
 
   if (isLoading) {
     return <div className="loading-text">Loading profile...</div>
@@ -55,7 +67,6 @@ const Profile = () => {
       console.log('updating pfp to ' + url)
       if (user?.sub !== undefined) {
         const userId = user.sub
-
         const updatedUser = {
           profilePicture: url,
         }
@@ -83,6 +94,32 @@ const Profile = () => {
       setEditDetailsIsHidden(true)
     }
   }
+
+  const myUserComments = userCommentsAndReplies
+    ? userCommentsAndReplies.filter((c) => c.userId === userLoaded)
+    : []
+  const myUserCommentIds = new Set(myUserComments.map((c) => c.id))
+
+  const rootCommentsByCurrentUser = myUserComments
+    .filter((comment) => comment.parent === null)
+    .sort(
+      (a, b) =>
+        new Date(b.dateAdded).getTime() - new Date(a.dateAdded).getTime(),
+    )
+
+  const repliesReceived = userCommentsAndReplies
+    ? userCommentsAndReplies
+        .filter(
+          (comment) =>
+            comment.userId !== userLoaded &&
+            comment.parent &&
+            myUserCommentIds.has(comment.parent),
+        )
+        .sort(
+          (a, b) =>
+            new Date(b.dateAdded).getTime() - new Date(a.dateAdded).getTime(),
+        )
+    : []
 
   return isAuthenticated && user ? (
     <div className="flex w-screen flex-row items-start justify-center">
@@ -199,56 +236,104 @@ const Profile = () => {
             </div>
           </div>
         )}
-
-        {/* <div className="BUTTONDIV p-2">
-          {editDetailsIsHidden && (
-            <button
-              className="mt-1 mr-2 inline-flex w-fit justify-center rounded-sm border border-black bg-[#faf8f1] p-1 text-sm font-medium text-black shadow-sm focus:ring-offset-2 focus:outline-none disabled:border-neutral-300 disabled:text-gray-300"
-              disabled={!editPfpIsHidden || (!editDetailsIsHidden && true)}
-              onClick={() => handleEditDetailsCLick()}
-            >
-              Edit Details
-            </button>
-          )}
-
-          {!editDetailsIsHidden && (
-            <button
-              className="mt-1 mr-2 inline-flex w-fit justify-center rounded-sm border border-black bg-[#faf8f1] p-1 text-sm font-medium text-black shadow-sm focus:ring-offset-2 focus:outline-none"
-              onClick={() => handleEditDetailsCLick()}
-            >
-              Cancel
-            </button>
-          )}
-
-          {editPfpIsHidden && (
-            <button
-              className="mt-1 inline-flex w-fit justify-center rounded-sm border border-black bg-[#faf8f1] p-1 text-sm font-medium text-black shadow-sm focus:ring-offset-2 focus:outline-none disabled:border-neutral-300 disabled:text-gray-300"
-              onClick={() => handleEditPfpClick()}
-              disabled={!editDetailsIsHidden && true}
-            >
-              Edit profile picture
-            </button>
-          )}
-          {!editPfpIsHidden && (
-            <button
-              className="mt-1 inline-flex w-fit justify-center rounded-sm border border-black bg-[#faf8f1] p-1 text-sm font-medium text-black shadow-sm focus:ring-offset-2 focus:outline-none"
-              onClick={() => handleEditPfpClick()}
-            >
-              Cancel
-            </button>
-          )}
-        </div> */}
       </div>
       <div className="ml-5 flex w-fit min-w-2/5 flex-col rounded-md border bg-[#e9e6d6ac]">
         <div className="mb-1 flex w-full items-center justify-between rounded-t-sm border-b-[1.5px] border-b-[#0202025f] bg-[#d9d7c0d6] p-1">
           <p className=""> Your Shows</p>
         </div>
-        <div className="upcomingShowsBox mt-1 p-2">
+        <div className="upcomingShowsBox p-1">
           {showsAreLoading && <LoadingSpinner />}
           {userShows &&
             userShows.map((show: UpcomingShow) => (
               <UpcomingShowCard key={show.id} show={show} />
             ))}
+          {userShows.length == 0 && !showsAreLoading && (
+            <p>You haven&apos;t made any shows yet.</p>
+          )}
+        </div>
+        <div className="YourCommments">
+          <div className="mb-1 flex w-full items-center justify-between rounded-t-sm border-b-[1.5px] border-b-[#0202025f] bg-[#d9d7c0d6] p-1">
+            <p className=""> Your Comments</p>
+          </div>
+          <div className="commentsBox mt-1 p-2">
+            {commentsAreLoading && <LoadingSpinner />}
+            {commentsAreError && <p>Error loading comments.</p>}
+            {rootCommentsByCurrentUser.length === 0 && !commentsAreLoading && (
+              <p>You haven&apos;t made any comments yet.</p>
+            )}
+            {rootCommentsByCurrentUser.map((comment) => (
+              <div key={comment.id}>
+                <p className="text-xs text-gray-500">
+                  On{' '}
+                  {comment.upcomingShowId
+                    ? 'upcoming show' + ' ' + comment.upcomingShowId
+                    : comment.archiveShowId
+                      ? 'archive show' + ' ' + comment.archiveShowId
+                      : 'post' + ' ' + comment.postId}
+                </p>
+                <Comment
+                  comment={{ ...comment, replies: [] }}
+                  originIdType={
+                    comment.upcomingShowId
+                      ? 'upcomingShowId'
+                      : comment.archiveShowId
+                        ? 'archiveShowId'
+                        : 'postId'
+                  }
+                  originId={
+                    comment.upcomingShowId ||
+                    comment.archiveShowId ||
+                    comment.postId ||
+                    0
+                  }
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+        <div className="RepliesReceived">
+          <div className="mt-4 mb-1 flex w-full items-center justify-between rounded-t-sm border-b-[1.5px] border-b-[#0202025f] bg-[#d9d7c0d6] p-1">
+            <p className=""> Replies Received</p>
+          </div>
+          <div className="commentsBox mt-1 p-2">
+            {commentsAreLoading && <LoadingSpinner />}
+            {commentsAreError && <p>Error loading comments.</p>}
+            {repliesReceived.length === 0 && !commentsAreLoading && (
+              <p>You haven&apos;t received any replies yet.</p>
+            )}
+            {repliesReceived.map((reply) => (
+              <div key={reply.id}>
+                <p className="text-xs text-gray-500">
+                  Reply on{' '}
+                  {reply.upcomingShowId ? (
+                    <Link to={`/upcomingshows/${reply.upcomingShowId}`}>
+                      upcoming show {reply.upcomingShowId}{' '}
+                    </Link>
+                  ) : reply.archiveShowId ? (
+                    'archive show' + ' ' + reply.archiveShowId
+                  ) : (
+                    'post' + ' ' + reply.postId
+                  )}
+                </p>
+                <Comment
+                  comment={{ ...reply, replies: [] }}
+                  originIdType={
+                    reply.upcomingShowId
+                      ? 'upcomingShowId'
+                      : reply.archiveShowId
+                        ? 'archiveShowId'
+                        : 'postId'
+                  }
+                  originId={
+                    reply.upcomingShowId ||
+                    reply.archiveShowId ||
+                    reply.postId ||
+                    0
+                  }
+                />
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </div>

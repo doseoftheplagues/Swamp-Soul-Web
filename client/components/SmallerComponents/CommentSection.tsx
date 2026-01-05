@@ -61,7 +61,7 @@ export function CommentSection({
   return (
     <div className="CommentsSection mt-2 h-fit min-h-24 w-fit max-w-1/2 rounded-md border-2 border-[#dad7c2d0]">
       {!isAuthenticated && (
-        <div className="mt-2 ml-2 border-b-2 border-b-[#dad7c2d0]">
+        <div className="mt-2 ml-2 w-fit border-b-2 border-b-[#dad7c2d0]">
           <p className="pr-2 text-[#3a3a3a]"> Log in to add comments</p>
         </div>
       )}
@@ -70,13 +70,16 @@ export function CommentSection({
           <img
             src={databaseUser?.profilePicture || '/assets/default.jpeg'}
             alt={`${databaseUser?.username}'s profile`}
-            className="mx-1.5 inline-block max-h-10 min-h-10 max-w-10 min-w-10 rounded-full object-contain"
+            className="mx-1.5 inline-block max-h-10 min-h-10 max-w-10 min-w-10 rounded-full object-fill"
           />
-          <form className="flex h-fit w-full flex-row" onSubmit={handleSubmit}>
+          <form
+            className="flex h-fit w-full flex-row items-baseline"
+            onSubmit={handleSubmit}
+          >
             <label htmlFor="addComment" className="sr-only">
               New comment
             </label>
-            <div className="mr-2 w-full border-b-2 border-b-[#dad7c2d0]">
+            <div className="w-full">
               <input
                 type="text"
                 id="addComment"
@@ -87,11 +90,12 @@ export function CommentSection({
                 onChange={handleChange}
                 value={formData.content}
               ></input>
+              <div className="mr-2.5 border-b-2 border-b-[#dad7c2d0]"></div>
             </div>
             {sendCommmentHidden == false && (
               <button
                 type="submit"
-                className="text-md mr-2 rounded-tl-sm rounded-r-sm rounded-bl-none bg-[#dad7c2] px-1.5 py-1"
+                className="text-md mr-2 rounded-tl-sm rounded-r-sm rounded-bl-none bg-[#dad7c2] px-1.5 py-0.5"
               >
                 Send
               </button>

@@ -23,6 +23,11 @@ export async function getCommentsByParentId(id: number) {
   return response.body as Comment[]
 }
 
+export async function apiGetCommentsByUserId(userId: string) {
+  const response = await request.get(`${rootURL}/user/${userId}`)
+  return response.body as Comment[]
+}
+
 interface AddCommentParams {
   comment: CommentData
   token: string

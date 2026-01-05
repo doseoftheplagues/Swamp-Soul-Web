@@ -37,6 +37,18 @@ router.get('/parent/:parentid', async (req, res) => {
   res.json(associatedComments)
 })
 
+// GET /api/v1/comments/user/:userid
+router.get('/user/:userid', async (req, res) => {
+  try {
+    const userId = req.params.userid
+    const associatedComments = await db.getCommentsByUserId(userId)
+    res.json(associatedComments)
+  } catch (error) {
+    console.log(error)
+    res.status(500).json({ message: 'Something went wrong fetching user comments' })
+  }
+})
+
 // POST /api/v1/comments/
 
 router.post('/', checkJwt, async (req, res) => {

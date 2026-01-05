@@ -36,6 +36,27 @@ export async function getCommentsByParentId(parentId: number) {
     .select(...commentProperties)
 }
 
+export async function getCommentsByUserId(userId: string) {
+  const userComments = await db('comments')
+    .where('user_id', userId)
+    .select(...commentProperties)
+
+  const userCommentIds = userComments.map((c) => c.id)
+
+  const repliesToUser = userCommentIds.length
+    ? await db('comments')
+        .whereIn('parent', userCommentIds)
+        .select(...commentProperties)
+    : []
+
+  const allComments = [...userComments, ...repliesToUser]
+  const uniqueComments = Array.from(
+    new Map(allComments.map((c) => [c.id, c])).values(),
+  )
+
+  return uniqueComments
+}
+
 //POST
 
 export async function addComment(commentData: Comment) {

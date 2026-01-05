@@ -4,6 +4,7 @@ import { useUserById } from '../../hooks/useUsers'
 import { useComments } from '../../hooks/useComments'
 import { CrossSymbol, TextBubbles } from './SymbolSvgs'
 import { useState } from 'react'
+import { TimeDisplay } from './ReusableFunctions'
 
 type CommentWithReplies = Comment & { replies: CommentWithReplies[] }
 
@@ -84,19 +85,26 @@ export function ReplyComment({
   }
 
   return (
-    <div className="ml-3">
-      <div className="ml-3 h-2 border-l-2 border-[#c1bd9c]"></div>
+    <div className="relative ml-3">
+      <div className="ml-3 h-2 border-0"></div>
       <div className="flex flex-row rounded-md border-2 border-[#dad7c2e0] bg-[#fbfaf6] px-1 py-1">
         <div className="mr-1">
           <img
             src={commentAuthor?.profilePicture || '/assets/default.jpeg'}
             alt={`${commentAuthor?.username}'s profile`}
-            className="max-h-10 min-h-10 max-w-10 min-w-10 rounded-full object-contain"
+            className="max-h-10 min-h-10 max-w-10 min-w-10 rounded-full object-fill"
           />
         </div>
         <div className="flex w-full flex-col">
           <div className="flex flex-row items-center justify-between">
-            <p>{commentAuthor?.username}</p>
+            <div className="flex flex-row items-baseline">
+              <p className="">
+                {commentAuthor?.username}{' '}
+                <span className="ml-1 text-xs text-gray-500">
+                  <TimeDisplay timestamp={String(comment.dateAdded)} />
+                </span>
+              </p>
+            </div>
             <div className="flex flex-row items-center">
               {isAuthenticated && commentAuthor?.authId == user?.sub && (
                 <button
@@ -118,36 +126,38 @@ export function ReplyComment({
               )}
             </div>
           </div>
-          <p className="text-md text-pretty">{comment.content}</p>
+          <p className="text-md pr-2 text-pretty">{comment.content}</p>
         </div>
       </div>
       {isReplying && (
         <div className="ReplyForm">
           <div className="ml-3">
             <div className="ml-3 h-2 border-l-2 border-[#c1bd9c]"></div>
-            <div className="flex flex-row rounded-md border-2 border-[#dad7c2e0] bg-[#fbfaf6] px-1 py-1">
+            <div className="flex flex-col rounded-md border-2 border-[#dad7c2e0] bg-[#fbfaf6] px-1 py-1 pl-2">
+              <p>Reply to {commentAuthor?.username}</p>
               <form
-                className="flex h-fit w-full flex-row"
+                className="flex h-fit w-full flex-row items-baseline"
                 onSubmit={(e) => handleReplySubmit(e, comment.id)}
               >
                 <label htmlFor="addComment" className="sr-only">
-                  New comment
+                  Reply to {commentAuthor?.username}
                 </label>
-                <div className="mr-2 w-full border-b-2 border-b-[#dad7c2d0]">
+
+                <div className="w-full">
                   <input
                     type="text"
                     id="addComment"
                     name="content"
-                    placeholder="Say something..."
-                    className="commentInput text-md -py-1 w-full"
+                    placeholder={'@' + commentAuthor?.username + '...'}
+                    className="commentInput text-md w-full"
                     onChange={handleChange}
                     value={formData.content}
                   ></input>
+                  <div className="border-b-2 border-b-[#dad7c2d0]"></div>
                 </div>
-
                 <button
                   type="submit"
-                  className="text-md mr-2 rounded-tl-sm rounded-r-sm rounded-bl-none bg-[#dad7c2] px-1.5 py-1"
+                  className="text-md mr-2 rounded-tl-sm rounded-r-sm rounded-bl-none bg-[#dad7c2] px-1.5 py-0.5"
                 >
                   Send
                 </button>

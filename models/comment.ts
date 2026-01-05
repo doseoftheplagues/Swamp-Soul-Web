@@ -5,6 +5,7 @@ export interface CommentData {
   parent?: number
   userId: string
   content: string
+  dateAdded: Date
 }
 
 export interface Comment extends CommentData {
