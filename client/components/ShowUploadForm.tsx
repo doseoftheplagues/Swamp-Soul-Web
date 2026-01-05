@@ -137,13 +137,6 @@ export function ShowUploadForm() {
           <Form.Label className="mb-1 block text-sm font-medium text-gray-700">
             Date:
           </Form.Label>
-          <DatePicker
-            id="date"
-            onChange={handleDateChange}
-            value={formData.date}
-            required
-            className="focus:ring-opacity-50 mt-1 block w-full rounded-md border-gray-300 px-3 py-2 shadow-sm focus:border-green-300 focus:ring focus:ring-green-200"
-          />
         </Form.Field>
 
         <Form.Field name="doorsTime" className="mb-4">
@@ -163,7 +156,7 @@ export function ShowUploadForm() {
               value={formData.doorsTime}
               onChange={handleChange}
               required
-              className="focus:ring-opacity-50 focus:border-swamp-green-300 mt-1 block w-full rounded-md border-gray-300 px-3 py-2 shadow-sm focus:ring focus:ring-green-200"
+              className="focus:ring-opacity-50 mt-1 block w-full rounded-md border-gray-300 px-3 py-2 shadow-sm focus:border-[#8f9779]"
             />
           </Form.Control>
         </Form.Field>
@@ -185,7 +178,7 @@ export function ShowUploadForm() {
               value={formData.price}
               onChange={handleChange}
               required
-              className="focus:ring-opacity-50 mt-1 block w-full rounded-md border-gray-300 px-3 py-2 shadow-sm focus:border-green-300 focus:ring focus:ring-green-200"
+              className="focus:ring-opacity-50 mt-1 block w-full rounded-md border-gray-300 px-3 py-2 shadow-sm focus:border-[#8f9779]"
             />
           </Form.Control>
         </Form.Field>
@@ -228,7 +221,7 @@ export function ShowUploadForm() {
               value={formData.locationName}
               onChange={handleChange}
               required
-              className="focus:ring-opacity-50 mt-1 block w-full rounded-md border-gray-300 px-3 py-2 shadow-sm focus:border-green-300 focus:ring focus:ring-green-200"
+              className="focus:ring-opacity-50 mt-1 block w-full rounded-md border-gray-300 px-3 py-2 shadow-sm focus:border-[#8f9779]"
             />
           </Form.Control>
         </Form.Field>
@@ -242,7 +235,7 @@ export function ShowUploadForm() {
             onValueChange={handleSelectChange('noiseLevel')}
             required
           >
-            <Select.Trigger className="focus:ring-opacity-50 mt-1 flex w-full items-center justify-between rounded-md border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm focus:border-[#8f9779] focus:ring focus:ring-[#8f9779]">
+            <Select.Trigger className="focus:ring-opacity-50 mt-1 flex w-full items-center justify-between rounded-md border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm focus:border-[#8f9779]">
               <Select.Value placeholder="Select noise level" />
               <Select.Icon className="h-4 w-4 text-gray-400">
                 <ChevronDownIcon />
@@ -281,7 +274,7 @@ export function ShowUploadForm() {
             onValueChange={handleSelectChange('wheelchairAccessible')}
             required
           >
-            <Select.Trigger className="focus:ring-opacity-50 mt-1 flex w-full items-center justify-between rounded-md border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm focus:border-[#8f9779] focus:ring focus:ring-[#8f9779]">
+            <Select.Trigger className="focus:ring-opacity-50 mt-1 flex w-full items-center justify-between rounded-md border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm focus:border-[#8f9779]">
               <Select.Value placeholder="Select an option" />
               <Select.Icon className="h-4 w-4 text-gray-400">
                 <ChevronDownIcon />
@@ -320,7 +313,7 @@ export function ShowUploadForm() {
             onValueChange={handleSelectChange('bathroomsNearby')}
             required
           >
-            <Select.Trigger className="focus:ring-opacity-50 mt-1 flex w-full items-center justify-between rounded-md border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm focus:border-[#8f9779] focus:ring focus:ring-[#8f9779]">
+            <Select.Trigger className="focus:ring-opacity-50 mt-1 flex w-full items-center justify-between rounded-md border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm focus:border-[#8f9779]">
               <Select.Value placeholder="Select an option" />
               <Select.Icon className="h-4 w-4 text-gray-400">
                 <ChevronDownIcon />
@@ -359,7 +352,7 @@ export function ShowUploadForm() {
             onValueChange={handleSelectChange('mobilityAccessible')}
             required
           >
-            <Select.Trigger className="focus:ring-opacity-50 mt-1 flex w-full items-center justify-between rounded-md border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm focus:border-[#8f9779] focus:ring focus:ring-[#8f9779]">
+            <Select.Trigger className="focus:ring-opacity-50 mt-1 flex w-full items-center justify-between rounded-md border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm focus:border-[#8f9779]">
               <Select.Value placeholder="Select an option" />
               <Select.Icon className="h-4 w-4 text-gray-400">
                 <ChevronDownIcon />
@@ -415,7 +408,7 @@ export function ShowUploadForm() {
           name="locationCoords"
           value={formData.locationCoords}
           onChange={handleChange}
-          className="focus:ring-opacity-50 mt-1 block w-full rounded-md border-gray-300 px-3 py-2 shadow-sm focus:border-green-300 focus:ring focus:ring-green-200"
+          className="focus:ring-opacity-50 mt-1 block w-full rounded-md border-gray-300 px-3 py-2 shadow-sm focus:border-[#8f9779]"
         />
         <label
           htmlFor="setTimes"
@@ -429,7 +422,7 @@ export function ShowUploadForm() {
           name="setTimes"
           value={formData.setTimes}
           onChange={handleChange}
-          className="focus:ring-opacity-50 mt-1 block w-full rounded-md border-gray-300 px-3 py-2 shadow-sm focus:border-green-300 focus:ring focus:ring-green-200"
+          className="focus:ring-opacity-50 mt-1 block w-full rounded-md border-gray-300 px-3 py-2 shadow-sm focus:border-[#8f9779]"
         />
         <label
           htmlFor="ticketsLink"
@@ -443,7 +436,7 @@ export function ShowUploadForm() {
           name="ticketsLink"
           value={formData.ticketsLink}
           onChange={handleChange}
-          className="focus:ring-opacity-50 focus:border-swamp-green-200 mt-1 block w-full rounded-md border-gray-300 px-3 py-2 shadow-sm focus:ring focus:ring-green-200"
+          className="focus:ring-opacity-50 focus:border-swamp-green-200 mt-1 block w-full rounded-md border-gray-300 px-3 py-2 shadow-sm"
         />
         <label
           htmlFor="description"
@@ -472,7 +465,7 @@ export function ShowUploadForm() {
           name="maxCapacity"
           value={formData.maxCapacity}
           onChange={handleChange}
-          className="focus:ring-opacity-50 mt-1 block w-full rounded-md border-gray-300 px-3 py-2 shadow-sm focus:border-[#8f9779] focus:ring focus:ring-[#8f9779]"
+          className="focus:ring-opacity-50 mt-1 block w-full rounded-md border-gray-300 px-3 py-2 shadow-sm focus:border-[#8f9779]"
         />
         <Form.Submit asChild>
           <button

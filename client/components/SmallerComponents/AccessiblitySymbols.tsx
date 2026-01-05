@@ -75,9 +75,9 @@ export function BathroomSymbol() {
         <Tooltip.Root>
           <Tooltip.Trigger asChild>
             <svg
-              className="relative top-0.5 mr-1 ml-1"
-              width="23"
-              height="23"
+              className="relative top-[2.5px] z-20 mr-1 ml-1"
+              width="20"
+              height="20"
               viewBox="0 0 512 512"
               fill="black"
               xmlns="http://www.w3.org/2000/svg"
@@ -89,7 +89,7 @@ export function BathroomSymbol() {
                   id="pattern0_1_2"
                   patternContentUnits="objectBoundingBox"
                   width="1"
-                  height="10"
+                  height="1"
                 >
                   <use xlinkHref="#image0_1_2" transform="scale(0.00195312)" />
                 </pattern>

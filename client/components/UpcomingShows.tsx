@@ -4,7 +4,6 @@ import { useState, useEffect } from 'react'
 import SearchBar from './SmallerComponents/SearchBar'
 import { LoadingSpinner } from './SmallerComponents/LoadingSpinner'
 import { UpcomingShowCard } from './SmallerComponents/UpcomingShowCard'
-import { UpcomingPosterData } from '../../models/poster'
 
 export function UpcomingShows() {
   const { data, isLoading, isError } = useUpcomingShows()
@@ -72,7 +71,7 @@ export function UpcomingShows() {
         changeFunction={handleChange}
         searchTerm={searchTerm}
       />
-      <div className="upcomingShowsBox mt-1">
+      <div className="mt-1">
         {currentData &&
           currentData.map((show: UpcomingShow) => (
             <UpcomingShowCard key={show.id} show={show} />
