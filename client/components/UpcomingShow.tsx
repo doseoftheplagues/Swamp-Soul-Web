@@ -6,7 +6,7 @@
 // to factor in fonts (because the header in the page will have user customisable fonts soon) and measure character space taken up vs
 // just number of characters like it does now
 
-import { useNavigate, useParams } from 'react-router'
+import { useNavigate, useParams, useLocation } from 'react-router'
 import {
   useDeleteUpcomingShow,
   useGetUpcomingShowById,
@@ -65,11 +65,9 @@ export function UpcomingShow() {
   })
   const params = useParams()
   const { data, isLoading, isError } = useGetUpcomingShowById(Number(params.id))
-  const {
-    comments,
-    isLoading: commentsIsLoading,
-    isError: commentsIsError,
-  } = useComments({ upcomingShowId: Number(params.id) })
+  const { comments, isLoading: commentsIsLoading } = useComments({
+    upcomingShowId: Number(params.id),
+  })
   const { isAuthenticated, getAccessTokenSilently, user } = useAuth0()
   const {
     data: poster,
@@ -79,6 +77,7 @@ export function UpcomingShow() {
   const deleteShowMutation = useDeleteUpcomingShow()
   const deletePosterMutation = useDeletePoster()
   const navigate = useNavigate()
+  const location = useLocation()
 
   const editShowMutation = useUpdateUpcomingShow()
 
@@ -87,6 +86,22 @@ export function UpcomingShow() {
       prevIndex === poster.length - 1 ? 0 : prevIndex + 1,
     )
   }
+  useEffect(() => {
+    if (!isLoading && !commentsIsLoading && location.hash) {
+      const targetId = location.hash.substring(1) // Remove the '#'
+      const targetElement = document.getElementById(targetId)
+      if (targetElement) {
+        targetElement.scrollIntoView({ behavior: 'smooth' })
+
+        targetElement.classList.add('animate-pulse')
+
+        const animationDuration = 6000
+        setTimeout(() => {
+          targetElement.classList.remove('animate-pulse')
+        }, animationDuration)
+      }
+    }
+  }, [isLoading, location])
 
   const prevPoster = () => {
     setCurrentPosterIndex((prevIndex) =>
@@ -690,11 +705,13 @@ export function UpcomingShow() {
             </div>
           </Toast.Provider>
         </div>
-        <CommentSection
-          comments={comments}
-          originIdType={'upcomingShowId'}
-          originId={data.id}
-        />
+        <div className="mt-4 flex w-full justify-center">
+          <CommentSection
+            comments={comments}
+            originIdType={'upcomingShowId'}
+            originId={data.id}
+          />
+        </div>
       </div>
 
       {/* phone size starts */}
@@ -945,7 +962,7 @@ export function UpcomingShow() {
             {data.locationName} - {formatDate(data.date)}{' '}
           </h3>
         </div>
-        <div className="posterDiv flex h-3/5 w-full items-center justify-center">
+        <div className="posterDiv flex h-3/5 w-full items-center justify-center overflow-hidden">
           {posterIsLoading && (
             <div className="flex h-full items-center justify-center">
               <LoadingSpinner />
@@ -969,11 +986,7 @@ export function UpcomingShow() {
                 }
                 alt={`Poster for ${data.performers}`}
               ></img>
-              {/* <div className="absolute top-1/2 left-0 flex flex-row items-center rounded-r-sm border-t-2 border-r-2 border-b-2 border-[#eae7d2e2] bg-[#dad7c2]">
-                <p>
-                  {currentPosterIndex + 1} / {poster.length}
-                </p>
-              </div> */}
+
               <div className="absolute top-1/2 -left-7 flex flex-row items-center rounded-sm border-2 border-[#eae7d2e2] bg-[#dad7c2] pl-1 opacity-70">
                 <button
                   onClick={prevPoster}
@@ -1074,6 +1087,13 @@ export function UpcomingShow() {
             </a>
           </div>
         )}
+        <div className="mx-2 mt-4">
+          <CommentSection
+            comments={comments}
+            originIdType={'upcomingShowId'}
+            originId={data.id}
+          />
+        </div>
       </div>
     </div>
   )

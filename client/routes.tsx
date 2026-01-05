@@ -25,6 +25,10 @@ const routes = createRoutesFromElements(
     <Route path="/showeditform/:id" element={<ShowEditForm />} />
     <Route path="/upcomingshows" element={<UpcomingShows />} />
     <Route path="/upcomingshows/:id" element={<UpcomingShow />} />
+    <Route
+      path="/upcomingshows/:id/#comment/:commentid"
+      element={<UpcomingShow />}
+    />
     <Route path="/addpostertoshow/:id" element={<AddPosterToShow />} />
     <Route path="/archive" element={<Archive />} />
     <Route path="*" element={<NotFound />} />

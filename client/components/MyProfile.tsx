@@ -247,7 +247,7 @@ const Profile = () => {
             userShows.map((show: UpcomingShow) => (
               <UpcomingShowCard key={show.id} show={show} />
             ))}
-          {userShows.length == 0 && !showsAreLoading && (
+          {!showsAreLoading && userShows && userShows.length == 0 && (
             <p>You haven&apos;t made any shows yet.</p>
           )}
         </div>
@@ -263,14 +263,6 @@ const Profile = () => {
             )}
             {rootCommentsByCurrentUser.map((comment) => (
               <div key={comment.id}>
-                <p className="text-xs text-gray-500">
-                  On{' '}
-                  {comment.upcomingShowId
-                    ? 'upcoming show' + ' ' + comment.upcomingShowId
-                    : comment.archiveShowId
-                      ? 'archive show' + ' ' + comment.archiveShowId
-                      : 'post' + ' ' + comment.postId}
-                </p>
                 <Comment
                   comment={{ ...comment, replies: [] }}
                   originIdType={
@@ -287,6 +279,31 @@ const Profile = () => {
                     0
                   }
                 />
+                <div className="mb-2 flex w-full justify-end">
+                  <div className="mr-1.5 rounded-b-md border-x-2 border-b-2 border-[#dad7c2d0] bg-[#fbfaf6] px-1 py-0.5">
+                    <p className="text-xs text-gray-500">
+                      {comment.upcomingShowId ? (
+                        <Link
+                          to={`/upcomingshows/${comment.upcomingShowId}#comment${comment.id}`}
+                        >
+                          View thread
+                        </Link>
+                      ) : comment.archiveShowId ? (
+                        <Link
+                          to={`/upcomingshows/${comment.archiveShowId}#comment${comment.id}`}
+                        >
+                          View thread
+                        </Link>
+                      ) : (
+                        <Link
+                          to={`/upcomingshows/${comment.postId}#comment${comment.id}`}
+                        >
+                          View thread
+                        </Link>
+                      )}
+                    </p>
+                  </div>
+                </div>
               </div>
             ))}
           </div>
@@ -298,23 +315,11 @@ const Profile = () => {
           <div className="commentsBox mt-1 p-2">
             {commentsAreLoading && <LoadingSpinner />}
             {commentsAreError && <p>Error loading comments.</p>}
-            {repliesReceived.length === 0 && !commentsAreLoading && (
+            {!commentsAreLoading && repliesReceived.length == 0 && (
               <p>You haven&apos;t received any replies yet.</p>
             )}
             {repliesReceived.map((reply) => (
-              <div key={reply.id}>
-                <p className="text-xs text-gray-500">
-                  Reply on{' '}
-                  {reply.upcomingShowId ? (
-                    <Link to={`/upcomingshows/${reply.upcomingShowId}`}>
-                      upcoming show {reply.upcomingShowId}{' '}
-                    </Link>
-                  ) : reply.archiveShowId ? (
-                    'archive show' + ' ' + reply.archiveShowId
-                  ) : (
-                    'post' + ' ' + reply.postId
-                  )}
-                </p>
+              <div key={reply.id} className="flex flex-col">
                 <Comment
                   comment={{ ...reply, replies: [] }}
                   originIdType={
@@ -331,6 +336,31 @@ const Profile = () => {
                     0
                   }
                 />
+                <div className="mb-2 flex w-full justify-end">
+                  <div className="mr-1.5 rounded-b-md border-x-2 border-b-2 border-[#dad7c2d0] bg-[#fbfaf6] px-1 py-0.5">
+                    <p className="text-xs text-gray-500">
+                      {reply.upcomingShowId ? (
+                        <Link
+                          to={`/upcomingshows/${reply.upcomingShowId}#comment${reply.id}`}
+                        >
+                          View thread
+                        </Link>
+                      ) : reply.archiveShowId ? (
+                        <Link
+                          to={`/upcomingshows/${reply.archiveShowId}#comment${reply.id}`}
+                        >
+                          View thread
+                        </Link>
+                      ) : (
+                        <Link
+                          to={`/upcomingshows/${reply.postId}#comment${reply.id}`}
+                        >
+                          View thread
+                        </Link>
+                      )}
+                    </p>
+                  </div>
+                </div>
               </div>
             ))}
           </div>

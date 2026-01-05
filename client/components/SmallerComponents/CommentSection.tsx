@@ -59,7 +59,10 @@ export function CommentSection({
   }
 
   return (
-    <div className="CommentsSection mt-2 h-fit min-h-24 w-fit max-w-1/2 rounded-md border-2 border-[#dad7c2d0]">
+    <div
+      className="CommentsSection mt-2 h-fit rounded-md border-2 border-[#dad7c2d0] sm:max-w-3/5 sm:min-w-2/5"
+      id="comment-section"
+    >
       {!isAuthenticated && (
         <div className="mt-2 ml-2 w-fit border-b-2 border-b-[#dad7c2d0]">
           <p className="pr-2 text-[#3a3a3a]"> Log in to add comments</p>
@@ -90,7 +93,9 @@ export function CommentSection({
                 onChange={handleChange}
                 value={formData.content}
               ></input>
-              <div className="mr-2.5 border-b-2 border-b-[#dad7c2d0]"></div>
+              <div
+                className={`border-b-2 border-b-[#dad7c2d0] ${sendCommmentHidden == true && 'mr-2.5'}`}
+              ></div>
             </div>
             {sendCommmentHidden == false && (
               <button
@@ -105,12 +110,13 @@ export function CommentSection({
       )}
       <div className="p-1">
         {commentTree.map((comment) => (
-          <Comment
-            key={comment.id}
-            comment={comment}
-            originIdType={originIdType}
-            originId={originId}
-          />
+          <div className="m-2" key={comment.id}>
+            <Comment
+              comment={comment}
+              originIdType={originIdType}
+              originId={originId}
+            />
+          </div>
         ))}
       </div>
     </div>

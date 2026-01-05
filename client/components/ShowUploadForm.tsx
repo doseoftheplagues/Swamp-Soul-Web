@@ -84,7 +84,7 @@ export function ShowUploadForm() {
       mobilityAccessible: formData.mobilityAccessible === 'true',
       bathroomsNearby: formData.bathroomsNearby === 'true',
       maxCapacity: parseInt(formData.maxCapacity, 10) || 0,
-      userId: user?.sub,
+      userId: user!.sub,
     }
     addShowMutation.mutate(
       { showData: submissionData, token },

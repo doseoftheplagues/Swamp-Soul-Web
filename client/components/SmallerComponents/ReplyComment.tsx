@@ -5,6 +5,7 @@ import { useComments } from '../../hooks/useComments'
 import { CrossSymbol, TextBubbles } from './SymbolSvgs'
 import { useState } from 'react'
 import { TimeDisplay } from './ReusableFunctions'
+import * as AlertDialog from '@radix-ui/react-alert-dialog'
 
 type CommentWithReplies = Comment & { replies: CommentWithReplies[] }
 
@@ -85,7 +86,7 @@ export function ReplyComment({
   }
 
   return (
-    <div className="relative ml-3">
+    <div className="ReplyComment relative ml-3" id={`comment${comment.id}`}>
       <div className="ml-3 h-2 border-0"></div>
       <div className="flex flex-row rounded-md border-2 border-[#dad7c2e0] bg-[#fbfaf6] px-1 py-1">
         <div className="mr-1">
@@ -96,37 +97,72 @@ export function ReplyComment({
           />
         </div>
         <div className="flex w-full flex-col">
-          <div className="flex flex-row items-center justify-between">
-            <div className="flex flex-row items-baseline">
-              <p className="">
-                {commentAuthor?.username}{' '}
-                <span className="ml-1 text-xs text-gray-500">
-                  <TimeDisplay timestamp={String(comment.dateAdded)} />
-                </span>
+          <div className="relative flex flex-row items-center justify-between">
+            <div className="flex flex-col items-baseline sm:flex-row">
+              <p className="text-sm sm:text-base">{commentAuthor?.username} </p>
+              <p className="ml-1 text-xs text-gray-500">
+                <TimeDisplay timestamp={String(comment.dateAdded)} />
               </p>
             </div>
-            <div className="flex flex-row items-center">
-              {isAuthenticated && commentAuthor?.authId == user?.sub && (
-                <button
-                  onClick={() => handleDeleteClick(comment.id)}
-                  className="flex items-center justify-center rounded-full p-0.5"
-                >
-                  <CrossSymbol className="h-5 cursor-pointer" />
-                </button>
-              )}
-              {isAuthenticated && (
-                <button
-                  onClick={() => setIsReplying(!isReplying)}
-                  className="flex items-center justify-center rounded-full p-0.5"
-                >
-                  <TextBubbles
-                    className={'relative top-0.5 h-6 cursor-pointer'}
-                  />
-                </button>
-              )}
+            <div className="relative -top-0.5 -right-0.5">
+              <div className="flex flex-row">
+                {isAuthenticated && commentAuthor?.authId == user?.sub && (
+                  <div>
+                    <AlertDialog.Root>
+                      <AlertDialog.Trigger asChild>
+                        <button className="flex items-center justify-center rounded-full">
+                          <CrossSymbol className="h-5 cursor-pointer" />
+                        </button>
+                      </AlertDialog.Trigger>
+                      <AlertDialog.Portal>
+                        <AlertDialog.Overlay className="AlertDialogOverlay" />
+                        <AlertDialog.Content className="AlertDialogContent">
+                          <AlertDialog.Title className="AlertDialogTitle">
+                            Delete comment?
+                          </AlertDialog.Title>
+                          <AlertDialog.Description className="AlertDialogDescription">
+                            This cannot be undone.
+                          </AlertDialog.Description>
+                          <div
+                            style={{
+                              display: 'flex',
+                              gap: 25,
+                              justifyContent: 'flex-end',
+                            }}
+                          >
+                            <AlertDialog.Cancel asChild>
+                              <button className="rounded-md border border-[#c6c6c6] px-1 shadow-md hover:bg-[#faf8f1]">
+                                Cancel
+                              </button>
+                            </AlertDialog.Cancel>
+                            <AlertDialog.Action asChild>
+                              <button
+                                className="rounded-md border border-[#e6e6e6] bg-[#fa3131] p-2 px-1 text-[#faf8f1] shadow-md hover:bg-[#fd7474]"
+                                onClick={() => handleDeleteClick(comment.id)}
+                              >
+                                Delete
+                              </button>
+                            </AlertDialog.Action>
+                          </div>
+                        </AlertDialog.Content>
+                      </AlertDialog.Portal>
+                    </AlertDialog.Root>
+                  </div>
+                )}
+                {isAuthenticated && (
+                  <button
+                    onClick={() => setIsReplying(!isReplying)}
+                    className="ml-0.5 flex items-center justify-center rounded-full"
+                  >
+                    <TextBubbles className="relative top-0.5 h-6 cursor-pointer" />
+                  </button>
+                )}
+              </div>
             </div>
           </div>
-          <p className="text-md pr-2 text-pretty">{comment.content}</p>
+          <p className="pr-2 text-sm text-pretty sm:text-base">
+            {comment.content}
+          </p>
         </div>
       </div>
       {isReplying && (
