@@ -1,12 +1,14 @@
 import toolsSymbolUrl from '/symbols/tools.svg?url'
 import magnifierSymbolUrl from '/symbols/magnifier.svg'
 import alertSymbolUrl from '/symbols/alert.svg'
+import crossSymbolUrl from '/symbols/cross.svg'
+import textBubblesUrl from '/symbols/textBubbles.svg'
 
-interface ToolsSymbolProps {
+interface SymbolProps {
   className?: string
 }
 
-export function ToolsSymbol({ className }: ToolsSymbolProps) {
+export function ToolsSymbol({ className }: SymbolProps) {
   return (
     <img
       alt="tools symbol"
@@ -15,7 +17,7 @@ export function ToolsSymbol({ className }: ToolsSymbolProps) {
     ></img>
   )
 }
-export function MagnifierSymbol({ className }: ToolsSymbolProps) {
+export function MagnifierSymbol({ className }: SymbolProps) {
   return (
     <img
       alt="magnifier symbol"
@@ -25,7 +27,7 @@ export function MagnifierSymbol({ className }: ToolsSymbolProps) {
   )
 }
 
-export function AlertSymbol({ className }: ToolsSymbolProps) {
+export function AlertSymbol({ className }: SymbolProps) {
   return (
     <img
       alt="alert symbol"
@@ -34,5 +36,30 @@ export function AlertSymbol({ className }: ToolsSymbolProps) {
     ></img>
   )
 }
+export function CrossSymbol({ className }: SymbolProps) {
+  return (
+    <img
+      alt="cross symbol"
+      src={crossSymbolUrl}
+      className={`${className}`}
+    ></img>
+  )
+}
 
-export default { ToolsSymbol, MagnifierSymbol, AlertSymbol }
+export function TextBubbles({ className }: SymbolProps) {
+  return (
+    <img
+      alt="text bubbles symbol"
+      src={textBubblesUrl}
+      className={`${className}`}
+    ></img>
+  )
+}
+
+export default {
+  ToolsSymbol,
+  MagnifierSymbol,
+  AlertSymbol,
+  CrossSymbol,
+  TextBubbles,
+}

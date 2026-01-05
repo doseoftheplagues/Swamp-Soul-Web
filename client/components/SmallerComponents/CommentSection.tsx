@@ -60,24 +60,29 @@ export function CommentSection({
 
   return (
     <div className="CommentsSection mt-2 h-fit min-h-24 w-fit max-w-1/2 rounded-md border-2 border-[#dad7c2d0]">
+      {!isAuthenticated && (
+        <div className="mt-2 ml-2 border-b-2 border-b-[#dad7c2d0]">
+          <p className="pr-2 text-[#3a3a3a]"> Log in to add comments</p>
+        </div>
+      )}
       {isAuthenticated && (
-        <div className="flex flex-row items-center justify-between p-1">
+        <div className="mt-1 flex flex-row items-center justify-between p-1">
           <img
             src={databaseUser?.profilePicture || '/assets/default.jpeg'}
             alt={`${databaseUser?.username}'s profile`}
-            className="mr-2 inline-block max-h-10 min-h-10 max-w-10 min-w-10 rounded-full object-contain"
+            className="mx-1.5 inline-block max-h-10 min-h-10 max-w-10 min-w-10 rounded-full object-contain"
           />
           <form className="flex h-fit w-full flex-row" onSubmit={handleSubmit}>
             <label htmlFor="addComment" className="sr-only">
               New comment
             </label>
-            <div className="w-full border-b-2 border-b-[#dad7c2d0]">
+            <div className="mr-2 w-full border-b-2 border-b-[#dad7c2d0]">
               <input
                 type="text"
                 id="addComment"
                 name="content"
                 placeholder="Say something..."
-                className="commentInput text-md w-full py-0"
+                className="commentInput text-md -py-1 w-full"
                 onFocus={() => setSendCommentHidden(false)}
                 onChange={handleChange}
                 value={formData.content}
@@ -86,7 +91,7 @@ export function CommentSection({
             {sendCommmentHidden == false && (
               <button
                 type="submit"
-                className="text-md mr-2 rounded-tl-sm rounded-r-sm rounded-bl-none bg-[#dad7c2] px-1 py-0.5"
+                className="text-md mr-2 rounded-tl-sm rounded-r-sm rounded-bl-none bg-[#dad7c2] px-1.5 py-1"
               >
                 Send
               </button>
@@ -96,7 +101,12 @@ export function CommentSection({
       )}
       <div className="p-1">
         {commentTree.map((comment) => (
-          <Comment key={comment.id} comment={comment} />
+          <Comment
+            key={comment.id}
+            comment={comment}
+            originIdType={originIdType}
+            originId={originId}
+          />
         ))}
       </div>
     </div>

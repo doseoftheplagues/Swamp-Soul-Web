@@ -15,10 +15,7 @@ function Header() {
   const displayPath = getDisplayPathname(location.pathname)
 
   const handleSignIn = () => {
-    console.log('window.location.origin:', window.location.origin)
-    console.log('window.location.origin')
     const redirectUri = `${window.location.origin}/register`
-    console.log('redirect_uri being used:', redirectUri)
     loginWithRedirect({
       authorizationParams: {
         redirect_uri: redirectUri,
