@@ -1,4 +1,5 @@
 import React from 'react'
+import { MagnifierSymbol } from './SymbolSvgs'
 
 interface SearchBarProps {
   searchTerm: string | undefined
@@ -12,20 +13,26 @@ function SearchBar({
   searchTerm,
 }: SearchBarProps) {
   return (
-    <div className="ml-1 flex w-fit flex-row rounded-md border-2 border-black text-xs sm:text-sm">
-      <form onSubmit={submitFunction}>
+    <div className="relative flex w-full flex-row rounded-md text-xs sm:text-sm">
+      <form onSubmit={submitFunction} className="flex flex-row">
+        <label htmlFor="search" className="sr-only">
+          Search
+        </label>
         <input
           type="text"
+          name="search"
+          id="search"
           value={searchTerm || ''}
           onChange={changeFunction}
-          className="SearchInput rounded-bl-sm p-1"
-          placeholder="Search..."
+          className="SearchInput relative top-0 z-0 rounded-l-md p-1 sm:min-w-60"
+          placeholder="I'm looking for..."
         ></input>
         <button
           type="submit"
-          className="h-full rounded-r-sm bg-[#dad7c2] px-1 hover:bg-[#e2e0cf] active:bg-[#c1bd9a]"
+          className="flex flex-row items-center rounded-r-sm bg-[#dad7c2] px-1 hover:bg-[#e2e0cf] active:bg-[#c1bd9a]"
         >
-          Search
+          <MagnifierSymbol className="h-5 px-1" />
+          <p className="sr-only">Search</p>
         </button>
       </form>
     </div>

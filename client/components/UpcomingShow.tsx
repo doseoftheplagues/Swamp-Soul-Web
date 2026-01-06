@@ -87,7 +87,7 @@ export function UpcomingShow() {
     )
   }
   useEffect(() => {
-    if (!isLoading && !commentsIsLoading && location.hash) {
+    if (!isLoading && location.hash) {
       const targetId = location.hash.substring(1) // Remove the '#'
       const targetElement = document.getElementById(targetId)
       if (targetElement) {

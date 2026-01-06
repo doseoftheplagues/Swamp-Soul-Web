@@ -32,52 +32,22 @@ function Header() {
     )
   }
 
-  if (!isAuthenticated) {
-    return (
-      <div className="flex w-screen flex-row bg-[#faf8f1] p-1 text-sm sm:p-2 sm:text-base">
-        <div className="flex w-3/4 sm:w-1/2">
-          <h1 className="">
-            <Link to={'/'}> Swamp Soul </Link>
-            {displayPath !== '/' && (
-              <Link to={displayPath}> {displayPath}</Link>
-            )}
-          </h1>
-        </div>
-        <div className="flex w-1/4 justify-end sm:w-1/2">
-          <LoginButton />
-        </div>
+  return (
+    <div className="flex w-screen flex-row bg-[#faf8f1] p-1 text-sm sm:text-base">
+      <div className="flex w-3/4 sm:w-1/2">
+        <h1 className="">
+          <Link to={'/'}> Swamp Soul </Link>
+          {displayPath !== '/' && <Link to={displayPath}> {displayPath}</Link>}
+        </h1>
       </div>
-    )
-  } else if (isAuthenticated && displayPath == '/profile') {
-    return (
-      <div className="flex w-screen flex-row bg-[#faf8f1] p-1 text-sm sm:p-2 sm:text-base">
-        <div className="flex w-3/4 sm:w-1/2">
-          <h3 className="text-swamp-green-300">
-            <Link to={'/'}> Swamp Soul </Link>{' '}
-            {<Link to={displayPath}> {displayPath}</Link>}
-          </h3>
-          <div></div>
-        </div>
-        <div className="flex w-1/4 justify-end sm:w-1/2"></div>
-      </div>
-    )
-  } else {
-    return (
-      <div className="flex w-screen flex-row bg-[#faf8f1] p-1 text-sm sm:p-2 sm:text-base">
-        <div className="flex w-3/4 sm:w-1/2">
-          <h3 className="text-swamp-green-300">
-            <Link to={'/'}> Swamp Soul </Link>{' '}
-            {displayPath !== '/' && (
-              <Link to={displayPath}> {displayPath}</Link>
-            )}
-          </h3>
-        </div>
-        <div className="flex w-1/4 justify-end sm:w-1/2">
+      <div className="flex w-1/4 justify-end sm:w-1/2">
+        {!isAuthenticated && <LoginButton />}
+        {isAuthenticated && displayPath != '/profile' && (
           <Link to={'/profile'}>Profile</Link>
-        </div>
+        )}
       </div>
-    )
-  }
+    </div>
+  )
 }
 
 export default Header

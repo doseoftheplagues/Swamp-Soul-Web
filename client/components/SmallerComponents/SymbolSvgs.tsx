@@ -3,6 +3,7 @@ import magnifierSymbolUrl from '/symbols/magnifier.svg'
 import alertSymbolUrl from '/symbols/alert.svg'
 import crossSymbolUrl from '/symbols/cross.svg'
 import textBubblesUrl from '/symbols/textBubbles.svg'
+import paintbrushUrl from '/symbols/paintbrush.svg'
 
 interface SymbolProps {
   className?: string
@@ -56,10 +57,21 @@ export function TextBubbles({ className }: SymbolProps) {
   )
 }
 
+export function PaintbrushSymbol({ className }: SymbolProps) {
+  return (
+    <img
+      alt="paintbrush symbol"
+      src={paintbrushUrl}
+      className={`${className}`}
+    ></img>
+  )
+}
+
 export default {
   ToolsSymbol,
   MagnifierSymbol,
   AlertSymbol,
   CrossSymbol,
   TextBubbles,
+  PaintbrushSymbol,
 }

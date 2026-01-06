@@ -9,7 +9,6 @@ body {
 input {
   background-color: #ffffff;
   border: 1.5px solid #212121;
-  border-radius: 3px;
 }
 
 textarea {
@@ -197,6 +196,8 @@ textarea:focus {
 
 .SearchInput {
   border: 0px;
+  position: relative;
+  z-index: 0;
 }
 .SearchButton {
   padding: 0;
@@ -204,8 +205,9 @@ textarea:focus {
 
 .clamped-text {
   display: -webkit-box;
-  line-clamp: 3;
-  -webkit-line-clamp: 3;
+  line-clamp: 1;
+
+  -webkit-line-clamp: 1;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }

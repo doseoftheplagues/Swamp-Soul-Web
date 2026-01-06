@@ -392,7 +392,7 @@ export function ShowUploadForm() {
           type="text"
           id="title"
           name="title"
-          value={formData.title}
+          value={formData.name}
           onChange={handleChange}
           className="focus:ring-opacity-50 mt-1 block w-full rounded-md border-gray-300 px-3 py-2 shadow-sm"
         />

@@ -5,8 +5,6 @@ function Home() {
     <div className="p-4">
       <Link to="/archive">Archive</Link>
       <br></br>
-      <Link to="/showuploadform">Show Upload Form</Link>
-      <br></br>
       <Link to="/upcomingshows">Upcoming Shows</Link>
     </div>
   )
