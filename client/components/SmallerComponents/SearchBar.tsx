@@ -25,7 +25,7 @@ function SearchBar({
           value={searchTerm || ''}
           onChange={changeFunction}
           className="SearchInput relative top-0 z-0 rounded-l-md p-1 sm:min-w-60"
-          placeholder="I'm looking for..."
+          placeholder="Search..."
         ></input>
         <button
           type="submit"

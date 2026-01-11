@@ -20,6 +20,7 @@ export function ShowEditForm() {
   const params = useParams()
   const navigate = useNavigate()
   const { getAccessTokenSilently, user } = useAuth0()
+  const [coordsTooltipIsHidden, setCoordsTooltipIsHidden] = useState(true)
 
   const { data, isLoading, isError } = useGetUpcomingShowById(Number(params.id))
   const [formData, setFormData] = useState({
@@ -121,6 +122,14 @@ export function ShowEditForm() {
     'mobilityAccessible',
   ]
 
+  function handleCoordsTooltipClick() {
+    if (coordsTooltipIsHidden == true) {
+      setCoordsTooltipIsHidden(false)
+    } else {
+      setCoordsTooltipIsHidden(true)
+    }
+  }
+
   const isFormInvalid =
     requiredFields.some((field) => !formData[field]) || !formData.date
   if (user?.sub === data.userId) {
@@ -137,7 +146,7 @@ export function ShowEditForm() {
               onChange={handleDateChange}
               value={formData.date}
               required
-              className="focus:ring-opacity-50 mt-1 block w-full rounded-md border-gray-300 px-3 py-2 shadow-sm focus:border-[#8f9779] focus:ring-[#8f9779]"
+              className="focus:ring-opacity-50 mt-1 block w-full rounded-md border-[1.5px] px-3 py-2 shadow-sm focus:border-[#8f9779] focus:ring-[#8f9779]"
             />
           </Form.Field>
 
@@ -254,7 +263,7 @@ export function ShowEditForm() {
               onValueChange={handleSelectChange('wheelchairAccessible')}
               required
             >
-              <Select.Trigger className="focus:ring-opacity-50 mt-1 flex w-full items-center justify-between rounded-md border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200">
+              <Select.Trigger className="focus:ring-opacity-50 shadow-s mt-1 flex w-full items-center justify-between rounded-md border border-gray-300 bg-white px-3 py-2 text-sm focus:border-[#8f9779]">
                 <Select.Value placeholder="Select an option" />
                 <Select.Icon className="h-4 w-4 text-gray-400">
                   <ChevronDownIcon />
@@ -293,7 +302,7 @@ export function ShowEditForm() {
               onValueChange={handleSelectChange('bathroomsNearby')}
               required
             >
-              <Select.Trigger className="focus:ring-opacity-50 mt-1 flex w-full items-center justify-between rounded-md border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200">
+              <Select.Trigger className="focus:ring-opacity-50 mt-1 flex w-full items-center justify-between rounded-md border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm focus:border-[#8f9779]">
                 <Select.Value placeholder="Select an option" />
                 <Select.Icon className="h-4 w-4 text-gray-400">
                   <ChevronDownIcon />
@@ -332,7 +341,7 @@ export function ShowEditForm() {
               onValueChange={handleSelectChange('mobilityAccessible')}
               required
             >
-              <Select.Trigger className="focus:ring-opacity-50 mt-1 flex w-full items-center justify-between rounded-md border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200">
+              <Select.Trigger className="focus:ring-opacity-50 mt-1 flex w-full items-center justify-between rounded-md border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm focus:border-[#8f9779]">
                 <Select.Value placeholder="Select an option" />
                 <Select.Icon className="h-4 w-4 text-gray-400">
                   <ChevronDownIcon />
@@ -376,19 +385,48 @@ export function ShowEditForm() {
             onChange={handleChange}
             className="focus:ring-opacity-50 mt-1 block w-full rounded-md border-gray-300 px-3 py-2 shadow-sm"
           />
-          <label
-            htmlFor="locationCoords"
-            className="mb-1 block text-sm font-medium text-gray-700"
-          >
-            Location coordinates:
-          </label>
+          <div className="flex flex-row items-center justify-between">
+            <label
+              htmlFor="locationCoords"
+              className="mb-1 block text-sm font-medium text-gray-700"
+            >
+              Location coordinates:
+            </label>
+            <button
+              type="button"
+              onClick={() => handleCoordsTooltipClick()}
+              className="ml-2 flex cursor-pointer items-center rounded-sm border border-[#aaa89955] bg-[#dad7c2] px-1 py-0 text-sm hover:bg-[#e2e0cf] focus:border-[#8f9779] active:bg-[#c1bd9a]"
+            >
+              ?
+            </button>
+          </div>
+          {coordsTooltipIsHidden == false && (
+            <div className="md flex flex-col rounded border-[1.5px] bg-[#dedccabd] p-1 text-sm wrap-anywhere">
+              <p className="mb-2 text-base underline">
+                How to add coordinates:
+              </p>
+              <p className="mb-2">
+                Open the location in maps and zoom in to where you want it.
+              </p>
+              <p className="mb-2">
+                Your windows address will look something like:
+                https://www.google.com/maps/@-41.2979987,174.7919087,20.25z?authuser=.............etc..etc...etc......etc...
+              </p>
+              <p className="mb-2">
+                -41.2979987,174.7919087,20.25z? - this is the part we want! copy
+                everything from @ till the end of the coordinates and post it
+                into the form feild below. The coordinates will be displayed as
+                a map link on the show page.
+              </p>
+            </div>
+          )}
           <input
             type="text"
             id="locationCoords"
             name="locationCoords"
             value={formData.locationCoords}
             onChange={handleChange}
-            className="focus:ring-opacity-50 mt-1 block w-full rounded-md border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200"
+            className="focus:ring-opacity-50 mt-1 block w-full rounded-md border-gray-300 px-3 py-2 shadow-sm"
           />
           <label
             htmlFor="setTimes"
@@ -402,7 +440,7 @@ export function ShowEditForm() {
             name="setTimes"
             value={formData.setTimes}
             onChange={handleChange}
-            className="focus:ring-opacity-50 mt-1 block w-full rounded-md border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200"
+            className="focus:ring-opacity-50 mt-1 block w-full rounded-md border-gray-300 px-3 py-2 shadow-sm"
           />
           <label
             htmlFor="ticketsLink"
@@ -416,7 +454,7 @@ export function ShowEditForm() {
             name="ticketsLink"
             value={formData.ticketsLink}
             onChange={handleChange}
-            className="focus:ring-opacity-50 mt-1 block w-full rounded-md border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200"
+            className="focus:ring-opacity-50 mt-1 block w-full rounded-md border-gray-300 px-3 py-2 shadow-sm"
           />
           <label
             htmlFor="description"
@@ -430,7 +468,7 @@ export function ShowEditForm() {
             name="description"
             value={formData.description}
             onChange={handleChange}
-            className="focus:ring-opacity-50 mt-1 block w-full rounded-md border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200"
+            className="focus:ring-opacity-50 mt-1 block w-full rounded-md border-gray-300 px-3 py-2 shadow-sm"
           />
           <label
             htmlFor="maxCapacity"
@@ -444,7 +482,7 @@ export function ShowEditForm() {
             name="maxCapacity"
             value={formData.maxCapacity}
             onChange={handleChange}
-            className="focus:ring-opacity-50 mt-1 block w-full rounded-md border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200"
+            className="focus:ring-opacity-50 mt-1 block w-full rounded-md border-gray-300 px-3 py-2 shadow-sm"
           />
           <Form.Submit asChild>
             <button

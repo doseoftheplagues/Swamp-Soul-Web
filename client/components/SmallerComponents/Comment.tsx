@@ -92,7 +92,8 @@ export function Comment({ comment, originIdType, originId }: CommentProps) {
           <img
             src={commentAuthor?.profilePicture || '/assets/default.jpeg'}
             alt={`${commentAuthor?.username}'s profile`}
-            className="max-h-10 min-h-10 max-w-10 min-w-10 rounded-full object-fill"
+            className="max-h-10 min-h-10 max-w-10 min-w-10 rounded-full object-cover"
+            // mx-1 h-16 w-16 min-w-15 overflow-hidden rounded-full border-2 border-[#acacac49] bg-gray-100 object-cover
           />
         </div>
         <div className="flex w-full flex-col">

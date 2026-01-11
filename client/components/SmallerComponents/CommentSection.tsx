@@ -73,7 +73,7 @@ export function CommentSection({
           <img
             src={databaseUser?.profilePicture || '/assets/default.jpeg'}
             alt={`${databaseUser?.username}'s profile`}
-            className="mx-1.5 inline-block max-h-10 min-h-10 max-w-10 min-w-10 rounded-full object-fill"
+            className="mx-1.5 inline-block max-h-10 min-h-10 max-w-10 min-w-10 rounded-full object-cover"
           />
           <form
             className="flex h-fit w-full flex-row items-baseline"

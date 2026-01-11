@@ -33,10 +33,12 @@ function Header() {
   }
 
   return (
-    <div className="flex w-screen flex-row bg-[#faf8f1] p-1 text-sm sm:text-base">
+    <div className="flex w-screen flex-row bg-[#faf8f1] p-1 text-sm sm:text-lg">
       <div className="flex w-3/4 sm:w-1/2">
         <h1 className="">
-          <Link to={'/'}> Swamp Soul </Link>
+          <Link to={'/'} className="">
+            Swamp Soul
+          </Link>
           {displayPath !== '/' && <Link to={displayPath}> {displayPath}</Link>}
         </h1>
       </div>

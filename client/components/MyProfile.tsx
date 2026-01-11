@@ -122,9 +122,9 @@ const Profile = () => {
     : []
 
   return isAuthenticated && user ? (
-    <div className="flex w-screen flex-row items-start justify-center">
-      <div className="relative flex flex-col rounded-md border-[1.5px] bg-[#e9e6d6ac] md:w-4/9 lg:w-2/9">
-        <div className="dropdo2n absolute right-0">
+    <div className="flex w-full flex-col items-start justify-center p-2 md:flex-row md:p-0">
+      <div className="relative mr-2 mb-2 flex w-full flex-col rounded-md border-[1.5px] bg-[#e9e6d6ac] md:mr-0 md:mb-0 md:w-2/9">
+        <div className="dropdown absolute right-0">
           <DropdownMenu.Root>
             <DropdownMenu.Trigger asChild>
               <button className="IconButton" aria-label="Customise options">
@@ -237,7 +237,7 @@ const Profile = () => {
           </div>
         )}
       </div>
-      <div className="ml-5 flex w-fit min-w-2/5 flex-col rounded-md border bg-[#e9e6d6ac]">
+      <div className="flex w-full flex-col rounded-md border bg-[#e9e6d6ac] md:ml-5 md:max-w-3/5 md:min-w-2/5">
         <div className="mb-1 flex w-full items-center justify-between rounded-t-sm border-b-[1.5px] border-b-[#0202025f] bg-[#d9d7c0d6] p-1">
           <p className=""> Your Shows</p>
         </div>

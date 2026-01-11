@@ -21,6 +21,7 @@ export function PosterUploader({
   const [designer, setDesigner] = useState('')
   const { getAccessTokenSilently } = useAuth0()
   const [file, setFile] = useState<File | null>(null)
+  const [fileIsUploading, setFileIsUploading] = useState(false)
 
   const imageUploadMutation = useMutation({
     mutationFn: ({ file, token }: UploadImageVariables) =>
@@ -29,6 +30,7 @@ export function PosterUploader({
       queryClient.invalidateQueries({
         queryKey: ['imageUpload'],
       })
+      setFileIsUploading(false)
       uploadSuccess(data.url, designer)
     },
     onError: (error) => {
@@ -43,6 +45,7 @@ export function PosterUploader({
       console.log('Image upload failed, no image found')
       return
     } else {
+      setFileIsUploading(true)
       imageUploadMutation.mutate({ file, token })
     }
   }
@@ -84,7 +87,7 @@ export function PosterUploader({
                 className="rounded-xs border-2 bg-[#dad7c267] px-1 py-0.5 text-sm hover:bg-[#dad7c2c0] disabled:bg-[#bebebd99] disabled:text-[#aca7a7a9]"
                 id="upload"
                 onClick={handleUpload}
-                disabled={designer.trim() === ''}
+                disabled={designer.trim() === '' || fileIsUploading == true}
               >
                 Upload
               </button>

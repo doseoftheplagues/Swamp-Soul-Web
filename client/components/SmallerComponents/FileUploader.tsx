@@ -16,6 +16,7 @@ export function FileUploader({ uploadSuccess }: FileUploaderProps) {
   const queryClient = useQueryClient()
   const { getAccessTokenSilently } = useAuth0()
   const [file, setFile] = useState<File | null>(null)
+  const [fileIsUploading, setFileIsUploading] = useState(false)
 
   const imageUploadMutation = useMutation({
     mutationFn: ({ file, token }: UploadImageVariables) =>
@@ -24,6 +25,7 @@ export function FileUploader({ uploadSuccess }: FileUploaderProps) {
       queryClient.invalidateQueries({
         queryKey: ['imageUpload'],
       })
+      setFileIsUploading(false)
       uploadSuccess(data.url)
     },
     onError: (error) => {
@@ -38,6 +40,8 @@ export function FileUploader({ uploadSuccess }: FileUploaderProps) {
       console.log('Image upload failed, no image found')
       return
     } else {
+      console.log('setting button disabled')
+      setFileIsUploading(true)
       imageUploadMutation.mutate({ file, token })
     }
   }
@@ -57,15 +61,15 @@ export function FileUploader({ uploadSuccess }: FileUploaderProps) {
         <input
           type="file"
           onChange={handleFileChange}
-          className="block w-[100px] text-sm text-gray-500 file:mr-4 file:border-0 file:bg-[#ffffff] file:px-2 file:py-1 file:text-sm file:text-black hover:file:bg-[#c9c7b576] active:file:bg-[#c9c7b5e1]"
+          className="block w-[100px] rounded-md text-sm text-gray-500 file:mr-4 file:border-0 file:bg-[#ffffff] file:px-2 file:py-1 file:text-sm file:text-black hover:file:bg-[#c9c7b576] active:file:bg-[#c9c7b5e1]"
         />
         {file && (
           <div>
             <button
               type="button"
               onClick={handleUpload}
-              disabled={!file}
-              className="ml-2 block w-[100px] rounded-xs border-[1.5px] bg-[#ead2d2be] px-2 py-1 text-sm text-black hover:bg-[#e1bebef5] active:bg-[#e1bebe]"
+              disabled={!file || fileIsUploading == true}
+              className="ml-2 block w-[100px] rounded-md border-[1.5px] bg-[#ead2d2be] px-2 py-1 text-sm text-black hover:bg-[#e1bebef5] active:bg-[#e1bebe]"
             >
               Upload
             </button>

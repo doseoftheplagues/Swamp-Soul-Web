@@ -93,7 +93,7 @@ export function ReplyComment({
           <img
             src={commentAuthor?.profilePicture || '/assets/default.jpeg'}
             alt={`${commentAuthor?.username}'s profile`}
-            className="max-h-10 min-h-10 max-w-10 min-w-10 rounded-full object-fill"
+            className="max-h-10 min-h-10 max-w-10 min-w-10 rounded-full object-cover"
           />
         </div>
         <div className="flex w-full flex-col">
