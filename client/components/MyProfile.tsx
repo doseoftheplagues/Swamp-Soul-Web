@@ -14,17 +14,30 @@ import { ToolsSymbol } from './SmallerComponents/SymbolSvgs'
 import { useComments } from '../hooks/useComments'
 import { Comment } from './SmallerComponents/Comment'
 import { Link } from 'react-router'
+import { usePosts, usePostsByUserId } from '../hooks/usePosts'
+import Post from './SmallerComponents/Post'
+import { Post as PostModel } from '../../models/post'
 
 const Profile = () => {
   const { deleteImage } = useImage()
   const [editPfpIsHidden, setEditPfpIsHidden] = useState(true)
   const [editDetailsIsHidden, setEditDetailsIsHidden] = useState(true)
+  const [blogOrActivity, setBlogOrActivity] = useState('blog')
   const [visibleSection, setVisibleSection] = useState('')
+  const [postFormData, setPostFormData] = useState({
+    title: '',
+    content: '',
+  })
 
   const { user, isAuthenticated, isLoading, getAccessTokenSilently } =
     useAuth0()
+  const { data: posts, isLoading: postsAreLoading } = usePostsByUserId(
+    user?.sub,
+  )
   const { data, update } = useUser()
   const userLoaded = user?.sub
+
+  const addPostMutation = usePosts()
 
   const {
     data: userShows,
@@ -101,6 +114,38 @@ const Profile = () => {
 
   function handleVisibleSectionClick(section: string) {
     setVisibleSection(section)
+  }
+
+  const handlePostFormChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
+    const { name, value } = e.target
+    setPostFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }))
+  }
+
+  const handlePostFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    const token = await getAccessTokenSilently()
+    if (user?.sub) {
+      addPostMutation.mutate(
+        {
+          postData: {
+            ...postFormData,
+            userId: user.sub,
+            dateAdded: new Date(),
+          },
+          token,
+        },
+        {
+          onSuccess: () => {
+            setPostFormData({ title: '', content: '' }) // Clear form
+          },
+        },
+      )
+    }
   }
 
   const myUserComments = userCommentsAndReplies
@@ -227,6 +272,7 @@ const Profile = () => {
                       {data?.status}
                     </span>
                   </p>
+                  <div className="relative top-0 right-0 -z-40 w-8"></div>
                 </div>
                 <p className="-mt-1 wrap-anywhere italic opacity-80">
                   {user.email}
@@ -246,154 +292,214 @@ const Profile = () => {
         )}
       </div>
       <div className="flex w-full flex-col rounded-md border bg-[#e9e6d6ac] md:ml-5 md:max-w-3/5 md:min-w-2/5">
-        <div className="mb-1 flex w-full items-center justify-between rounded-t-sm border-b-[1.5px] border-b-[#0202025f] bg-[#d9d7c0d6] p-1">
-          <p className="">Activity</p>
+        <div className="mb-1 flex w-full items-center rounded-t-sm border-b-[1.5px] border-b-[#0202025f] bg-[#d9d7c0d6] p-1">
+          <button
+            onClick={() => {
+              setBlogOrActivity('blog')
+            }}
+            className={`flex w-fit cursor-pointer flex-row items-center rounded-sm border-[1.5px] px-1.5 py-1 text-sm active:bg-[#c1bd9a] ${blogOrActivity == 'blog' ? 'border-black bg-[#eae8dc]' : 'border-[#aaa89955] hover:bg-[#eae8dc]'}`}
+          >
+            Blog
+          </button>
+          <button
+            onClick={() => {
+              setBlogOrActivity('activity')
+            }}
+            className={`ml-2 flex w-fit cursor-pointer flex-row items-center rounded-sm border-[1.5px] px-1.5 py-1 text-sm active:bg-[#c1bd9a] ${blogOrActivity == 'activity' ? 'border-black bg-[#eae8dc]' : 'border-[#aaa89955] hover:bg-[#eae8dc]'}`}
+          >
+            Activity
+          </button>{' '}
         </div>
-        <div className="mx-1 mt-1 mb-1 flex flex-row gap-2">
-          <button
-            onClick={() => handleVisibleSectionClick('yourComments')}
-            className={`flex w-fit cursor-pointer flex-row items-center rounded-sm border-[1.5px] border-[#aaa89955] px-1.5 py-1 text-sm active:bg-[#c1bd9a] ${visibleSection == 'yourComments' ? 'bg-[#dad7c2c1]' : 'hover:bg-[#eae8dc]'}`}
-          >
-            Comments
-          </button>
-          <button
-            onClick={() => handleVisibleSectionClick('yourShows')}
-            className={`flex w-fit cursor-pointer flex-row items-center rounded-sm border-[1.5px] border-[#aaa89955] px-1.5 py-1 text-sm active:bg-[#c1bd9a] ${visibleSection == 'yourShows' ? 'bg-[#dad7c2c1]' : 'hover:bg-[#eae8dc]'}`}
-          >
-            Shows
-          </button>
-          <button
-            onClick={() => handleVisibleSectionClick('yourReplies')}
-            className={`flex w-fit cursor-pointer flex-row items-center rounded-sm border-[1.5px] border-[#aaa89955] px-1.5 py-1 text-sm active:bg-[#c1bd9a] ${visibleSection == 'yourReplies' ? 'bg-[#dad7c2c1]' : 'hover:bg-[#eae8dc]'}`}
-          >
-            Replies
-          </button>
-        </div>
-        {visibleSection == 'yourShows' && (
-          <div className="YourShowsBox">
-            <div className="upcomingShowsBox p-2">
-              {showsAreLoading && <LoadingSpinner />}
-              {userShows &&
-                userShows.map((show: UpcomingShow) => (
-                  <UpcomingShowCard key={show.id} show={show} />
-                ))}
-              {!showsAreLoading && userShows && userShows.length == 0 && (
-                <p>You haven&apos;t made any shows yet.</p>
-              )}
-            </div>
+        {blogOrActivity == 'blog' && (
+          <div className="flex flex-col justify-center">
+            <form onSubmit={handlePostFormSubmit} className="p-2">
+              <label htmlFor="title" className="sr-only">
+                Post Title
+              </label>
+              <input
+                type="text"
+                name="title"
+                placeholder="Post Title (optional!)"
+                value={postFormData.title}
+                onChange={handlePostFormChange}
+                className="mb-2 w-full rounded-sm border p-1"
+              />
+              <label htmlFor="content" className="sr-only">
+                Post content
+              </label>
+              <textarea
+                name="content"
+                placeholder="..."
+                value={postFormData.content}
+                onChange={handlePostFormChange}
+                className="mb-2 h-32 w-full rounded-sm border p-1"
+              ></textarea>
+              <div className="flex w-full justify-end">
+                <button
+                  type="submit"
+                  className="flex cursor-pointer flex-row items-center rounded-sm border-[1.5px] border-[#aaa89955] bg-[#e4e2d3] px-2 py-1 text-sm hover:bg-[#e2e0cf] active:bg-[#c1bd9a]"
+                >
+                  Add Post
+                </button>
+              </div>
+            </form>
+            <div className="mx-auto my-2 w-[94%] border border-[#aaa89955]"></div>
+            {postsAreLoading && <LoadingSpinner />}
+            {posts &&
+              posts.map((post: PostModel) => {
+                return <Post post={post} key={post.id} />
+              })}
           </div>
         )}
-        {visibleSection == 'yourComments' && (
-          <div className="YourCommments">
-            <div className="commentsBox mt-1 p-2">
-              {commentsAreLoading && <LoadingSpinner />}
-              {commentsAreError && <p>Error loading comments.</p>}
-              {rootCommentsByCurrentUser.length === 0 &&
-                !commentsAreLoading && (
-                  <p>You haven&apos;t made any comments yet.</p>
-                )}
-              {rootCommentsByCurrentUser.map((comment) => (
-                <div key={comment.id}>
-                  <Comment
-                    comment={{ ...comment, replies: [] }}
-                    originIdType={
-                      comment.upcomingShowId
-                        ? 'upcomingShowId'
-                        : comment.archiveShowId
-                          ? 'archiveShowId'
-                          : 'postId'
-                    }
-                    originId={
-                      comment.upcomingShowId ||
-                      comment.archiveShowId ||
-                      comment.postId ||
-                      0
-                    }
-                  />
-                  <div className="mb-2 flex w-full justify-end">
-                    <div className="mr-1.5 rounded-b-md border-x-2 border-b-2 border-[#dad7c2d0] bg-[#fbfaf6] px-1 py-0.5">
-                      <p className="text-xs text-gray-500">
-                        {comment.upcomingShowId ? (
-                          <Link
-                            to={`/upcomingshows/${comment.upcomingShowId}#comment${comment.id}`}
-                          >
-                            View thread
-                          </Link>
-                        ) : comment.archiveShowId ? (
-                          <Link
-                            to={`/upcomingshows/${comment.archiveShowId}#comment${comment.id}`}
-                          >
-                            View thread
-                          </Link>
-                        ) : (
-                          <Link
-                            to={`/upcomingshows/${comment.postId}#comment${comment.id}`}
-                          >
-                            View thread
-                          </Link>
-                        )}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              ))}
+        {blogOrActivity == 'activity' && (
+          <div>
+            <div className="mx-1 mt-1 mb-1 flex flex-row gap-2">
+              <button
+                onClick={() => handleVisibleSectionClick('yourComments')}
+                className={`flex w-fit cursor-pointer flex-row items-center rounded-sm border-[1.5px] border-[#aaa89955] px-1.5 py-1 text-sm active:bg-[#c1bd9a] ${visibleSection == 'yourComments' ? 'bg-[#dad7c2c1]' : 'hover:bg-[#eae8dc]'}`}
+              >
+                Comments
+              </button>
+              <button
+                onClick={() => handleVisibleSectionClick('yourShows')}
+                className={`flex w-fit cursor-pointer flex-row items-center rounded-sm border-[1.5px] border-[#aaa89955] px-1.5 py-1 text-sm active:bg-[#c1bd9a] ${visibleSection == 'yourShows' ? 'bg-[#dad7c2c1]' : 'hover:bg-[#eae8dc]'}`}
+              >
+                Shows
+              </button>
+              <button
+                onClick={() => handleVisibleSectionClick('yourReplies')}
+                className={`flex w-fit cursor-pointer flex-row items-center rounded-sm border-[1.5px] border-[#aaa89955] px-1.5 py-1 text-sm active:bg-[#c1bd9a] ${visibleSection == 'yourReplies' ? 'bg-[#dad7c2c1]' : 'hover:bg-[#eae8dc]'}`}
+              >
+                Replies
+              </button>
             </div>
-          </div>
-        )}
-        {visibleSection == 'yourReplies' && (
-          <div className="RepliesReceived">
-            <div className="commentsBox mt-1 p-2">
-              {commentsAreLoading && <LoadingSpinner />}
-              {commentsAreError && <p>Error loading comments.</p>}
-              {!commentsAreLoading && repliesReceived.length == 0 && (
-                <p>You haven&apos;t received any replies yet.</p>
-              )}
-              {repliesReceived.map((reply) => (
-                <div key={reply.id} className="flex flex-col">
-                  <Comment
-                    comment={{ ...reply, replies: [] }}
-                    originIdType={
-                      reply.upcomingShowId
-                        ? 'upcomingShowId'
-                        : reply.archiveShowId
-                          ? 'archiveShowId'
-                          : 'postId'
-                    }
-                    originId={
-                      reply.upcomingShowId ||
-                      reply.archiveShowId ||
-                      reply.postId ||
-                      0
-                    }
-                  />
-                  <div className="mb-2 flex w-full justify-end">
-                    <div className="mr-1.5 rounded-b-md border-x-2 border-b-2 border-[#dad7c2d0] bg-[#fbfaf6] px-1 py-0.5">
-                      <p className="text-xs text-gray-500">
-                        {reply.upcomingShowId ? (
-                          <Link
-                            to={`/upcomingshows/${reply.upcomingShowId}#comment${reply.id}`}
-                          >
-                            View thread
-                          </Link>
-                        ) : reply.archiveShowId ? (
-                          <Link
-                            to={`/upcomingshows/${reply.archiveShowId}#comment${reply.id}`}
-                          >
-                            View thread
-                          </Link>
-                        ) : (
-                          <Link
-                            to={`/upcomingshows/${reply.postId}#comment${reply.id}`}
-                          >
-                            View thread
-                          </Link>
-                        )}
-                      </p>
-                    </div>
-                  </div>
+            {visibleSection == 'yourShows' && (
+              <div className="YourShowsBox">
+                <div className="upcomingShowsBox p-2">
+                  {showsAreLoading && <LoadingSpinner />}
+                  {userShows &&
+                    userShows.map((show: UpcomingShow) => (
+                      <UpcomingShowCard key={show.id} show={show} />
+                    ))}
+                  {!showsAreLoading && userShows && userShows.length == 0 && (
+                    <p>You haven&apos;t made any shows yet.</p>
+                  )}
                 </div>
-              ))}
-            </div>
+              </div>
+            )}
+            {visibleSection == 'yourComments' && (
+              <div className="YourCommments">
+                <div className="commentsBox mt-1 p-2">
+                  {commentsAreLoading && <LoadingSpinner />}
+                  {commentsAreError && <p>Error loading comments.</p>}
+                  {rootCommentsByCurrentUser.length === 0 &&
+                    !commentsAreLoading && (
+                      <p>You haven&apos;t made any comments yet.</p>
+                    )}
+                  {rootCommentsByCurrentUser.map((comment) => (
+                    <div key={comment.id}>
+                      <Comment
+                        comment={{ ...comment, replies: [] }}
+                        originIdType={
+                          comment.upcomingShowId
+                            ? 'upcomingShowId'
+                            : comment.archiveShowId
+                              ? 'archiveShowId'
+                              : 'postId'
+                        }
+                        originId={
+                          comment.upcomingShowId ||
+                          comment.archiveShowId ||
+                          comment.postId ||
+                          0
+                        }
+                      />
+                      <div className="mb-2 flex w-full justify-end">
+                        <div className="mr-1.5 rounded-b-md border-x-2 border-b-2 border-[#dad7c2d0] bg-[#fbfaf6] px-1 py-0.5">
+                          <p className="text-xs text-gray-500">
+                            {comment.upcomingShowId ? (
+                              <Link
+                                to={`/upcomingshows/${comment.upcomingShowId}#comment${comment.id}`}
+                              >
+                                View thread
+                              </Link>
+                            ) : comment.archiveShowId ? (
+                              <Link
+                                to={`/archive/${comment.archiveShowId}#comment${comment.id}`}
+                              >
+                                View thread
+                              </Link>
+                            ) : (
+                              <Link
+                                to={`/user/${comment.postAuthorId}#comment${comment.id}`}
+                              >
+                                View thread
+                              </Link>
+                            )}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+            {visibleSection == 'yourReplies' && (
+              <div className="RepliesReceived">
+                <div className="commentsBox mt-1 p-2">
+                  {commentsAreLoading && <LoadingSpinner />}
+                  {commentsAreError && <p>Error loading comments.</p>}
+                  {!commentsAreLoading && repliesReceived.length == 0 && (
+                    <p>You haven&apos;t received any replies yet.</p>
+                  )}
+                  {repliesReceived.map((reply) => (
+                    <div key={reply.id} className="flex flex-col">
+                      <Comment
+                        comment={{ ...reply, replies: [] }}
+                        originIdType={
+                          reply.upcomingShowId
+                            ? 'upcomingShowId'
+                            : reply.archiveShowId
+                              ? 'archiveShowId'
+                              : 'postId'
+                        }
+                        originId={
+                          reply.upcomingShowId ||
+                          reply.archiveShowId ||
+                          reply.postId ||
+                          0
+                        }
+                      />
+                      <div className="mb-2 flex w-full justify-end">
+                        <div className="mr-1.5 rounded-b-md border-x-2 border-b-2 border-[#dad7c2d0] bg-[#fbfaf6] px-1 py-0.5">
+                          <p className="text-xs text-gray-500">
+                            {reply.upcomingShowId ? (
+                              <Link
+                                to={`/upcomingshows/${reply.upcomingShowId}#comment${reply.id}`}
+                              >
+                                View thread
+                              </Link>
+                            ) : reply.archiveShowId ? (
+                              <Link
+                                to={`/upcomingshows/${reply.archiveShowId}#comment${reply.id}`}
+                              >
+                                View thread
+                              </Link>
+                            ) : (
+                              <Link
+                                to={`/upcomingshows/${reply.postId}#comment${reply.id}`}
+                              >
+                                View thread
+                              </Link>
+                            )}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         )}
       </div>

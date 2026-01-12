@@ -710,6 +710,7 @@ export function UpcomingShow() {
             comments={comments}
             originIdType={'upcomingShowId'}
             originId={data.id}
+            classes=" sm:max-w-3/5 sm:min-w-2/5 rounded-md border-2 border-[#dad7c2d0]"
           />
         </div>
       </div>
@@ -1051,7 +1052,7 @@ export function UpcomingShow() {
           <div className="action buttons mt-2 flex w-screen items-center justify-between px-2 py-1">
             <div className="flex w-1/2 items-center justify-center">
               <a
-                href={data.ticketsLink}
+                href={`${data.ticketsLink}`}
                 className="mx-0.5 w-full rounded-md border-2 border-[#eae7d2e2] bg-[#e0dfbd8d] px-1 py-1.5 text-center hover:bg-[#ebead5af] active:bg-[#e0dfbd8d]"
               >
                 Buy tickets online

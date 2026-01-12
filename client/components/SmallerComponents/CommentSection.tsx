@@ -10,12 +10,14 @@ interface CommentSectionProps {
   comments: CommentModel[]
   originIdType: string
   originId: number
+  classes?: string
 }
 
 export function CommentSection({
   comments,
   originIdType,
   originId,
+  classes,
 }: CommentSectionProps) {
   const { addComment } = useComments()
   const { user, getAccessTokenSilently, isAuthenticated } = useAuth0()
@@ -59,17 +61,14 @@ export function CommentSection({
   }
 
   return (
-    <div
-      className="CommentsSection mt-2 h-fit rounded-md border-2 border-[#dad7c2d0] sm:max-w-3/5 sm:min-w-2/5"
-      id="comment-section"
-    >
+    <div className={`CommentsSection h-fit ${classes}`} id="comment-section">
       {!isAuthenticated && (
-        <div className="mt-2 ml-2 w-fit border-b-2 border-b-[#dad7c2d0]">
-          <p className="pr-2 text-[#3a3a3a]"> Log in to add comments</p>
+        <div className="ml-2 w-fit border-b-2 border-b-[#dad7c2d0]">
+          <p className="pt-1 pr-2 text-[#3a3a3a]"> Log in to add comments</p>
         </div>
       )}
       {isAuthenticated && (
-        <div className="mt-1 flex flex-row items-center justify-between p-1">
+        <div className="flex flex-row items-center justify-between p-1">
           <img
             src={databaseUser?.profilePicture || '/assets/default.jpeg'}
             alt={`${databaseUser?.username}'s profile`}

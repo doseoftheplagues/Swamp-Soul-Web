@@ -69,7 +69,7 @@ export function UpcomingShowCard({ show }: Props) {
     const length = input.length
     const hasSpaces = input.includes(' ')
     if (length > 1 && length < 25) {
-      setTitleTextSize('text-lg sm:text-[clamp(3.75rem,5vw,6rem)] leading-none')
+      setTitleTextSize('text-xl sm:text-[clamp(3.75rem,5vw,6rem)] leading-none')
 
       if (hasSpaces == true) {
         setTitleWrap('wrap-break-word')
@@ -78,7 +78,7 @@ export function UpcomingShowCard({ show }: Props) {
       }
     }
     if (length >= 25 && length < 30) {
-      setTitleTextSize('text-lg sm:text-[clamp(3.75rem,5vw,6rem)] leading-none')
+      setTitleTextSize('text-xl sm:text-[clamp(3.75rem,5vw,6rem)] leading-none')
       if (hasSpaces == true) {
         setTitleWrap('wrap-break-word')
       } else {
@@ -86,7 +86,7 @@ export function UpcomingShowCard({ show }: Props) {
       }
     }
     if (length >= 30 && length < 50) {
-      setTitleTextSize('text-lg sm:text-[clamp(3rem,5vw,6rem)] leading-none')
+      setTitleTextSize('text-xl sm:text-[clamp(3rem,5vw,6rem)] leading-none')
       if (hasSpaces == true) {
         setTitleWrap('wrap-break-word')
       } else {
@@ -184,7 +184,7 @@ export function UpcomingShowCard({ show }: Props) {
                   </h2>
                 )}
                 <div className="flex flex-col">
-                  <div className="mt-2 flex justify-between pl-0.5 text-sm font-extralight sm:text-2xl">
+                  <div className="mt-1 flex justify-between pl-0.5 text-sm font-extralight sm:mt-2 sm:text-2xl">
                     <p className="">{show.locationName}</p>
                     <p className="block text-[#000000] sm:hidden">
                       {formatDateSmall(show.date)}
@@ -193,7 +193,7 @@ export function UpcomingShowCard({ show }: Props) {
                       {formatDatePretty(show.date)}
                     </p>
                   </div>
-                  <div className="mt-1 flex justify-between pl-0.5 text-sm font-extralight sm:text-2xl">
+                  <div className="mt-0 flex justify-between pl-0.5 text-sm font-extralight sm:mt-1 sm:text-2xl">
                     <p>{show.price}</p>
                     <p className="ml-1 text-[#000000]">{show.doorsTime}</p>
                   </div>

@@ -5,6 +5,34 @@
   font-style: normal;
 }
 
+@font-face {
+  font-family: 'Mess';
+  src: url('/fonts/Mess-Light_web.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Monor';
+  src: url('/fonts/Monor_Regular.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Phosphene';
+  src: url('/fonts/PhospheneFont-Regular.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'PicNic';
+  src: url('/fonts/PicNic.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+}
+
 @import 'tailwindcss';
 
 body {
@@ -15,6 +43,22 @@ body {
 
 .font-gemini {
   font-family: 'Gemini', sans-serif;
+}
+
+.font-mess {
+  font-family: 'Mess', sans-serif;
+}
+
+.font-monor {
+  font-family: 'Monor', sans-serif;
+}
+
+.font-phosphene {
+  font-family: 'Phosphene', sans-serif;
+}
+
+.font-picnic {
+  font-family: 'PicNic', sans-serif;
 }
 
 input {

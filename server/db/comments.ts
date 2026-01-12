@@ -4,47 +4,55 @@ import connection from './connection.ts'
 const db = connection
 
 const commentProperties = [
-  'id',
-  'user_id as userId',
-  'upcoming_show_id as upcomingShowId',
-  'archive_show_id as archiveShowId',
-  'date_added as dateAdded',
-  'content',
-  'parent',
+  'comments.id as id',
+  'comments.user_id as userId',
+  'comments.upcoming_show_id as upcomingShowId',
+  'comments.archive_show_id as archiveShowId',
+  'comments.post_id as postId',
+  'comments.date_added as dateAdded',
+  'comments.content',
+  'comments.parent',
+  'posts.user_id as postAuthorId',
 ]
 
 // GET
 
 export async function getCommentsByUpcomingShowId(showId: number) {
   return db('comments')
+    .leftJoin('posts', 'comments.post_id', 'posts.id')
     .where('upcoming_show_id', showId)
     .select(...commentProperties)
 }
 export async function getCommentsByArchiveShowId(showId: number) {
   return db('comments')
+    .leftJoin('posts', 'comments.post_id', 'posts.id')
     .where('archive_show_id', showId)
     .select(...commentProperties)
 }
 export async function getCommentsByPostId(postId: number) {
   return db('comments')
+    .leftJoin('posts', 'comments.post_id', 'posts.id')
     .where('post_id', postId)
     .select(...commentProperties)
 }
 export async function getCommentsByParentId(parentId: number) {
   return db('comments')
+    .leftJoin('posts', 'comments.post_id', 'posts.id')
     .where('parent', parentId)
     .select(...commentProperties)
 }
 
 export async function getCommentsByUserId(userId: string) {
   const userComments = await db('comments')
-    .where('user_id', userId)
+    .leftJoin('posts', 'comments.post_id', 'posts.id')
+    .where('comments.user_id', userId)
     .select(...commentProperties)
 
   const userCommentIds = userComments.map((c) => c.id)
 
   const repliesToUser = userCommentIds.length
     ? await db('comments')
+        .leftJoin('posts', 'comments.post_id', 'posts.id')
         .whereIn('parent', userCommentIds)
         .select(...commentProperties)
     : []

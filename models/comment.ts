@@ -2,6 +2,7 @@ export interface CommentData {
   upcomingShowId?: number
   archiveShowId?: number
   postId?: number
+  postAuthorId?: string
   parent?: number
   userId: string
   content: string
