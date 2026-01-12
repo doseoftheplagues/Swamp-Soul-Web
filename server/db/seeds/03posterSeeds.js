@@ -7,28 +7,46 @@ export async function seed(knex) {
   await knex('posters').del()
   await knex('posters').insert([
     {
-      image: 'plastic-double-1.png',
+      image: '/posters/plastic-double-1.png',
       designer: 'Cassie Tenebaum',
       archive_show_id: 1,
       upcoming_show_id: 1,
     },
     {
-      image: 'plastic-double-2.png',
+      image: '/posters/plastic-double-2.png',
       designer: 'Cassie Tenebaum',
       archive_show_id: 1,
       upcoming_show_id: 1,
     },
     {
-      image: 'plastic-double-3.jpg',
+      image: '/posters/plastic-double-3.jpg',
       designer: 'Sofia Mary Wednesday Tarn',
       archive_show_id: 1,
       upcoming_show_id: 1,
     },
     {
-      image: 'plastic-double-4.png',
+      image: '/posters/plastic-double-4.png',
       designer: 'Cassie Tenebaum',
       archive_show_id: 1,
       upcoming_show_id: 1,
+    },
+    {
+      image: '/posters/lezfest.png',
+      designer: 'Cassie Tenebaum, Sofia Mary Wednesday Tarn',
+      archive_show_id: 1,
+      upcoming_show_id: 2,
+    },
+    {
+      image: '/posters/valhallaJuly10th.jpg',
+      designer: 'Sofia Mary Wednesday Tarn',
+      archive_show_id: 1,
+      upcoming_show_id: 3,
+    },
+    {
+      image: '/posters/airplaneposter.jpg',
+      designer: 'Frankass',
+      archive_show_id: 1,
+      upcoming_show_id: 3,
     },
   ])
 }

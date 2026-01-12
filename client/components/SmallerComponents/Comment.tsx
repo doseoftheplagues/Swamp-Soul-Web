@@ -7,6 +7,7 @@ import { CrossSymbol, TextBubbles } from './SymbolSvgs'
 import { useState } from 'react'
 import { TimeDisplay } from './ReusableFunctions'
 import * as AlertDialog from '@radix-ui/react-alert-dialog'
+import { Link } from 'react-router-dom'
 
 type CommentWithReplies = CommentModel & { replies: CommentWithReplies[] }
 
@@ -93,13 +94,16 @@ export function Comment({ comment, originIdType, originId }: CommentProps) {
             src={commentAuthor?.profilePicture || '/assets/default.jpeg'}
             alt={`${commentAuthor?.username}'s profile`}
             className="max-h-10 min-h-10 max-w-10 min-w-10 rounded-full object-cover"
-            // mx-1 h-16 w-16 min-w-15 overflow-hidden rounded-full border-2 border-[#acacac49] bg-gray-100 object-cover
           />
         </div>
         <div className="flex w-full flex-col">
           <div className="relative flex flex-row justify-between">
             <div className="flex flex-col items-baseline sm:flex-row">
-              <p className="text-sm sm:text-base">{commentAuthor?.username} </p>
+              <Link to={`/user/${commentAuthor?.authId}`}>
+                <p className="text-sm sm:text-base">
+                  {commentAuthor?.username}{' '}
+                </p>
+              </Link>
               <p className="ml-1 text-xs text-gray-500">
                 <TimeDisplay timestamp={String(comment.dateAdded)} />
               </p>
@@ -131,13 +135,13 @@ export function Comment({ comment, originIdType, originId }: CommentProps) {
                             }}
                           >
                             <AlertDialog.Cancel asChild>
-                              <button className="rounded-md border border-[#c6c6c6] px-1 shadow-md hover:bg-[#faf8f1]">
+                              <button className="cursor-pointer rounded-md border px-1 shadow-md hover:bg-[#e2dece]">
                                 Cancel
                               </button>
                             </AlertDialog.Cancel>
                             <AlertDialog.Action asChild>
                               <button
-                                className="rounded-md border border-[#e6e6e6] bg-[#fa3131] p-2 px-1 text-[#faf8f1] shadow-md hover:bg-[#fd7474]"
+                                className="cursor-pointer rounded-md border bg-[#f8a1a1] p-2 px-1 shadow-md hover:bg-[#fd7474]"
                                 onClick={() => handleDeleteClick(comment.id)}
                               >
                                 Delete

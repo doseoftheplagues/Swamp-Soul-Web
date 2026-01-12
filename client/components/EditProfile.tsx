@@ -118,7 +118,7 @@ const EditProfile = ({ setEditDetailsIsHidden }: EditProfileProps) => {
             <Form.Control asChild>
               <input
                 type="text"
-                className="mb-2 w-full p-1 text-sm"
+                className="mb-2 w-full rounded-sm p-1 text-sm"
                 name="username"
                 value={formData.username}
                 onChange={handleChange}
@@ -136,7 +136,7 @@ const EditProfile = ({ setEditDetailsIsHidden }: EditProfileProps) => {
             </div>
             <Form.Control asChild>
               <textarea
-                className="w-full p-1 text-sm"
+                className="w-full rounded-sm p-1 text-sm"
                 rows={3}
                 name="bio"
                 value={formData.bio}
@@ -157,7 +157,7 @@ const EditProfile = ({ setEditDetailsIsHidden }: EditProfileProps) => {
             <Form.Control asChild>
               <input
                 type="text"
-                className="w-full p-1 text-sm"
+                className="w-full rounded-sm p-1 text-sm"
                 name="status"
                 value={formData.status}
                 onChange={handleChange}

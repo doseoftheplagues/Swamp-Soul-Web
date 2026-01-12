@@ -7,7 +7,7 @@ export function MobilitySymbol() {
         <Tooltip.Root>
           <Tooltip.Trigger asChild>
             <svg
-              className="relative"
+              className="relative h-6 sm:h-auto"
               width="26"
               height="26"
               viewBox="0 0 200 200"
@@ -41,7 +41,7 @@ export function WheelchairSymbol() {
         <Tooltip.Root>
           <Tooltip.Trigger asChild>
             <svg
-              className="relative"
+              className="relative h-6 sm:h-auto"
               width="26"
               height="26"
               viewBox="0 0 200 200"
@@ -75,7 +75,7 @@ export function BathroomSymbol() {
         <Tooltip.Root>
           <Tooltip.Trigger asChild>
             <svg
-              className="relative top-[2.5px] z-20 mr-1 ml-1"
+              className="relative top-[2.5px] z-20 mr-1 ml-1 h-4.5 sm:h-auto"
               width="20"
               height="20"
               viewBox="0 0 512 512"

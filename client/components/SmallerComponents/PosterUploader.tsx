@@ -67,7 +67,7 @@ export function PosterUploader({
             type="text"
             name="designer"
             id="designer"
-            className="mb-2 px-1 py-0.5"
+            className="mb-2 rounded-sm px-1 py-0.5"
             value={designer}
             onChange={(e) => setDesigner(e.target.value)}
           ></input>
@@ -77,7 +77,7 @@ export function PosterUploader({
           <input
             type="file"
             onChange={handleFileChange}
-            className="max-w file:text-md mb-1 w-[102px] px-1"
+            className="max-w file:text-md mb-1 w-[102px] rounded-sm px-1"
           />
           {file && (
             <div className="p-0.5 text-sm">

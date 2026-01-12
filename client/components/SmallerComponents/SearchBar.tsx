@@ -29,7 +29,7 @@ function SearchBar({
         ></input>
         <button
           type="submit"
-          className="flex flex-row items-center rounded-r-sm bg-[#dad7c2] px-1 hover:bg-[#e2e0cf] active:bg-[#c1bd9a]"
+          className="flex cursor-pointer flex-row items-center rounded-r-sm bg-[#dad7c2] px-1 hover:bg-[#e2e0cf] active:bg-[#c1bd9a]"
         >
           <MagnifierSymbol className="h-5 px-1" />
           <p className="sr-only">Search</p>

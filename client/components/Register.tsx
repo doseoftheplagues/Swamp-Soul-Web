@@ -92,7 +92,7 @@ export function Register() {
                 </div>
                 <Form.Control asChild>
                   <input
-                    className="mb-1.5 w-full p-1"
+                    className="mb-1.5 w-full rounded-xs p-1"
                     name="username"
                     type="text"
                     required
@@ -110,7 +110,7 @@ export function Register() {
                 <Form.Control asChild>
                   <textarea
                     name="bio"
-                    className="w-full p-1"
+                    className="w-full rounded-xs p-1"
                     required
                     value={formData.bio}
                     onChange={handleChange}
@@ -126,8 +126,9 @@ export function Register() {
                 <Form.Control asChild>
                   <input
                     name="status"
-                    className="w-full p-1"
+                    className="w-full rounded-xs p-1"
                     type="text"
+                    maxLength={8}
                     required
                     value={formData.status}
                     onChange={handleChange}
@@ -137,7 +138,7 @@ export function Register() {
 
               <Form.Submit asChild>
                 <div className="flex justify-end">
-                  <button className="mt-6 inline-flex rounded-md border border-transparent bg-[#dad7c2] px-4 py-2 text-sm font-medium text-[#000000] shadow-sm focus:border-[#d1d5c7] focus:bg-[#c1bd9a] focus:ring-[#8f9779] focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50">
+                  <button className="mt-4 flex cursor-pointer flex-row items-center rounded-sm border-[1.5px] border-[#aaa89955] bg-[#dad7c2c1] px-1.5 py-1 text-sm hover:bg-[#eae8dc] active:bg-[#c1bd9a] disabled:cursor-not-allowed disabled:opacity-50">
                     Submit
                   </button>
                 </div>

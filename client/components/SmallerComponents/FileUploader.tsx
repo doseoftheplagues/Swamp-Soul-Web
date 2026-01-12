@@ -53,7 +53,7 @@ export function FileUploader({ uploadSuccess }: FileUploaderProps) {
   }
 
   return (
-    <div>
+    <div className="flex flex-col">
       <form className="flex flex-row">
         <label htmlFor="image" className="sr-only">
           File
@@ -69,13 +69,18 @@ export function FileUploader({ uploadSuccess }: FileUploaderProps) {
               type="button"
               onClick={handleUpload}
               disabled={!file || fileIsUploading == true}
-              className="ml-2 block w-[100px] rounded-md border-[1.5px] bg-[#ead2d2be] px-2 py-1 text-sm text-black hover:bg-[#e1bebef5] active:bg-[#e1bebe]"
+              className="ml-2 block w-[100px] rounded-md border-[1.5px] bg-[#e5c9c9d5] px-2 py-1 text-sm text-black hover:bg-[#e1bebef5] active:bg-[#e1bebe]"
             >
-              Upload
+              Upload file
             </button>
           </div>
         )}
       </form>
+      {file && (
+        <div>
+          <p className="my-1 text-xs">Selected: {file.name}</p>
+        </div>
+      )}
     </div>
   )
 }

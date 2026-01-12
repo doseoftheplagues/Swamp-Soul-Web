@@ -34,7 +34,8 @@ function App() {
       >
         <Header />
       </div>
-      <div className="sm:p-1">
+
+      <div className="">
         <Outlet />
       </div>
     </div>

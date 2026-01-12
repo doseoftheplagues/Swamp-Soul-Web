@@ -6,6 +6,7 @@ import { CrossSymbol, TextBubbles } from './SymbolSvgs'
 import { useState } from 'react'
 import { TimeDisplay } from './ReusableFunctions'
 import * as AlertDialog from '@radix-ui/react-alert-dialog'
+import { Link } from 'react-router'
 
 type CommentWithReplies = Comment & { replies: CommentWithReplies[] }
 
@@ -99,7 +100,11 @@ export function ReplyComment({
         <div className="flex w-full flex-col">
           <div className="relative flex flex-row items-center justify-between">
             <div className="flex flex-col items-baseline sm:flex-row">
-              <p className="text-sm sm:text-base">{commentAuthor?.username} </p>
+              <Link to={`/user/${commentAuthor?.authId}`}>
+                <p className="text-sm sm:text-base">
+                  {commentAuthor?.username}{' '}
+                </p>
+              </Link>
               <p className="ml-1 text-xs text-gray-500">
                 <TimeDisplay timestamp={String(comment.dateAdded)} />
               </p>
@@ -131,13 +136,13 @@ export function ReplyComment({
                             }}
                           >
                             <AlertDialog.Cancel asChild>
-                              <button className="rounded-md border border-[#c6c6c6] px-1 shadow-md hover:bg-[#faf8f1]">
+                              <button className="cursor-pointer rounded-md border px-1 shadow-md hover:bg-[#e2dece]">
                                 Cancel
                               </button>
                             </AlertDialog.Cancel>
                             <AlertDialog.Action asChild>
                               <button
-                                className="rounded-md border border-[#e6e6e6] bg-[#fa3131] p-2 px-1 text-[#faf8f1] shadow-md hover:bg-[#fd7474]"
+                                className="cursor-pointer rounded-md border bg-[#f8a1a1] p-2 px-1 shadow-md hover:bg-[#fd7474]"
                                 onClick={() => handleDeleteClick(comment.id)}
                               >
                                 Delete

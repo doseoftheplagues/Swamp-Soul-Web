@@ -109,7 +109,7 @@ textarea:focus {
 }
 
 .AlertDialogContent {
-  background-color: white;
+  background-color: #faf8f1;
   border-radius: 6px;
   position: fixed;
   top: 50%;
@@ -118,7 +118,7 @@ textarea:focus {
   width: 90vw;
   max-width: 500px;
   max-height: 85vh;
-  padding: 25px;
+  padding: 20px;
   animation: contentShow 150ms cubic-bezier(0.16, 1, 0.3, 1);
   outline: none;
   z-index: 1000;
@@ -160,8 +160,8 @@ textarea:focus {
 .AlertDialogTitle {
   margin: 0;
   color: var(--mauve-12);
-  font-size: 17px;
-  font-weight: 600;
+  font-size: 25px;
+  font-weight: 500;
   margin-bottom: 2px;
 }
 

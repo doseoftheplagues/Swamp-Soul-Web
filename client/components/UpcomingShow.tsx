@@ -373,7 +373,7 @@ export function UpcomingShow() {
                       <p> Manage posters</p>
                     </div>
                     <button
-                      className="shadow-black-20 h-fit rounded-md border bg-[#fa9292] p-1 shadow-md hover:bg-[#f87070] active:bg-[#fa4c4c]"
+                      className="shadow-black-20 h-fit cursor-pointer rounded-md border bg-[#fa9292] p-1 shadow-md hover:bg-[#f87070] active:bg-[#fa4c4c]"
                       onClick={handleManageClick}
                     >
                       <Cross1Icon />
@@ -397,7 +397,7 @@ export function UpcomingShow() {
                           </p>
                           <button
                             onClick={() => handleManagePosterClick(poster)}
-                            className="rounded-sm border-[1.5px] bg-[#fe4242] px-1 py-0.5 text-white active:bg-[#f75353]"
+                            className="cursor-pointer rounded-sm border-[1.5px] bg-[#fe4242] px-1 py-0.5 text-white active:bg-[#f75353]"
                           >
                             Delete
                           </button>
@@ -410,7 +410,7 @@ export function UpcomingShow() {
                         This show doesn&apos;t have any posters yet!
                       </p>
                       <img
-                        className="h-28 md:h-96"
+                        className="mb-4 h-28 md:h-96"
                         src="/assets/Im-working-on-it.png"
                         alt="Bleb painting a poster"
                       ></img>
@@ -439,7 +439,7 @@ export function UpcomingShow() {
                       <AlertDialog.Trigger asChild>
                         <button
                           onClick={() => setToolsHiddenClass('hidden')}
-                          className="w-full bg-[#f7f9ef] px-1 py-0.5 text-left hover:bg-[#d8d9b2b6] active:bg-[#d8d9b2]"
+                          className="w-full cursor-pointer bg-[#f7f9ef] px-1 py-0.5 text-left hover:bg-[#d8d9b2b6] active:bg-[#d8d9b2]"
                         >
                           Delete show
                         </button>
@@ -464,14 +464,14 @@ export function UpcomingShow() {
                             <AlertDialog.Cancel asChild>
                               <button
                                 onClick={() => setToolsHiddenClass('')}
-                                className="rounded-md border border-[#c6c6c6] px-1 shadow-md hover:bg-[#faf8f1]"
+                                className="cursor-pointer rounded-md border px-1 shadow-md hover:bg-[#e2dece]"
                               >
                                 Cancel
                               </button>
                             </AlertDialog.Cancel>
                             <AlertDialog.Action asChild>
                               <button
-                                className="rounded-md border border-[#e6e6e6] bg-[#fa3131] p-2 px-1 text-[#faf8f1] shadow-md hover:bg-[#fd7474]"
+                                className="cursor-pointer rounded-md border bg-[#f8a1a1] p-2 px-1 shadow-md hover:bg-[#fd7474]"
                                 onClick={() => handleDeleteClick(data.id)}
                               >
                                 Delete
@@ -484,20 +484,20 @@ export function UpcomingShow() {
 
                     <button
                       onClick={() => handleEditClick(data.id)}
-                      className="w-full bg-[#e9ecdf] px-1 py-0.5 text-left hover:bg-[#d8d9b2b6] active:bg-[#d8d9b2]"
+                      className="w-full cursor-pointer bg-[#e9ecdf] px-1 py-0.5 text-left hover:bg-[#d8d9b2b6] active:bg-[#d8d9b2]"
                     >
                       Edit details
                     </button>
                     {data.canceled ? (
                       <button
-                        className="w-full bg-[#f7f9ef] px-1 py-0.5 text-left hover:bg-[#d8d9b2b6] active:bg-[#d8d9b2]"
+                        className="w-full cursor-pointer bg-[#f7f9ef] px-1 py-0.5 text-left hover:bg-[#d8d9b2b6] active:bg-[#d8d9b2]"
                         onClick={() => handleCancelClick(data.id, true)}
                       >
                         Uncancel show
                       </button>
                     ) : (
                       <button
-                        className="w-full bg-[#f7f9ef] px-1 py-0.5 text-left hover:bg-[#d8d9b2b6] active:bg-[#d8d9b2]"
+                        className="w-full cursor-pointer bg-[#f7f9ef] px-1 py-0.5 text-left hover:bg-[#d8d9b2b6] active:bg-[#d8d9b2]"
                         onClick={() => handleCancelClick(data.id, false)}
                       >
                         Cancel show
@@ -505,13 +505,13 @@ export function UpcomingShow() {
                     )}
                     <button
                       onClick={handleAddClick}
-                      className="w-full bg-[#e9ecdf] px-1 py-0.5 text-left hover:bg-[#d8d9b2b6] active:bg-[#d8d9b2]"
+                      className="w-full cursor-pointer bg-[#e9ecdf] px-1 py-0.5 text-left hover:bg-[#d8d9b2b6] active:bg-[#d8d9b2]"
                     >
-                      Add alt poster
+                      Add a poster
                     </button>
                     {addPosterIsHidden == false && (
                       <div className="absolute top-30 -right-63 flex w-60 flex-col rounded-sm border-2 bg-[#e9ecdf] px-1 py-0.5 shadow-sm shadow-black/10">
-                        <p className="mb-1 px-0.5">Add alt poster</p>
+                        <p className="mb-1 px-0.5">Add a poster</p>
                         <PosterUploader
                           uploadSuccess={handleAddAltPosterSuccess}
                           currentNumberOfPosters={poster.length}
@@ -523,7 +523,7 @@ export function UpcomingShow() {
                               <span>
                                 <button
                                   onClick={handleManageClick}
-                                  className="w-ful mr-0.5 rounded-md border-[1.5px] border-[#d8d8d7] bg-[#f7f9ef] px-1 py-0.5 text-left hover:bg-[#d8d9b2b6] active:bg-[#d8d9b2]"
+                                  className="w-ful mr-0.5 cursor-pointer rounded-md border-[1.5px] border-[#d8d8d7] bg-[#f7f9ef] px-1 py-0.5 text-left hover:bg-[#d8d9b2b6] active:bg-[#d8d9b2]"
                                 >
                                   Manage posters
                                 </button>
@@ -537,7 +537,7 @@ export function UpcomingShow() {
 
                     <button
                       onClick={handleManageClick}
-                      className="w-ful rounded-b-md bg-[#f7f9ef] px-1 py-0.5 text-left hover:bg-[#d8d9b2b6] active:bg-[#d8d9b2]"
+                      className="w-ful cursor-pointer rounded-b-md bg-[#f7f9ef] px-1 py-0.5 text-left hover:bg-[#d8d9b2b6] active:bg-[#d8d9b2]"
                     >
                       Manage posters
                     </button>
@@ -705,7 +705,7 @@ export function UpcomingShow() {
             </div>
           </Toast.Provider>
         </div>
-        <div className="mt-4 flex w-full justify-center">
+        <div className="my-4 flex w-full justify-center">
           <CommentSection
             comments={comments}
             originIdType={'upcomingShowId'}
@@ -725,7 +725,7 @@ export function UpcomingShow() {
       phone 
       phone \
       phone */}
-      <div className="phone-screen flex flex-col sm:hidden">
+      <div className="phone-screen mb-4 flex flex-col sm:hidden">
         {isAuthenticated &&
           data?.userId == user?.sub &&
           managePosterIsHidden == false && (
@@ -1048,7 +1048,7 @@ export function UpcomingShow() {
           </div>
         </div>
         {data.locationCoords && data.ticketsLink && (
-          <div className="action buttons my-2 flex w-screen items-center justify-between px-2 py-1">
+          <div className="action buttons mt-2 flex w-screen items-center justify-between px-2 py-1">
             <div className="flex w-1/2 items-center justify-center">
               <a
                 href={data.ticketsLink}
@@ -1068,7 +1068,7 @@ export function UpcomingShow() {
           </div>
         )}
         {data.locationCoords && !data.ticketsLink && (
-          <div className="action buttons my-2 flex w-screen items-center justify-center px-2 py-1">
+          <div className="action buttons mt-2 flex w-screen items-center justify-center px-2 py-1">
             <a
               href={data.ticketsLink}
               className="mx-0.5 w-full rounded-md border-2 border-[#eae7d2e2] bg-[#e0dfbd8d] px-1 py-1.5 text-center active:bg-[#e3e1a9]"
@@ -1078,7 +1078,7 @@ export function UpcomingShow() {
           </div>
         )}
         {data.ticketsLink && !data.locationCoords && (
-          <div className="action buttons my-2 flex w-screen items-center justify-center px-2 py-1">
+          <div className="action buttons mt-2 flex w-screen items-center justify-center px-2 py-1">
             <a
               href={`https://www.google.com/maps/@${data.locationCoords}`}
               className="w-full rounded-sm border-2 border-[#eae7d2e2] bg-[#eae7d2ac] px-1 py-1.5 text-center active:bg-[#e3e1a9]"
@@ -1087,7 +1087,7 @@ export function UpcomingShow() {
             </a>
           </div>
         )}
-        <div className="mx-2 mt-4">
+        <div className="mx-2">
           <CommentSection
             comments={comments}
             originIdType={'upcomingShowId'}

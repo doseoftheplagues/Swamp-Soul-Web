@@ -12,6 +12,7 @@ import { Register } from './components/Register'
 import NotFound from './components/NotFound'
 import { UpcomingShow } from './components/UpcomingShow'
 import AddPosterToShow from './components/AddPosterToShow'
+import UserProfile from './components/UserProfile'
 
 // const routes = createRoutesFromElements(<Route index element={<App />} />)
 
@@ -20,6 +21,7 @@ const routes = createRoutesFromElements(
     <Route index element={<Home />} />
     <Route path="/header" element={<Header />} />
     <Route path="/profile" element={<Profile />} />
+    <Route path="/user/:id" element={<UserProfile />} />
     <Route path="/register" element={<Register />} />
     <Route path="/showuploadform" element={<ShowUploadForm />} />
     <Route path="/showeditform/:id" element={<ShowEditForm />} />

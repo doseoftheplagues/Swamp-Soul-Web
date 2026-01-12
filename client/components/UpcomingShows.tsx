@@ -36,11 +36,25 @@ export function UpcomingShows() {
   }, [data])
 
   if (isLoading) {
-    return <LoadingSpinner />
+    return (
+      <div className="flex h-[calc(100vh-4rem)] w-full place-content-center place-items-center">
+        <div className="inset-0 m-auto h-fit w-fit">
+          <LoadingSpinner />
+        </div>
+      </div>
+    )
   }
 
   if (isError) {
-    return <h1>An error occured when loading upcoming shows</h1>
+    return (
+      <div className="flex h-[calc(100vh-5rem)] w-full place-content-center place-items-center">
+        <div className="inset-0 m-auto h-fit w-fit">
+          <h1 className="sm:text-xl">
+            An error occured when loading upcoming shows
+          </h1>
+        </div>
+      </div>
+    )
   }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -70,15 +84,15 @@ export function UpcomingShows() {
   }
 
   return (
-    <div className="h-fit rounded-md">
+    <div className="h-fit p-1">
       <div className="mb-2 flex flex-row rounded-md">
         <div className="mr-1 flex cursor-pointer flex-row items-center rounded-sm border-[1.5px] border-[#aaa89955] bg-[#dad7c2] px-1 text-sm hover:bg-[#e2e0cf] active:bg-[#c1bd9a]">
           <Link to="/showuploadform" className="flex flex-row items-center">
-            <PaintbrushSymbol className={'h-5'} />
-            <p className="p-1">Add a show</p>
+            <PaintbrushSymbol className={'h-4 sm:h-5'} />
+            <p className="p-1 text-xs sm:text-sm">Add a show</p>
           </Link>
         </div>
-        <div className="w-fit rounded-md border-[1.5px] border-[#dad7c2]">
+        <div className="h-fit w-fit rounded-md border-[1.5px] border-[#dad7c2]">
           <SearchBar
             submitFunction={handleSearch}
             changeFunction={handleChange}

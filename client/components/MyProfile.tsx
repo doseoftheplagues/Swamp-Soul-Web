@@ -19,19 +19,19 @@ const Profile = () => {
   const { deleteImage } = useImage()
   const [editPfpIsHidden, setEditPfpIsHidden] = useState(true)
   const [editDetailsIsHidden, setEditDetailsIsHidden] = useState(true)
+  const [visibleSection, setVisibleSection] = useState('')
+
   const { user, isAuthenticated, isLoading, getAccessTokenSilently } =
     useAuth0()
   const { data, update } = useUser()
   const userLoaded = user?.sub
 
-  // Fetch user's upcoming shows
   const {
     data: userShows,
     isLoading: showsAreLoading,
     isError: showsAreError,
   } = useGetUpcomingShowsByUserId(userLoaded)
 
-  // Fetch user's comments and replies to them
   const {
     comments: userCommentsAndReplies,
     isLoading: commentsAreLoading,
@@ -45,7 +45,11 @@ const Profile = () => {
     console.log('Something went wrong loading your shows')
   }
   if (!isAuthenticated) {
-    return <p>Log in to view your profile</p>
+    return (
+      <div className="flex h-[calc(100vh-4rem)] w-full">
+        <p className="mx-auto my-auto text-lg">Log in to view your profile</p>
+      </div>
+    )
   }
 
   function handleEditPfpClick() {
@@ -93,6 +97,10 @@ const Profile = () => {
       console.log('setting edit details to true')
       setEditDetailsIsHidden(true)
     }
+  }
+
+  function handleVisibleSectionClick(section: string) {
+    setVisibleSection(section)
   }
 
   const myUserComments = userCommentsAndReplies
@@ -162,7 +170,7 @@ const Profile = () => {
                       onClick={() => handleEditPfpClick()}
                       disabled={!editDetailsIsHidden && true}
                     >
-                      Edit profile picture
+                      Change profile picture
                     </button>
                   )}
                   {!editPfpIsHidden && (
@@ -239,132 +247,155 @@ const Profile = () => {
       </div>
       <div className="flex w-full flex-col rounded-md border bg-[#e9e6d6ac] md:ml-5 md:max-w-3/5 md:min-w-2/5">
         <div className="mb-1 flex w-full items-center justify-between rounded-t-sm border-b-[1.5px] border-b-[#0202025f] bg-[#d9d7c0d6] p-1">
-          <p className=""> Your Shows</p>
+          <p className="">Activity</p>
         </div>
-        <div className="upcomingShowsBox p-1">
-          {showsAreLoading && <LoadingSpinner />}
-          {userShows &&
-            userShows.map((show: UpcomingShow) => (
-              <UpcomingShowCard key={show.id} show={show} />
-            ))}
-          {!showsAreLoading && userShows && userShows.length == 0 && (
-            <p>You haven&apos;t made any shows yet.</p>
-          )}
+        <div className="mx-1 mt-1 mb-1 flex flex-row gap-2">
+          <button
+            onClick={() => handleVisibleSectionClick('yourComments')}
+            className={`flex w-fit cursor-pointer flex-row items-center rounded-sm border-[1.5px] border-[#aaa89955] px-1.5 py-1 text-sm active:bg-[#c1bd9a] ${visibleSection == 'yourComments' ? 'bg-[#dad7c2c1]' : 'hover:bg-[#eae8dc]'}`}
+          >
+            Comments
+          </button>
+          <button
+            onClick={() => handleVisibleSectionClick('yourShows')}
+            className={`flex w-fit cursor-pointer flex-row items-center rounded-sm border-[1.5px] border-[#aaa89955] px-1.5 py-1 text-sm active:bg-[#c1bd9a] ${visibleSection == 'yourShows' ? 'bg-[#dad7c2c1]' : 'hover:bg-[#eae8dc]'}`}
+          >
+            Shows
+          </button>
+          <button
+            onClick={() => handleVisibleSectionClick('yourReplies')}
+            className={`flex w-fit cursor-pointer flex-row items-center rounded-sm border-[1.5px] border-[#aaa89955] px-1.5 py-1 text-sm active:bg-[#c1bd9a] ${visibleSection == 'yourReplies' ? 'bg-[#dad7c2c1]' : 'hover:bg-[#eae8dc]'}`}
+          >
+            Replies
+          </button>
         </div>
-        <div className="YourCommments">
-          <div className="mb-1 flex w-full items-center justify-between rounded-t-sm border-b-[1.5px] border-b-[#0202025f] bg-[#d9d7c0d6] p-1">
-            <p className=""> Your Comments</p>
+        {visibleSection == 'yourShows' && (
+          <div className="YourShowsBox">
+            <div className="upcomingShowsBox p-2">
+              {showsAreLoading && <LoadingSpinner />}
+              {userShows &&
+                userShows.map((show: UpcomingShow) => (
+                  <UpcomingShowCard key={show.id} show={show} />
+                ))}
+              {!showsAreLoading && userShows && userShows.length == 0 && (
+                <p>You haven&apos;t made any shows yet.</p>
+              )}
+            </div>
           </div>
-          <div className="commentsBox mt-1 p-2">
-            {commentsAreLoading && <LoadingSpinner />}
-            {commentsAreError && <p>Error loading comments.</p>}
-            {rootCommentsByCurrentUser.length === 0 && !commentsAreLoading && (
-              <p>You haven&apos;t made any comments yet.</p>
-            )}
-            {rootCommentsByCurrentUser.map((comment) => (
-              <div key={comment.id}>
-                <Comment
-                  comment={{ ...comment, replies: [] }}
-                  originIdType={
-                    comment.upcomingShowId
-                      ? 'upcomingShowId'
-                      : comment.archiveShowId
-                        ? 'archiveShowId'
-                        : 'postId'
-                  }
-                  originId={
-                    comment.upcomingShowId ||
-                    comment.archiveShowId ||
-                    comment.postId ||
-                    0
-                  }
-                />
-                <div className="mb-2 flex w-full justify-end">
-                  <div className="mr-1.5 rounded-b-md border-x-2 border-b-2 border-[#dad7c2d0] bg-[#fbfaf6] px-1 py-0.5">
-                    <p className="text-xs text-gray-500">
-                      {comment.upcomingShowId ? (
-                        <Link
-                          to={`/upcomingshows/${comment.upcomingShowId}#comment${comment.id}`}
-                        >
-                          View thread
-                        </Link>
-                      ) : comment.archiveShowId ? (
-                        <Link
-                          to={`/upcomingshows/${comment.archiveShowId}#comment${comment.id}`}
-                        >
-                          View thread
-                        </Link>
-                      ) : (
-                        <Link
-                          to={`/upcomingshows/${comment.postId}#comment${comment.id}`}
-                        >
-                          View thread
-                        </Link>
-                      )}
-                    </p>
+        )}
+        {visibleSection == 'yourComments' && (
+          <div className="YourCommments">
+            <div className="commentsBox mt-1 p-2">
+              {commentsAreLoading && <LoadingSpinner />}
+              {commentsAreError && <p>Error loading comments.</p>}
+              {rootCommentsByCurrentUser.length === 0 &&
+                !commentsAreLoading && (
+                  <p>You haven&apos;t made any comments yet.</p>
+                )}
+              {rootCommentsByCurrentUser.map((comment) => (
+                <div key={comment.id}>
+                  <Comment
+                    comment={{ ...comment, replies: [] }}
+                    originIdType={
+                      comment.upcomingShowId
+                        ? 'upcomingShowId'
+                        : comment.archiveShowId
+                          ? 'archiveShowId'
+                          : 'postId'
+                    }
+                    originId={
+                      comment.upcomingShowId ||
+                      comment.archiveShowId ||
+                      comment.postId ||
+                      0
+                    }
+                  />
+                  <div className="mb-2 flex w-full justify-end">
+                    <div className="mr-1.5 rounded-b-md border-x-2 border-b-2 border-[#dad7c2d0] bg-[#fbfaf6] px-1 py-0.5">
+                      <p className="text-xs text-gray-500">
+                        {comment.upcomingShowId ? (
+                          <Link
+                            to={`/upcomingshows/${comment.upcomingShowId}#comment${comment.id}`}
+                          >
+                            View thread
+                          </Link>
+                        ) : comment.archiveShowId ? (
+                          <Link
+                            to={`/upcomingshows/${comment.archiveShowId}#comment${comment.id}`}
+                          >
+                            View thread
+                          </Link>
+                        ) : (
+                          <Link
+                            to={`/upcomingshows/${comment.postId}#comment${comment.id}`}
+                          >
+                            View thread
+                          </Link>
+                        )}
+                      </p>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
-        </div>
-        <div className="RepliesReceived">
-          <div className="mt-4 mb-1 flex w-full items-center justify-between rounded-t-sm border-b-[1.5px] border-b-[#0202025f] bg-[#d9d7c0d6] p-1">
-            <p className=""> Replies Received</p>
-          </div>
-          <div className="commentsBox mt-1 p-2">
-            {commentsAreLoading && <LoadingSpinner />}
-            {commentsAreError && <p>Error loading comments.</p>}
-            {!commentsAreLoading && repliesReceived.length == 0 && (
-              <p>You haven&apos;t received any replies yet.</p>
-            )}
-            {repliesReceived.map((reply) => (
-              <div key={reply.id} className="flex flex-col">
-                <Comment
-                  comment={{ ...reply, replies: [] }}
-                  originIdType={
-                    reply.upcomingShowId
-                      ? 'upcomingShowId'
-                      : reply.archiveShowId
-                        ? 'archiveShowId'
-                        : 'postId'
-                  }
-                  originId={
-                    reply.upcomingShowId ||
-                    reply.archiveShowId ||
-                    reply.postId ||
-                    0
-                  }
-                />
-                <div className="mb-2 flex w-full justify-end">
-                  <div className="mr-1.5 rounded-b-md border-x-2 border-b-2 border-[#dad7c2d0] bg-[#fbfaf6] px-1 py-0.5">
-                    <p className="text-xs text-gray-500">
-                      {reply.upcomingShowId ? (
-                        <Link
-                          to={`/upcomingshows/${reply.upcomingShowId}#comment${reply.id}`}
-                        >
-                          View thread
-                        </Link>
-                      ) : reply.archiveShowId ? (
-                        <Link
-                          to={`/upcomingshows/${reply.archiveShowId}#comment${reply.id}`}
-                        >
-                          View thread
-                        </Link>
-                      ) : (
-                        <Link
-                          to={`/upcomingshows/${reply.postId}#comment${reply.id}`}
-                        >
-                          View thread
-                        </Link>
-                      )}
-                    </p>
+        )}
+        {visibleSection == 'yourReplies' && (
+          <div className="RepliesReceived">
+            <div className="commentsBox mt-1 p-2">
+              {commentsAreLoading && <LoadingSpinner />}
+              {commentsAreError && <p>Error loading comments.</p>}
+              {!commentsAreLoading && repliesReceived.length == 0 && (
+                <p>You haven&apos;t received any replies yet.</p>
+              )}
+              {repliesReceived.map((reply) => (
+                <div key={reply.id} className="flex flex-col">
+                  <Comment
+                    comment={{ ...reply, replies: [] }}
+                    originIdType={
+                      reply.upcomingShowId
+                        ? 'upcomingShowId'
+                        : reply.archiveShowId
+                          ? 'archiveShowId'
+                          : 'postId'
+                    }
+                    originId={
+                      reply.upcomingShowId ||
+                      reply.archiveShowId ||
+                      reply.postId ||
+                      0
+                    }
+                  />
+                  <div className="mb-2 flex w-full justify-end">
+                    <div className="mr-1.5 rounded-b-md border-x-2 border-b-2 border-[#dad7c2d0] bg-[#fbfaf6] px-1 py-0.5">
+                      <p className="text-xs text-gray-500">
+                        {reply.upcomingShowId ? (
+                          <Link
+                            to={`/upcomingshows/${reply.upcomingShowId}#comment${reply.id}`}
+                          >
+                            View thread
+                          </Link>
+                        ) : reply.archiveShowId ? (
+                          <Link
+                            to={`/upcomingshows/${reply.archiveShowId}#comment${reply.id}`}
+                          >
+                            View thread
+                          </Link>
+                        ) : (
+                          <Link
+                            to={`/upcomingshows/${reply.postId}#comment${reply.id}`}
+                          >
+                            View thread
+                          </Link>
+                        )}
+                      </p>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </div>
   ) : null
