@@ -4,17 +4,24 @@ import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router'
 import * as API from '../apis/users'
 import * as Form from '@radix-ui/react-form'
+import { LoadingSpinner } from './SmallerComponents/LoadingSpinner'
 
-const EditProfile = () => {
+interface EditProfileProps {
+  setEditDetailsIsHidden: (isHidden: boolean) => void
+}
+
+const EditProfile = ({ setEditDetailsIsHidden }: EditProfileProps) => {
   const { user, isAuthenticated, isLoading, getAccessTokenSilently } =
     useAuth0()
   const { update, ...userDb } = useUser()
   const [userNameIsTaken, setUsernameIsTaken] = useState(false)
+
   const [formData, setFormData] = useState({
     username: '',
     bio: '',
     status: '',
     email: '',
+    profilePicture: '',
   })
 
   const navigate = useNavigate()
@@ -26,12 +33,13 @@ const EditProfile = () => {
   }, [userDb.isLoading, userDb.data, navigate])
 
   useEffect(() => {
-    if (user && userDb.data) {
+    if (user && userDb.data && user.email) {
       setFormData({
         username: userDb.data.username,
         bio: userDb.data.bio,
         status: userDb.data.status,
         email: user.email,
+        profilePicture: userDb.data.profilePicture,
       })
     }
   }, [user, userDb.data])
@@ -54,13 +62,19 @@ const EditProfile = () => {
         console.error('Could not find user ID to update.')
         return
       }
-      update.mutate({
-        id: userId,
-        updatedUser: formData,
-        token,
-      })
-      setUsernameIsTaken(false)
-      navigate('/profile')
+      update.mutate(
+        {
+          id: userId,
+          updatedUser: formData,
+          token,
+        },
+        {
+          onSuccess: () => {
+            setUsernameIsTaken(false)
+            setEditDetailsIsHidden(true)
+          },
+        },
+      )
     } catch (error) {
       console.error('Failed to get access token:', error)
     }
@@ -80,18 +94,24 @@ const EditProfile = () => {
   }
 
   if (isLoading) {
-    return <div className="loading-text">Loading profile...</div>
+    return (
+      <div className="">
+        <LoadingSpinner />
+      </div>
+    )
   }
+
   if (isAuthenticated) {
     return (
-      <div className="mx-auto max-w-md p-4">
-        <h2 className="mb-2 text-xl">Edit Profile</h2>
+      <div className="mx-auto max-w-md p-2">
+        <h2 className="text-md mb-2">Edit Details</h2>
         <Form.Root onSubmit={handleSubmit}>
           {userNameIsTaken && <p>That username is already taken</p>}
           <Form.Field name="username">
-            <div>
-              <Form.Label>Username</Form.Label>
-              <br />
+            <div className="">
+              <Form.Label className="block text-sm font-medium">
+                Username
+              </Form.Label>
               <Form.Message match="valueMissing">
                 Please enter your username
               </Form.Message>
@@ -99,7 +119,7 @@ const EditProfile = () => {
             <Form.Control asChild>
               <input
                 type="text"
-                className="w-full p-1"
+                className="mb-2 w-full rounded-sm p-1 text-sm"
                 name="username"
                 value={formData.username}
                 onChange={handleChange}
@@ -107,18 +127,17 @@ const EditProfile = () => {
               />
             </Form.Control>
           </Form.Field>
-          <br />
+
           <Form.Field name="bio">
             <div>
-              <Form.Label>Bio</Form.Label>
-              <br />
+              <Form.Label className="block text-sm font-medium">Bio</Form.Label>
               <Form.Message match="valueMissing">
                 Please enter your bio
               </Form.Message>
             </div>
             <Form.Control asChild>
               <textarea
-                className="w-full p-1"
+                className="w-full rounded-sm p-1 text-sm"
                 rows={3}
                 name="bio"
                 value={formData.bio}
@@ -127,10 +146,10 @@ const EditProfile = () => {
               />
             </Form.Control>
           </Form.Field>
-          <br />
+
           <Form.Field name="status">
             <div>
-              <Form.Label>Status</Form.Label>
+              <Form.Label className="text-sm">Status</Form.Label>
               <br />
               <Form.Message match="valueMissing">
                 Please enter your status
@@ -139,7 +158,7 @@ const EditProfile = () => {
             <Form.Control asChild>
               <input
                 type="text"
-                className="w-full p-1"
+                className="w-full rounded-sm p-1 text-sm"
                 name="status"
                 value={formData.status}
                 onChange={handleChange}
@@ -147,10 +166,10 @@ const EditProfile = () => {
               />
             </Form.Control>
           </Form.Field>
-          <br />
+
           <Form.Submit asChild>
             <button
-              className="text-md mt-6 inline-flex w-full justify-center rounded-md border-2 border-black bg-[#dad7c2] px-4 py-2 font-medium text-black shadow-sm focus:ring-offset-2 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+              className="mt-2 inline-flex justify-center rounded-md border-2 border-black bg-[#ead2d2be] px-2 py-1 text-sm font-medium text-black hover:bg-[#e1bebef5] focus:ring-offset-2 focus:outline-none active:bg-[#e1bebe] disabled:cursor-not-allowed disabled:opacity-50"
               disabled={
                 update.isPending ||
                 !formData.username ||

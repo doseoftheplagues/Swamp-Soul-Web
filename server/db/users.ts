@@ -3,17 +3,27 @@ import { User, UserData } from '../../models/user.ts'
 
 const db = connection
 
-const columns = ['authId', 'username', 'bio', 'status', 'email']
+const columns = [
+  'authId',
+  'username',
+  'bio',
+  'status',
+  'email',
+  'profile_picture as profilePicture',
+]
 
 export async function getUserById(id: string) {
-  const result = await db('users').where('authId', id).first()
+  const result = await db('users').where('authId', id).select(columns).first()
   return result
 }
 
 export async function addUser(newUser: User): Promise<UserData[]> {
-  return db('users')
-    .insert(newUser)
-    .returning([...columns])
+  const { profilePicture, ...rest } = newUser
+  const userToInsert = {
+    ...rest,
+    profile_picture: profilePicture,
+  }
+  return db('users').insert(userToInsert).returning(columns)
 }
 
 export async function usernameTakenCheck(username: string) {
@@ -21,7 +31,16 @@ export async function usernameTakenCheck(username: string) {
   return !!result
 }
 
-export async function editUser(userData: User, userId: string) {
-  const result = await db('users').where('authId', userId).update(userData)
+export async function editUser(userData: Partial<User>, userId: string) {
+  const { profilePicture, ...rest } = userData
+  const userToUpdate: { [key: string]: string | boolean | undefined } = {
+    ...rest,
+  }
+
+  if (profilePicture !== undefined) {
+    userToUpdate.profile_picture = profilePicture
+  }
+
+  const result = await db('users').where('authId', userId).update(userToUpdate)
   return result
 }

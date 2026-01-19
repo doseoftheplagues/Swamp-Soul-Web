@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useShows } from '../hooks/useShows'
 import showArchiveInfo from './ArchiveInfo'
-import SearchBar from './SearchBar'
+import SearchBar from './SmallerComponents/SearchBar'
 
 function Archive() {
   const [currentGigIndex, setCurrentGigIndex] = useState(0)

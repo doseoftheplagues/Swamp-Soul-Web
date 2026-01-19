@@ -61,17 +61,6 @@ router.post('/', checkJwt, async (req, res) => {
   }
 })
 
-router.delete('/:id', async (req, res) => {
-  try {
-    const showId = Number(req.params)
-    const deletedShow = db.deleteArchiveShow(showId)
-    res.json(deletedShow)
-  } catch (error) {
-    console.log(error)
-    res.status(500).json({ message: 'Something went wrong deleting show' })
-  }
-})
-
 function groupShows(flatShows: ShowDbRow[]): Show[] {
   const showsById = new Map<number, Show>()
 

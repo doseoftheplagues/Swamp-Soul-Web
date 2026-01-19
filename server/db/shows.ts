@@ -16,33 +16,6 @@ export function getAllShows() {
     )
 }
 
-export function searchShows(searchterm: string) {
-  return db('shows')
-    .select('shows.*')
-    .distinct()
-    .join('shows_posters', 'shows.id', '=', 'shows_posters.show_id')
-    .join('posters', 'posters.id', '=', 'shows_posters.poster_id')
-    .where('date', 'like', `%${searchterm}%`)
-    .orWhere('location', 'like', `%${searchterm}%`)
-    .orWhere('performers', 'like', `%${searchterm}%`)
-    .orWhere('posters.designer', 'like', `%${searchterm}%`)
-}
-
-export async function addPosterToShow(
-  showId: number,
-  posterData: { image: string; designer: string },
-) {
-  return db.transaction(async (trx) => {
-    const [newPosterId] = await trx('posters')
-      .insert(posterData)
-      .returning('id')
-    await trx('shows_posters').insert({
-      show_id: showId,
-      poster_id: newPosterId,
-    })
-  })
-}
-
 export async function addShowWithPoster(
   showData: { date: string; location: string; performers: string },
   posterData: { image: string; designer: string },
@@ -83,4 +56,4 @@ export async function addShowWithMultiplePosters(
   })
 }
 
-export async function deleteArchiveShow(showId: number) {}
+// export async function deleteArchiveShow(showId: number) {}

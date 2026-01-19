@@ -20,6 +20,22 @@ export async function getUser({
     })
 }
 
+interface GetUserByIdFunction {
+  id: string
+}
+
+export async function getUserById({
+  id,
+}: GetUserByIdFunction): Promise<User | null> {
+  return await request
+    .get(`${rootURL}/users/${id}`)
+    .then((res) => (res.body.user ? res.body.user : null))
+    .catch((err) => {
+      console.error(err)
+      throw err
+    })
+}
+
 interface AddUserFunction {
   newUser: UserData
   token: string
@@ -40,9 +56,17 @@ export async function addUser({
     })
 }
 
+interface EditUserTemp {
+  username: string
+  bio: string
+  status: string
+  email: string
+  profilePicture: string
+}
+
 interface EditUserFunction {
   id: string
-  updatedUser: User
+  updatedUser: Partial<EditUserTemp>
   token: string
 }
 
@@ -50,7 +74,7 @@ export async function editUser({
   id,
   updatedUser,
   token,
-}: EditUserFunction): Promise<User> {
+}: EditUserFunction): Promise<Partial<EditUserTemp>> {
   return request
     .patch(`${rootURL}/users/edit-user/${id}`)
     .send(updatedUser)
