@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "types": ["vite/client"],
+    "types": ["vite/client", "@testing-library/jest-dom"],
     "target": "es2020", 
     "jsx": "react-jsx",
     "module": "ES2020",

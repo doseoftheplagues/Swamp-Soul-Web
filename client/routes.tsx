@@ -4,13 +4,15 @@ import App from './components/App'
 import Home from './components/Home'
 import { Archive } from './components/Archive'
 import Header from './components/Header'
-import Profile from './components/Profile'
+import Profile from './components/MyProfile'
 import { ShowUploadForm } from './components/ShowUploadForm'
 import { ShowEditForm } from './components/ShowEditForm'
 import { UpcomingShows } from './components/UpcomingShows'
 import { Register } from './components/Register'
-import EditProfile from './components/EditProfile'
 import NotFound from './components/NotFound'
+import { UpcomingShow } from './components/UpcomingShow'
+import AddPosterToShow from './components/AddPosterToShow'
+import UserProfile from './components/UserProfile'
 
 // const routes = createRoutesFromElements(<Route index element={<App />} />)
 
@@ -19,11 +21,17 @@ const routes = createRoutesFromElements(
     <Route index element={<Home />} />
     <Route path="/header" element={<Header />} />
     <Route path="/profile" element={<Profile />} />
-    <Route path="/editprofile" element={<EditProfile />} />
+    <Route path="/user/:id" element={<UserProfile />} />
     <Route path="/register" element={<Register />} />
     <Route path="/showuploadform" element={<ShowUploadForm />} />
     <Route path="/showeditform/:id" element={<ShowEditForm />} />
     <Route path="/upcomingshows" element={<UpcomingShows />} />
+    <Route path="/upcomingshows/:id" element={<UpcomingShow />} />
+    <Route
+      path="/upcomingshows/:id/#comment/:commentid"
+      element={<UpcomingShow />}
+    />
+    <Route path="/addpostertoshow/:id" element={<AddPosterToShow />} />
     <Route path="/archive" element={<Archive />} />
     <Route path="*" element={<NotFound />} />
   </Route>,

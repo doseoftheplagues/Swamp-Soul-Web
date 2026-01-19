@@ -18,14 +18,11 @@ export function up(knex) {
     table.string('location_coords').nullable()
     table.string('set_times').nullable()
     table.string('tickets_link').nullable()
-    table
-      .integer('poster_id')
-      .references('posters.id')
-      .nullable()
-      .onDelete('CASCADE')
     table.string('description').nullable()
     table.integer('max_capacity').nullable()
     table.boolean('canceled').nullable()
+    table.string('name').nullable()
+    table.string('city').nullable()
   })
 }
 

@@ -18,10 +18,11 @@ const showProperties = [
   'location_coords as locationCoords',
   'set_times as setTimes',
   'tickets_link as ticketsLink',
-  'poster_id as posterId',
   'description',
   'max_capacity as maxCapacity',
   'canceled',
+  'name',
+  'city',
 ]
 
 //read
@@ -35,6 +36,13 @@ export async function getUpcomingShowById(id: number) {
     .where('id', id)
     .select(...showProperties)
   return result[0] as UpcomingShow
+}
+
+export async function getUpcomingShowsByUserId(id: string) {
+  const result = await db('upcoming_shows')
+    .where('user_id', id)
+    .select(...showProperties)
+  return result
 }
 
 //create
@@ -53,10 +61,11 @@ export async function addUpcomingShow(showData: UpcomingShowData) {
     locationCoords,
     setTimes,
     ticketsLink,
-    posterId,
+
     description,
     maxCapacity,
     canceled,
+    name,
   } = showData
 
   const [result] = await db('upcoming_shows')
@@ -74,10 +83,11 @@ export async function addUpcomingShow(showData: UpcomingShowData) {
       location_coords: locationCoords,
       set_times: setTimes,
       tickets_link: ticketsLink,
-      poster_id: posterId,
+
       description,
       max_capacity: maxCapacity,
       canceled,
+      name,
     })
     .returning([...showProperties])
 
@@ -103,10 +113,11 @@ export async function updateUpcomingShow(
     locationCoords,
     setTimes,
     ticketsLink,
-    posterId,
+
     description,
     maxCapacity,
     canceled,
+    name,
   } = showData
   const snakeCaseShowData = {
     date,
@@ -121,10 +132,10 @@ export async function updateUpcomingShow(
     location_coords: locationCoords,
     set_times: setTimes,
     tickets_link: ticketsLink,
-    poster_id: posterId,
     description,
     max_capacity: maxCapacity,
     canceled,
+    name,
   }
 
   return await db('upcoming_shows').where('id', id).update(snakeCaseShowData)
@@ -132,6 +143,12 @@ export async function updateUpcomingShow(
 
 //delete
 
-export async function deleteUpcomingShow(id: number) {
-  return await db('upcoming_shows').where('id', id).delete()
+export async function deleteUpcomingShow(id: number, authId?: string) {
+  const query = db('upcoming_shows').where('id', id)
+
+  if (authId) {
+    query.where('user_id', authId)
+  }
+
+  return await query.delete()
 }

@@ -26,6 +26,19 @@ export function useUser() {
   }
 }
 
+export function useUserById(id: string) {
+  const query = useQuery({
+    queryKey: ['user', id],
+    queryFn: async () => {
+      return API.getUserById({ id })
+    },
+    enabled: !!id,
+  })
+  return {
+    ...query,
+  }
+}
+
 export function useUserMutation<TData = unknown, TVariables = unknown>(
   mutationFn: MutationFunction<TData, TVariables>,
 ) {

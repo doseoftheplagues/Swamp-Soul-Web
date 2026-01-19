@@ -1,13 +1,10 @@
-import knexfile from './knexfile.js'
-import knex from 'knex'
 import connection from './connection.ts'
 
 const db = connection
 
 export function getAllShows() {
   return db('shows')
-    .join('shows_posters', 'shows.id', '=', 'shows_posters.show_id')
-    .join('posters', 'posters.id', '=', 'shows_posters.poster_id')
+    .join('posters', 'shows.id', '=', 'posters.show_id')
     .select(
       'posters.id as posterId',
       'performers',
@@ -19,42 +16,15 @@ export function getAllShows() {
     )
 }
 
-export function searchShows(searchterm: string) {
-  return db('shows')
-    .select('shows.*')
-    .distinct()
-    .join('shows_posters', 'shows.id', '=', 'shows_posters.show_id')
-    .join('posters', 'posters.id', '=', 'shows_posters.poster_id')
-    .where('date', 'like', `%${searchterm}%`)
-    .orWhere('location', 'like', `%${searchterm}%`)
-    .orWhere('performers', 'like', `%${searchterm}%`)
-    .orWhere('posters.designer', 'like', `%${searchterm}%`)
-}
-
-export async function addPosterToShow(
-  showId: number,
-  posterData: { image: string; designer: string },
-) {
-  return db.transaction(async (trx) => {
-    const [newPosterId] = await trx('posters')
-      .insert(posterData)
-      .returning('id')
-    await trx('shows_posters').insert({
-      show_id: showId,
-      poster_id: newPosterId,
-    })
-  })
-}
-
 export async function addShowWithPoster(
   showData: { date: string; location: string; performers: string },
   posterData: { image: string; designer: string },
 ) {
   return db.transaction(async (trx) => {
     const newShow = await trx('shows').insert(showData).returning('id')
-    const showId = newShow[0]
+    const showId = newShow[0].id
     const newPoster = await trx('posters').insert(posterData).returning('id')
-    const posterId = newPoster[0]
+    const posterId = newPoster[0].id
     await trx('shows_posters').insert({
       poster_id: posterId,
       show_id: showId,
@@ -85,3 +55,5 @@ export async function addShowWithMultiplePosters(
     }
   })
 }
+
+// export async function deleteArchiveShow(showId: number) {}

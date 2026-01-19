@@ -1,5 +1,6 @@
 import { Router } from 'express'
 import * as db from '../db/upcomingShows.ts'
+import * as userDb from '../db/users.ts'
 import checkJwt, { JwtRequest } from '../../auth0.ts'
 
 const router = Router()
@@ -27,6 +28,17 @@ router.get('/:id', async (req, res) => {
   }
 })
 
+router.get('/user/:id', async (req, res) => {
+  try {
+    const id = req.params.id
+    const showById = await db.getUpcomingShowsByUserId(id)
+    res.json(showById)
+  } catch (error) {
+    console.log(error)
+    res.status(500).json({ message: 'Something went wrong getting show' })
+  }
+})
+
 // POST localhost:3000/api/v1/upcomingShows
 router.post('/', checkJwt, async (req: JwtRequest, res) => {
   try {
@@ -44,8 +56,8 @@ router.post('/', checkJwt, async (req: JwtRequest, res) => {
       userId: userId,
     }
 
-    await db.addUpcomingShow(newShowData)
-    res.sendStatus(201)
+    const newShow = await db.addUpcomingShow(newShowData)
+    res.status(201).json(newShow)
   } catch (error) {
     console.log(error)
     res.status(500).json({ message: 'Something went wrong posting show' })
@@ -53,10 +65,14 @@ router.post('/', checkJwt, async (req: JwtRequest, res) => {
 })
 
 // PATCH localhost:3000/api/v1/upcomingShows/:id
-router.patch('/:id', checkJwt, async (req, res) => {
+router.patch('/:id', checkJwt, async (req: JwtRequest, res) => {
   try {
     const showData = req.body
     const showId = Number(req.params.id)
+    const authId = req.auth?.sub
+    if (!authId) {
+      return res.status(401).json({ message: 'Unauthorized' })
+    }
     await db.updateUpcomingShow(showId, showData)
     res.sendStatus(200)
   } catch (error) {
@@ -66,10 +82,30 @@ router.patch('/:id', checkJwt, async (req, res) => {
 })
 
 // DELETE localhost:3000/api/v1/upcomingShows/:id
-router.delete('/:id', checkJwt, async (req, res) => {
+router.delete('/:id', checkJwt, async (req: JwtRequest, res) => {
   try {
     const showId = Number(req.params.id)
-    await db.deleteUpcomingShow(showId)
+    const authId = req.auth?.sub
+
+    if (!authId) {
+      return res.status(401).json({ message: 'Unauthorized' })
+    }
+
+    const user = await userDb.getUserById(authId)
+    let rowsDeleted = 0
+
+    if (user && user.admin) {
+      rowsDeleted = await db.deleteUpcomingShow(showId)
+    } else {
+      rowsDeleted = await db.deleteUpcomingShow(showId, authId)
+    }
+
+    if (rowsDeleted === 0) {
+      return res.status(403).json({
+        message: 'Forbidden: You do not have permission to delete this show.',
+      })
+    }
+
     res.sendStatus(204)
   } catch (error) {
     console.log(error)

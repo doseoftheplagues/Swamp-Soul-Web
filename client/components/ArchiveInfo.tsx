@@ -1,4 +1,4 @@
-import { Gig, gigsData } from '../../data/shows'
+import { gigsData } from '../../data/shows'
 
 // archive info process
 // conditionally render poster variants
@@ -20,6 +20,7 @@ export default function showArchiveInfo(currentGigIndex: number) {
               <img
                 className="variantGigPoster"
                 src={'/posters/' + currentGig.posters[1].image}
+                alt="Variant 1 poster"
               ></img>
               <p>Design by {currentGig.posters[1].designer}</p>
             </div>
@@ -30,6 +31,7 @@ export default function showArchiveInfo(currentGigIndex: number) {
               <img
                 className="variantGigPoster"
                 src={'/posters/' + currentGig.posters[2].image}
+                alt="Variant 2 poster"
               ></img>
               <p>Design by {currentGig.posters[2].designer}</p>
             </div>
@@ -40,6 +42,7 @@ export default function showArchiveInfo(currentGigIndex: number) {
               <img
                 className="variantGigPoster"
                 src={'/posters/' + currentGig.posters[3].image}
+                alt="Variant 3 poster"
               ></img>
               <p>Design by {currentGig.posters[3].designer}</p>
             </div>
@@ -50,6 +53,7 @@ export default function showArchiveInfo(currentGigIndex: number) {
               <img
                 className="variantGigPoster"
                 src={'/posters/' + currentGig.posters[4].image}
+                alt="Variant 4 poster"
               ></img>
               <p>Design by {currentGig.posters[4].designer}</p>
             </div>

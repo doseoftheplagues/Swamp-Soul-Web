@@ -10,7 +10,28 @@ const router = Router()
 router.get('/', checkJwt, async (req: JwtRequest, res) => {
   try {
     const auth0Id = req.auth?.sub
-    const user = await db.getUserById(auth0Id as string)
+
+    if (!auth0Id) {
+      return res.status(401).json({ message: 'Unauthorized: Missing Auth0 ID' })
+    }
+
+    const user = await db.getUserById(auth0Id)
+    res.json({ user })
+  } catch (error) {
+    console.log(error)
+    res.status(500).json({ message: 'Something went wrong getting user' })
+  }
+})
+
+// GET localhost:3000/api/v1/users/:id
+router.get('/:id', async (req: JwtRequest, res) => {
+  try {
+    const id = req.params.id
+
+    const user = await db.getUserById(id)
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' })
+    }
     res.json({ user })
   } catch (error) {
     console.log(error)
@@ -29,7 +50,8 @@ router.get('/check-username/:username', async (req, res) => {
     res.status(500).json({ message: 'Something went wrong checking username' })
   }
 })
-// get localhost:3000/api/v1/users/edit-user/:username
+
+// get localhost:3000/api/v1/users/edit-user/:id
 router.patch('/edit-user/:id', async (req, res) => {
   try {
     const userData = req.body
