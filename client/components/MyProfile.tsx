@@ -17,17 +17,23 @@ import { Link } from 'react-router'
 import { usePosts, usePostsByUserId } from '../hooks/usePosts'
 import Post from './SmallerComponents/Post'
 import { Post as PostModel } from '../../models/post'
+import { useLinks } from '../hooks/useLinks'
+import * as Form from '@radix-ui/react-form'
+import { Cross1Icon } from '@radix-ui/react-icons'
 
 const Profile = () => {
   const { deleteImage } = useImage()
   const [editPfpIsHidden, setEditPfpIsHidden] = useState(true)
   const [editDetailsIsHidden, setEditDetailsIsHidden] = useState(true)
+  const [editLinksIsHidden, setEditLinksIsHidden] = useState(true)
   const [blogOrActivity, setBlogOrActivity] = useState('blog')
   const [visibleSection, setVisibleSection] = useState('')
   const [postFormData, setPostFormData] = useState({
     title: '',
     content: '',
   })
+  const [newLink, setNewLink] = useState({ title: '', link: '' })
+  const { links, addLink, deleteLink } = useLinks()
 
   const { user, isAuthenticated, isLoading, getAccessTokenSilently } =
     useAuth0()
@@ -112,6 +118,48 @@ const Profile = () => {
     }
   }
 
+  function handleEditLinksClick() {
+    if (editLinksIsHidden == true) {
+      setEditLinksIsHidden(false)
+    } else {
+      setEditLinksIsHidden(true)
+    }
+  }
+
+  const handleAddLink = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    if (!newLink.link.trim() || !newLink.title.trim()) return
+    try {
+      const token = await getAccessTokenSilently()
+      if (!user?.sub) {
+        console.error('User not found')
+        return
+      }
+      addLink.mutate(
+        {
+          link: { ...newLink, user_id: user.sub },
+          token,
+        },
+        {
+          onSuccess: () => {
+            setNewLink({ title: '', link: '' })
+          },
+        },
+      )
+    } catch (error) {
+      console.error('Failed to add link:', error)
+    }
+  }
+
+  const handleDeleteLink = async (id: number) => {
+    try {
+      const token = await getAccessTokenSilently()
+      deleteLink.mutate({ id, token })
+    } catch (error) {
+      console.error('Failed to delete link:', error)
+    }
+  }
+
   function handleVisibleSectionClick(section: string) {
     setVisibleSection(section)
   }
@@ -176,122 +224,211 @@ const Profile = () => {
 
   return isAuthenticated && user ? (
     <div className="flex w-full flex-col items-start justify-center p-2 md:flex-row md:p-0">
-      <div className="relative mr-2 mb-2 flex w-full flex-col rounded-md border-[1.5px] bg-[#e9e6d6ac] md:mr-0 md:mb-0 md:w-2/9">
-        <div className="dropdown absolute right-0">
-          <DropdownMenu.Root>
-            <DropdownMenu.Trigger asChild>
-              <button className="IconButton" aria-label="Customise options">
-                <ToolsSymbol className="h-11 hover:p-1" />
-              </button>
-            </DropdownMenu.Trigger>
-            <DropdownMenu.Portal>
-              <DropdownMenu.Content className="relative right-12 min-w-32 overflow-hidden rounded-md border-[1.5px] shadow-md">
-                <DropdownMenu.Item className="DropdownMenuItem">
-                  {editDetailsIsHidden && (
-                    <button
-                      className="w-full bg-[#e9ecdf] px-1 py-0.5 text-left text-sm hover:bg-[#d8d9b2b6] active:bg-[#d8d9b2] disabled:border-neutral-300 disabled:text-gray-300"
-                      disabled={
-                        !editPfpIsHidden || (!editDetailsIsHidden && true)
-                      }
-                      onClick={() => handleEditDetailsCLick()}
-                    >
-                      Edit Details
-                    </button>
-                  )}
+      <div className="STUFFDIVCONTAINER relative flex w-full flex-col rounded-md border-[1.5px] bg-[#e9e6d6ac] md:mr-0 md:mb-0 md:w-2/9">
+        <div>
+          <div className="dropdown absolute right-0">
+            <DropdownMenu.Root>
+              <DropdownMenu.Trigger asChild>
+                <button className="IconButton" aria-label="Customise options">
+                  <ToolsSymbol className="h-11 hover:p-1" />
+                </button>
+              </DropdownMenu.Trigger>
+              <DropdownMenu.Portal>
+                <DropdownMenu.Content className="relative right-12 min-w-32 overflow-hidden rounded-md border-[1.5px] shadow-md">
+                  <DropdownMenu.Item className="DropdownMenuItem">
+                    {editDetailsIsHidden && (
+                      <button
+                        className="w-full bg-[#e9ecdf] px-1 py-0.5 text-left text-sm hover:bg-[#d8d9b2b6] active:bg-[#d8d9b2] disabled:border-neutral-300 disabled:text-gray-300"
+                        disabled={
+                          !editPfpIsHidden ||
+                          !editDetailsIsHidden ||
+                          !editLinksIsHidden
+                        }
+                        onClick={() => handleEditDetailsCLick()}
+                      >
+                        Edit Details
+                      </button>
+                    )}
 
-                  {!editDetailsIsHidden && (
-                    <button
-                      className="w-full bg-[#e9ecdf] px-1 py-0.5 text-left text-sm hover:bg-[#d8d9b2b6] active:bg-[#d8d9b2] disabled:border-neutral-300 disabled:text-gray-300"
-                      onClick={() => handleEditDetailsCLick()}
-                    >
-                      Cancel
-                    </button>
-                  )}
-                </DropdownMenu.Item>
-                <DropdownMenu.Item className="DropdownMenuItem">
-                  {editPfpIsHidden && (
-                    <button
-                      className="w-full bg-[#f7f9ef] px-1 py-0.5 text-left text-sm hover:bg-[#d8d9b2b6] active:bg-[#d8d9b2] disabled:border-neutral-300 disabled:text-gray-300"
-                      onClick={() => handleEditPfpClick()}
-                      disabled={!editDetailsIsHidden && true}
-                    >
-                      Change profile picture
-                    </button>
-                  )}
-                  {!editPfpIsHidden && (
-                    <button
-                      className="w-full bg-[#f7f9ef] px-1 py-0.5 text-left text-sm hover:bg-[#d8d9b2b6] active:bg-[#d8d9b2] disabled:border-neutral-300 disabled:text-gray-300"
-                      onClick={() => handleEditPfpClick()}
-                    >
-                      Cancel
-                    </button>
-                  )}
-                </DropdownMenu.Item>
-              </DropdownMenu.Content>
-            </DropdownMenu.Portal>
-          </DropdownMenu.Root>
-        </div>
-        {!editDetailsIsHidden && (
-          <div>
-            <EditProfile setEditDetailsIsHidden={setEditDetailsIsHidden} />
+                    {!editDetailsIsHidden && (
+                      <button
+                        className="w-full bg-[#e9ecdf] px-1 py-0.5 text-left text-sm hover:bg-[#d8d9b2b6] active:bg-[#d8d9b2] disabled:border-neutral-300 disabled:text-gray-300"
+                        onClick={() => handleEditDetailsCLick()}
+                      >
+                        Cancel
+                      </button>
+                    )}
+                  </DropdownMenu.Item>
+                  <DropdownMenu.Item className="DropdownMenuItem">
+                    {editPfpIsHidden && (
+                      <button
+                        className="w-full bg-[#f7f9ef] px-1 py-0.5 text-left text-sm hover:bg-[#d8d9b2b6] active:bg-[#d8d9b2] disabled:border-neutral-300 disabled:text-gray-300"
+                        onClick={() => handleEditPfpClick()}
+                        disabled={!editDetailsIsHidden || !editLinksIsHidden}
+                      >
+                        Change profile picture
+                      </button>
+                    )}
+                    {!editPfpIsHidden && (
+                      <button
+                        className="w-full bg-[#f7f9ef] px-1 py-0.5 text-left text-sm hover:bg-[#d8d9b2b6] active:bg-[#d8d9b2] disabled:border-neutral-300 disabled:text-gray-300"
+                        onClick={() => handleEditPfpClick()}
+                      >
+                        Cancel
+                      </button>
+                    )}
+                  </DropdownMenu.Item>
+                  <DropdownMenu.Item className="DropdownMenuItem">
+                    {editLinksIsHidden && (
+                      <button
+                        className="w-full bg-[#e9ecdf] px-1 py-0.5 text-left text-sm hover:bg-[#d8d9b2b6] active:bg-[#d8d9b2] disabled:border-neutral-300 disabled:text-gray-300"
+                        onClick={() => handleEditLinksClick()}
+                        disabled={!editDetailsIsHidden || !editPfpIsHidden}
+                      >
+                        Edit Links
+                      </button>
+                    )}
+                    {!editLinksIsHidden && (
+                      <button
+                        className="w-full bg-[#e9ecdf] px-1 py-0.5 text-left text-sm hover:bg-[#d8d9b2b6] active:bg-[#d8d9b2] disabled:border-neutral-300 disabled:text-gray-300"
+                        onClick={() => handleEditLinksClick()}
+                      >
+                        Cancel
+                      </button>
+                    )}
+                  </DropdownMenu.Item>
+                </DropdownMenu.Content>
+              </DropdownMenu.Portal>
+            </DropdownMenu.Root>
           </div>
-        )}
-        {editDetailsIsHidden && (
-          <div className="STUFFDIV">
+          {!editDetailsIsHidden && (
             <div>
-              {data?.admin && (
-                <p className="text-md rounded-t-md border-b bg-[#e1bebe9f] pr-2 text-right text-[#424242]">
-                  Site Admin
-                </p>
-              )}
+              <EditProfile setEditDetailsIsHidden={setEditDetailsIsHidden} />
             </div>
-            <div className="usernamePfpBanner mt-2 flex flex-row">
-              {data?.profilePicture ? (
-                <div>
-                  <img
-                    src={data?.profilePicture}
-                    alt={data?.username + ' profile picture'}
-                    className="mx-1 h-16 w-16 min-w-15 overflow-hidden rounded-full border-2 border-[#acacac49] bg-gray-100 object-cover"
-                  ></img>
-                </div>
-              ) : (
-                <ProfilePlaceholder />
-              )}
-              <div
-                className={`place-content-center pl-0.5 ${editPfpIsHidden && 'hidden'}`}
-              >
-                <FileUploader uploadSuccess={handleImageUrlReceived} />
-              </div>
-              <div
-                className={`place-content-center pr-1 pl-0.5 ${!editPfpIsHidden && 'hidden'}`}
-              >
-                <div className="flex flex-row">
-                  <p className="text-xl font-bold">
-                    {data?.username}{' '}
-                    <span className="ml-1 text-base font-normal wrap-anywhere text-[#444] italic">
-                      {data?.status}
-                    </span>
-                  </p>
-                  <div className="relative top-0 right-0 -z-40 w-8"></div>
-                </div>
-                <p className="-mt-1 wrap-anywhere italic opacity-80">
-                  {user.email}
-                </p>
-              </div>
-            </div>
+          )}
+          {!editLinksIsHidden && (
             <div className="p-2">
-              <div className="">
-                <p
-                  className={`${!editPfpIsHidden && 'text-[#faf8f1]'} text-pretty`}
+              <h3 className="text-md">Edit links</h3>
+              {links && links.length > 0 ? (
+                <ul className="">
+                  {links.map((link) => (
+                    <li key={link.id} className="flex items-center">
+                      <a
+                        href={link.link}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-sm hover:underline"
+                      >
+                        {link.title}
+                      </a>
+                      <button
+                        onClick={() => handleDeleteLink(link.id)}
+                        className="ml-2 cursor-pointer rounded-md border-[1.2px] bg-[#fc9f9f] p-0.5 text-sm"
+                      >
+                        <Cross1Icon />
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="text-sm">You don&apos;t have any links yet.</p>
+              )}
+
+              <Form.Root onSubmit={handleAddLink} className="mt-2">
+                <Form.Field name="newLinkTitle">
+                  <Form.Control asChild>
+                    <input
+                      type="text"
+                      className="mb-1 w-full rounded-sm p-1 text-sm"
+                      placeholder="Title"
+                      value={newLink.title}
+                      onChange={(e) =>
+                        setNewLink({ ...newLink, title: e.target.value })
+                      }
+                    />
+                  </Form.Control>
+                </Form.Field>
+                <Form.Field name="newLink">
+                  <Form.Control asChild>
+                    <input
+                      type="text"
+                      className="w-full rounded-sm p-1 text-sm"
+                      placeholder="Add a link"
+                      value={newLink.link}
+                      onChange={(e) =>
+                        setNewLink({ ...newLink, link: e.target.value })
+                      }
+                    />
+                  </Form.Control>
+                </Form.Field>
+                <Form.Submit asChild>
+                  <button
+                    className="mt-1 inline-flex justify-center rounded-md border-2 border-black bg-[#ead2d2be] px-2 py-1 text-sm font-medium text-black hover:bg-[#e1bebef5] focus:ring-offset-2 focus:outline-none active:bg-[#e1bebe] disabled:cursor-not-allowed disabled:opacity-50"
+                    disabled={addLink.isPending}
+                  >
+                    {addLink.isPending ? 'Adding...' : 'Add Link'}
+                  </button>
+                </Form.Submit>
+              </Form.Root>
+            </div>
+          )}
+          {editDetailsIsHidden && editLinksIsHidden && (
+            <div className="STUFFDIV">
+              <div>
+                {data?.admin && (
+                  <p className="text-md rounded-t-md border-b bg-[#e1bebe9f] pr-2 text-right text-[#424242]">
+                    Site Admin
+                  </p>
+                )}
+              </div>
+              <div className="usernamePfpBanner mt-2 flex flex-row">
+                {data?.profilePicture ? (
+                  <div>
+                    <img
+                      src={data?.profilePicture}
+                      alt={data?.username + ' profile picture'}
+                      className="mx-1 h-16 w-16 min-w-15 overflow-hidden rounded-full border-2 border-[#acacac49] bg-gray-100 object-cover"
+                    ></img>
+                  </div>
+                ) : (
+                  <ProfilePlaceholder />
+                )}
+                <div
+                  className={`place-content-center pl-0.5 ${editPfpIsHidden && 'hidden'}`}
                 >
-                  {data?.bio}
-                </p>
+                  <FileUploader uploadSuccess={handleImageUrlReceived} />
+                </div>
+                <div
+                  className={`place-content-center pr-1 pl-0.5 ${!editPfpIsHidden && 'hidden'}`}
+                >
+                  <div className="flex flex-row">
+                    <p className="text-xl font-bold">
+                      {data?.username}{' '}
+                      <span className="ml-1 text-base font-normal wrap-anywhere text-[#444] italic">
+                        {data?.status}
+                      </span>
+                    </p>
+                    <div className="relative top-0 right-0 -z-40 w-8"></div>
+                  </div>
+                  <p className="-mt-1 wrap-anywhere italic opacity-80">
+                    {user.email}
+                  </p>
+                </div>
+              </div>
+              <div className="p-2">
+                <div className="">
+                  <p
+                    className={`${!editPfpIsHidden && 'text-[#faf8f1]'} text-pretty`}
+                  >
+                    {data?.bio}
+                  </p>
+                </div>
               </div>
             </div>
-          </div>
-        )}
+          )}
+        </div>
       </div>
-      <div className="flex w-full flex-col rounded-md border bg-[#e9e6d6ac] md:ml-5 md:max-w-3/5 md:min-w-2/5">
+      <div className="mb-10 flex w-full flex-col rounded-md border-[1.5px] bg-[#e9e6d6ac] md:ml-5 md:max-w-3/5 md:min-w-2/5">
         <div className="mb-1 flex w-full items-center rounded-t-sm border-b-[1.5px] border-b-[#0202025f] bg-[#d9d7c0d6] p-1">
           <button
             onClick={() => {

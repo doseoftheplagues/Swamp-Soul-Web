@@ -15,6 +15,7 @@ const EditProfile = ({ setEditDetailsIsHidden }: EditProfileProps) => {
     useAuth0()
   const { update, ...userDb } = useUser()
   const [userNameIsTaken, setUsernameIsTaken] = useState(false)
+
   const [formData, setFormData] = useState({
     username: '',
     bio: '',

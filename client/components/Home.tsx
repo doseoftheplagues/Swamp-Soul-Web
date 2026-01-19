@@ -16,7 +16,7 @@ function Home() {
             objectFit: 'cover',
             zIndex: -1,
           }}
-          className="h-screen brightness-50"
+          className="h-screen w-screen brightness-50"
         >
           <source src={bgVideo} type="video/mp4" />
         </video>
@@ -37,8 +37,8 @@ function Home() {
         >
           Upcoming Shows
         </Link>
-        <div className="mt-40 h-200 w-200 bg-[#faf8f1]">
-          <p className="p-10">
+        <div className="mt-40 h-200 w-200 max-w-screen bg-[#faf8f1]">
+          <p className="p-10 wrap-anywhere">
             more stuff here soon more stuff here soon more stuff here soon more
             stuff here soon vv more stuff here soon more stuff here soon more
             stuff here soon more stuff here soon more stuff here soon more stuff
