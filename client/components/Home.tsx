@@ -1,5 +1,6 @@
 import { Link } from 'react-router'
 import bgVideo from '/gifs/backgrnd.mp4'
+import { Footer } from './Footer'
 
 function Home() {
   return (
@@ -62,24 +63,9 @@ function Home() {
             stuff here soon vv more stuff here soon more stuff here soon more
             stuff here soon more stuff here soon more stuff here soon more stuff
             here soon more stuff here soon v more stuff here soon v more stuff
-            here soon more stuff here soon more stuff here soon more stuff here
-            soon more stuff here soon more stuff here soon more stuff here soon
-            more stuff here soon more stuff here soon more stuff here soon more
-            stuff here soon more stuff here soon vv more stuff here soon more
-            stuff here soon more stuff here soon more stuff here soon more stuff
-            here soon more stuff here soon more stuff here soon v more stuff
-            here soon v more stuff here soon more stuff here soon more stuff
-            here soon more stuff here soon more stuff here soon more stuff here
-            soon more stuff here soon more stuff here soon more stuff here soon
-            more stuff here soon more stuff here soon more stuff here soon vv
-            more stuff here soon more stuff here soon more stuff here soon more
-            stuff here soon more stuff here soon more stuff here soon more stuff
-            here soon v more stuff here soon v more stuff here soon more stuff
-            here soon more stuff here soon more stuff here soon more stuff here
-            soon more stuff here soon more stuff here soon more stuff here
-            soon{' '}
           </p>
         </div>
+        <Footer />
       </div>
     </div>
   )

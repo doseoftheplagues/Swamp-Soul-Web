@@ -69,7 +69,7 @@ export function Register() {
 
   if (isAuthenticated) {
     return (
-      <div className="flex items-center justify-center p-5">
+      <div className="-mt-20 flex h-screen items-center justify-center p-5">
         <div className="mt-10 h-fit w-full rounded-lg border-2 bg-[#dad8cb53] text-left md:w-88">
           <div className="rounded-t-md border-b-[1.5px] border-b-[#0202025f] bg-[#dad8cb] px-1.5 py-1">
             Register your account
