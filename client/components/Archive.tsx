@@ -69,7 +69,7 @@ function Archive() {
               Poster design by {firstPoster.designer}
             </p>
             <p className="block sm:hidden">
-              Poster design by {firstPoster.designer}
+              Poster designed by {firstPoster.designer}
             </p>
           </div>
         </div>
