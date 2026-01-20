@@ -25,7 +25,7 @@ function Home() {
         <img
           src="/gifs/logoCream.gif"
           alt="swamp soul logo gif cream"
-          className="inset-0 mx-auto w-4/5"
+          className="inset-0 mx-auto w-full sm:w-4/5"
         ></img>
         <p className="relative -top-2 text-[clamp(2rem,5vw,3.5rem)] text-[#faf8f1]">
           Noise / Pop / Love
