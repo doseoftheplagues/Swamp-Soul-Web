@@ -2,7 +2,7 @@
 import { createRoutesFromElements, Route } from 'react-router'
 import App from './components/App'
 import Home from './components/Home'
-import { Archive } from './components/Archive'
+// import { Archive } from './components/Archive'
 import Header from './components/Header'
 import Profile from './components/MyProfile'
 import { ShowUploadForm } from './components/ShowUploadForm'
@@ -32,7 +32,7 @@ const routes = createRoutesFromElements(
       element={<UpcomingShow />}
     />
     <Route path="/addpostertoshow/:id" element={<AddPosterToShow />} />
-    <Route path="/archive" element={<Archive />} />
+    {/* <Route path="/archive" element={<Archive />} /> */}
     <Route path="*" element={<NotFound />} />
   </Route>,
 )
