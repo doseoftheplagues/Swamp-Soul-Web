@@ -1,6 +1,6 @@
 export function Footer() {
   return (
-    <div className="relative bottom-0 mt-auto flex h-auto w-screen flex-row justify-center bg-[#7a7a7a0c] p-1 text-xs md:text-sm">
+    <div className="mt-auto flex h-auto w-screen flex-row justify-center bg-[#7a7a7a0c] p-1 text-xs md:text-sm">
       <div className="flex flex-row items-center py-5 pl-10">
         <img
           src="/assets/wizardBleb10ppi.png"

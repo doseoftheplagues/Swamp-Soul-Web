@@ -4,6 +4,7 @@ import { useUser } from '../hooks/useUsers.ts'
 
 import { LoadingSpinner } from './SmallerComponents/LoadingSpinner.tsx'
 import { useEffect, useState } from 'react'
+import { Footer } from './Footer.tsx'
 
 function App() {
   const { isLoading } = useUser()
@@ -34,8 +35,11 @@ function App() {
       >
         <Header />
       </div>
-      <div className="">
+      <div className="min-h-[90%]">
         <Outlet />
+      </div>
+      <div>
+        <Footer />
       </div>
     </div>
   )

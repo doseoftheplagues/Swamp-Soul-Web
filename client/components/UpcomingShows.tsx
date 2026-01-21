@@ -85,7 +85,7 @@ export function UpcomingShows() {
   }
 
   return (
-    <div className="h-[calc(100vh-4rem)] p-1">
+    <div className="min-h-[calc(100vh-4rem)] p-1">
       <div className="mb-2 flex h-fit flex-row rounded-md">
         <div className="mr-1 flex cursor-pointer flex-row items-center rounded-sm border-[1.5px] border-[#aaa89955] bg-[#dad7c2] px-1 text-sm hover:bg-[#e2e0cf] active:bg-[#c1bd9a]">
           <Link to="/showuploadform" className="flex flex-row items-center">
@@ -107,9 +107,6 @@ export function UpcomingShows() {
           currentData.map((show: UpcomingShow) => (
             <UpcomingShowCard key={show.id} show={show} />
           ))}
-      </div>
-      <div className="relative bottom-0">
-        <Footer />
       </div>
     </div>
   )
