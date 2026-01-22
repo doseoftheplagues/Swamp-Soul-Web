@@ -32,7 +32,7 @@ const routes = createRoutesFromElements(
       element={<UpcomingShow />}
     />
     <Route path="/addpostertoshow/:id" element={<AddPosterToShow />} />
-    <Route path="/archive" element={<Archive />} />
+
     <Route path="*" element={<NotFound />} />
   </Route>,
 )
