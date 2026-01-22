@@ -1,0 +1,15 @@
+services:
+  web-app:
+    build: .
+    env_file:
+      - .env
+    ports:
+      - "3000:3000"
+    restart: always
+
+  tunnel:
+    image: cloudflare/cloudflared:latest
+    restart: always
+    command: tunnel run
+    environment:
+      - TUNNEL_TOKEN=${TUNNEL_TOKEN}

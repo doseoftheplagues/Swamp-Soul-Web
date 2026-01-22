@@ -1,7 +1,7 @@
 import * as Path from 'node:path'
-import * as URL from 'node:url'
+import { fileURLToPath } from 'node:url'
 
-const __filename = URL.fileURLToPath(import.meta.url)
+const __filename = fileURLToPath(import.meta.url)
 const __dirname = Path.dirname(__filename)
 
 export default {
