@@ -1,6 +1,10 @@
 services:
   web-app:
     build: .
+    # Explicitly set production mode and port
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
     env_file:
       - .env
     ports:

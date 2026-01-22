@@ -40,7 +40,11 @@ if (process.env.NODE_ENV === 'production') {
   server.use(express.static(distPath))
 
   server.get('*', (req, res) => {
-    res.sendFile(Path.join(distPath, 'index.html'))
+    if (req.path.startsWith('/api')) {
+      res.status(404).json({ error: 'Not Found' })
+    } else {
+      res.sendFile(Path.join(distPath, 'index.html'))
+    }
   })
 }
 
