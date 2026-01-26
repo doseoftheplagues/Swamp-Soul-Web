@@ -80,4 +80,16 @@ router.post('/', checkJwt, async (req: JwtRequest, res) => {
   }
 })
 
+// GET localhost:3000/api/v1/users/usercheck/:authId
+router.get('/usercheck/:authId', async (req, res) => {
+  try {
+    const { authId } = req.params
+    const exists = await db.userExists(authId)
+    res.json({ exists })
+  } catch (error) {
+    console.log(error)
+    res.status(500).json({ message: 'Something went wrong checking user existence' })
+  }
+})
+
 export default router

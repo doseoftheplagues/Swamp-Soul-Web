@@ -11,8 +11,13 @@ function getDisplayPathname(pathname: string): string {
   return pathname
 }
 
-function Header() {
+interface HeaderProps {
+  scrolled: boolean
+}
+
+function Header({ scrolled }: HeaderProps) {
   const { user, isAuthenticated } = useAuth0()
+
   const location = useLocation()
   const pathParts = location.pathname.split('/')
   const isUserProfilePage = pathParts[1] === 'user' && pathParts[2]
@@ -43,30 +48,33 @@ function Header() {
       breadcrumb = <Link to={displayPath}> {displayPath}</Link>
     }
   }
+
   if (location.pathname !== '/register') {
     return (
-      <div
-        className={`flex w-screen flex-row px-2 py-1 text-sm sm:text-lg ${
-          location.pathname !== '/'
-            ? 'bg-[#faf8f1]'
-            : 'bg-transparent text-[#faf8f1]'
-        }`}
-      >
-        <div className="flex w-3/4 sm:w-1/2">
-          <h1 className="HeaderAddress">
-            <Link to={'/'} className="">
-              Swamp Soul
-            </Link>
-            {location.pathname !== '/' && breadcrumb}
-          </h1>
-        </div>
-        <div className="flex w-1/4 justify-end sm:w-1/2">
-          {!isAuthenticated && <LoginButton classes={''} />}
-          {isAuthenticated && location.pathname !== '/profile' && (
-            <Link to={'/profile'} className="cursor-pointer">
-              Profile
-            </Link>
-          )}
+      <div>
+        <div
+          className={`flex w-screen flex-row px-2 py-1 text-sm sm:text-lg ${
+            location.pathname !== '/'
+              ? 'bg-[#faf8f1]'
+              : `${scrolled == true ? 'bg-[#faf8f1] text-black' : 'bg-transparent text-[#faf8f1]'} `
+          }`}
+        >
+          <div className="flex w-3/4 sm:w-1/2">
+            <h1 className="HeaderAddress">
+              <Link to={'/'} className="">
+                Swamp Soul
+              </Link>
+              {location.pathname !== '/' && breadcrumb}
+            </h1>
+          </div>
+          <div className="flex w-1/4 justify-end sm:w-1/2">
+            {!isAuthenticated && <LoginButton classes={''} />}
+            {isAuthenticated && location.pathname !== '/profile' && (
+              <Link to={'/profile'} className="cursor-pointer">
+                Profile
+              </Link>
+            )}
+          </div>
         </div>
       </div>
     )

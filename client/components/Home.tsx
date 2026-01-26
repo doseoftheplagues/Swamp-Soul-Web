@@ -1,6 +1,4 @@
 import { Link } from 'react-router'
-import bgVideo from '/gifs/backgrnd.mp4'
-import { Footer } from './Footer'
 
 function Home() {
   return (
@@ -19,8 +17,12 @@ function Home() {
               zIndex: -1,
             }}
             className="h-screen w-screen brightness-50"
+            poster="https://ik.imagekit.io/wosr5xwjlx/9389CCCB-C098-4412-9919-2C925616BE6E.jpeg"
           >
-            <source src={bgVideo} type="video/mp4" />
+            <source
+              src="https://ik.imagekit.io/wosr5xwjlx/backgrnd.mp4"
+              type="video/mp4"
+            />
           </video>
         </div>
         <div className="mt-48 flex flex-col items-center">
