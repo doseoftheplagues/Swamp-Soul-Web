@@ -40,13 +40,13 @@ const Profile = () => {
     contentSize: '',
   })
   const [newLink, setNewLink] = useState({ title: '', link: '' })
-  const { links, addLink, deleteLink } = useLinks()
 
   const { user, isAuthenticated, isLoading, getAccessTokenSilently } =
     useAuth0()
   const { data: posts, isLoading: postsAreLoading } = usePostsByUserId(
     user?.sub,
   )
+  const { links, addLink, deleteLink } = useLinks(user?.sub)
   const { data, update } = useUser()
   const userLoaded = user?.sub
 

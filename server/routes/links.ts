@@ -4,10 +4,11 @@ import checkJwt, { JwtRequest } from '../../auth0.ts'
 
 const router = Router()
 
-// GET /api/v1/links
-router.get('/', async (req, res) => {
+// GET /api/v1/links/:userId
+router.get('/:userId', async (req, res) => {
+  const userId = req.params.userId
   try {
-    const links = await db.getLinks()
+    const links = await db.getLinks(userId)
     res.json(links)
   } catch (error) {
     console.error(error)

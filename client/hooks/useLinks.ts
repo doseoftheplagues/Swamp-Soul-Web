@@ -1,13 +1,21 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import { getLinks, addLink as apiAddLink, deleteLink as apiDeleteLink } from '../apis/links'
+import {
+  getLinksByUserId,
+  addLink as apiAddLink,
+  deleteLink as apiDeleteLink,
+} from '../apis/links'
 import { Link } from '../../models/link'
 
-export function useLinks() {
+export function useLinks(userId?: string) {
   const queryClient = useQueryClient()
 
-  const { data: links, isLoading, isError } = useQuery({
-    queryKey: ['links'],
-    queryFn: getLinks,
+  const {
+    data: links,
+    isLoading,
+    isError,
+  } = useQuery({
+    queryKey: ['links', userId],
+    queryFn: () => getLinksByUserId(userId),
   })
 
   const addLinkMutation = useMutation({

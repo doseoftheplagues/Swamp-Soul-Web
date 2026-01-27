@@ -5,6 +5,7 @@ import { usePostsByUserId } from '../hooks/usePosts'
 import Post from './SmallerComponents/Post'
 import { Post as PostModel } from '../../models/post'
 import { LoadingSpinner } from './SmallerComponents/LoadingSpinner'
+import { useLinks } from '../hooks/useLinks'
 
 const UserProfile = () => {
   const params = useParams()
@@ -12,6 +13,7 @@ const UserProfile = () => {
   const { data: posts, isLoading: postsAreLoading } = usePostsByUserId(
     data?.authId,
   )
+  const { links } = useLinks(params.id!)
 
   if (isLoading) {
     return <div className="loading-text">Loading profile...</div>
@@ -22,7 +24,7 @@ const UserProfile = () => {
       <div className="relative mr-2 mb-2 flex w-full flex-col items-center rounded-md border-[1.5px] bg-[#e9e6d6ac] pr-2 md:mr-0 md:mb-0 md:w-fit md:max-w-md">
         <div className="STUFFDIV">
           <div>
-            {data?.admin && (
+            {data?.admin == true && (
               <p className="text-md rounded-t-md border-b bg-[#e1bebe9f] pr-2 text-right text-[#424242]">
                 Admin
               </p>
@@ -54,6 +56,23 @@ const UserProfile = () => {
               <p className={`'text-[#faf8f1]'} text-pretty`}>{data?.bio}</p>
             </div>
           </div>
+          <div className="mx-auto my-2 w-[98%] border border-[#aaa89955]"></div>
+          {links.length !== 0 && (
+            <ul className="">
+              {links.map((link) => (
+                <li key={link.id} className="flex items-center">
+                  <a
+                    href={link.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-sm hover:underline"
+                  >
+                    {link.title}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
       </div>
       <div className="flex w-full flex-col rounded-md border-[1.5px] bg-[#e9e6d6ac] md:ml-5 md:max-w-3/5 md:min-w-2/5">

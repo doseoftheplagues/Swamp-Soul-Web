@@ -3,8 +3,9 @@ import { Link } from '../../models/link'
 
 const rootURL = new URL('/api/v1/links', document.baseURI)
 
-export async function getLinks(): Promise<Link[]> {
-  const res = await request.get(rootURL.toString())
+export async function getLinksByUserId(userId?: string): Promise<Link[]> {
+  const url = userId ? `${rootURL}/${userId}` : rootURL.toString()
+  const res = await request.get(url)
   return res.body
 }
 

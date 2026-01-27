@@ -3,8 +3,12 @@ import connection from './connection.ts'
 
 const db = connection
 
-export async function getLinks(): Promise<Link[]> {
-  return db('links').select('*')
+export async function getLinks(authId?: string): Promise<Link[]> {
+  const query = db('links').select('*')
+  if (authId) {
+    query.where('user_id', authId)
+  }
+  return query
 }
 
 export async function addLink(link: Omit<Link, 'id'>): Promise<Link> {
