@@ -81,7 +81,6 @@ router.patch('/:id', checkJwt, async (req: JwtRequest, res) => {
   }
 })
 
-// DELETE localhost:3000/api/v1/upcomingShows/:id
 router.delete('/:id', checkJwt, async (req: JwtRequest, res) => {
   try {
     const showId = Number(req.params.id)

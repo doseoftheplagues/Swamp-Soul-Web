@@ -95,3 +95,13 @@ export async function checkUsernameTaken(username: string) {
 
   return response.body
 }
+
+export async function userCheck(authId: string) {
+  const response = await request
+    .get(`${rootURL}/users/usercheck/${authId}`)
+    .catch((err) => {
+      console.error(err)
+      throw err
+    })
+  return response.body.exists
+}

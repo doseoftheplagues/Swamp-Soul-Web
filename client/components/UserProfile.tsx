@@ -19,7 +19,7 @@ const UserProfile = () => {
 
   return data ? (
     <div className="mt-4 flex w-full flex-col items-start justify-center p-2 md:flex-row">
-      <div className="relative mr-2 mb-2 flex w-full flex-col items-center rounded-md border-[1.5px] bg-[#e9e6d6ac] md:mr-0 md:mb-0 md:w-fit md:max-w-md">
+      <div className="relative mr-2 mb-2 flex w-full flex-col items-center rounded-md border-[1.5px] bg-[#e9e6d6ac] pr-2 md:mr-0 md:mb-0 md:w-fit md:max-w-md">
         <div className="STUFFDIV">
           <div>
             {data?.admin && (

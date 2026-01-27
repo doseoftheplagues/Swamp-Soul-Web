@@ -2,7 +2,6 @@
 import { createRoutesFromElements, Route } from 'react-router'
 import App from './components/App'
 import Home from './components/Home'
-// import { Archive } from './components/Archive'
 import Header from './components/Header'
 import Profile from './components/MyProfile'
 import { ShowUploadForm } from './components/ShowUploadForm'
@@ -13,13 +12,16 @@ import NotFound from './components/NotFound'
 import { UpcomingShow } from './components/UpcomingShow'
 import AddPosterToShow from './components/AddPosterToShow'
 import UserProfile from './components/UserProfile'
+import Credits from './components/Credits'
+import Videos from './components/Videos'
+import NewReleases from './components/NewReleases'
 
 // const routes = createRoutesFromElements(<Route index element={<App />} />)
 
 const routes = createRoutesFromElements(
   <Route path="/" element={<App />}>
     <Route index element={<Home />} />
-    <Route path="/header" element={<Header />} />
+    <Route path="/header" element={<Header scrolled={false} />} />
     <Route path="/profile" element={<Profile />} />
     <Route path="/user/:id" element={<UserProfile />} />
     <Route path="/register" element={<Register />} />
@@ -32,7 +34,10 @@ const routes = createRoutesFromElements(
       element={<UpcomingShow />}
     />
     <Route path="/addpostertoshow/:id" element={<AddPosterToShow />} />
-    {/* <Route path="/archive" element={<Archive />} /> */}
+    <Route path="/credits" element={<Credits />} />
+    <Route path="/footage" element={<Videos />} />
+    <Route path="/newreleases" element={<NewReleases />} />
+
     <Route path="*" element={<NotFound />} />
   </Route>,
 )

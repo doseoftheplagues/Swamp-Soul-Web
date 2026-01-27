@@ -8,8 +8,9 @@ export function up(knex) {
     table.integer('archive_show_id').references('shows.id').nullable()
     table
       .integer('upcoming_show_id')
-      .references('upcoming_shows.id')
       .nullable()
+      .references('id')
+      .inTable('upcoming_shows')
       .onDelete('CASCADE')
     table.string('image')
     table.string('designer')

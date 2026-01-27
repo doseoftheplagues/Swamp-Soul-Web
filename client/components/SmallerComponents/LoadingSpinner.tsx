@@ -1,6 +1,6 @@
 export function LoadingSpinner() {
   return (
-    <div className="mx-auto my-auto">
+    <div className="mx-auto my-auto flex h-[90vh] w-[90vw] items-center justify-center">
       <div role="status">
         <svg
           aria-hidden="true"

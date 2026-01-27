@@ -1,5 +1,8 @@
 import { useUpcomingShows } from '../hooks/useUpcomingShows'
-import { UpcomingShow } from '../../models/upcomingShow'
+import {
+  UpcomingShow,
+  UpcomingShowWithDateObject,
+} from '../../models/upcomingShow'
 import { useState, useEffect } from 'react'
 import SearchBar from './SmallerComponents/SearchBar'
 import { LoadingSpinner } from './SmallerComponents/LoadingSpinner'
@@ -23,11 +26,14 @@ export function UpcomingShows() {
           date: new Date(item.date),
         }
       })
-      dataWithDateObjects.sort((a, b) => a.date.getTime() - b.date.getTime())
+      dataWithDateObjects.sort(
+        (a: UpcomingShowWithDateObject, b: UpcomingShowWithDateObject) =>
+          a.date.getTime() - b.date.getTime(),
+      )
       const currentDate = new Date()
       currentDate.setHours(0, 0, 0, 0)
       const dateFilteredShows = dataWithDateObjects.filter(
-        (show) => show.date >= currentDate,
+        (show: UpcomingShowWithDateObject) => show.date >= currentDate,
       )
 
       setDateFilteredData(dateFilteredShows)
@@ -84,8 +90,8 @@ export function UpcomingShows() {
   }
 
   return (
-    <div className="h-fit p-1">
-      <div className="mb-2 flex flex-row rounded-md">
+    <div className="min-h-[calc(100vh-4rem)] p-1">
+      <div className="mb-2 flex h-fit flex-row rounded-md">
         <div className="mr-1 flex cursor-pointer flex-row items-center rounded-sm border-[1.5px] border-[#aaa89955] bg-[#dad7c2] px-1 text-sm hover:bg-[#e2e0cf] active:bg-[#c1bd9a]">
           <Link to="/showuploadform" className="flex flex-row items-center">
             <PaintbrushSymbol className={'h-4 sm:h-5'} />
