@@ -23,7 +23,7 @@ export function Register() {
 
   useEffect(() => {
     if (userDb.data) {
-      navigate('/')
+      navigate(-2)
     }
   }, [userDb.data, navigate])
 
