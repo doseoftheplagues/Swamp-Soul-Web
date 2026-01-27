@@ -50,6 +50,7 @@ export function CommentSection({
         ...formData,
         userId: userId!,
         [originIdType]: originId,
+        dateAdded: new Date(),
       }
       addComment.mutate({ comment: submissionData, token })
     }

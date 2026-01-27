@@ -61,7 +61,6 @@ export async function addUpcomingShow(showData: UpcomingShowData) {
     locationCoords,
     setTimes,
     ticketsLink,
-
     description,
     maxCapacity,
     canceled,

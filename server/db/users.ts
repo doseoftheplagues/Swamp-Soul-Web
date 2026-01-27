@@ -10,7 +10,13 @@ const columns = [
   'status',
   'email',
   'profile_picture as profilePicture',
+  'admin',
 ]
+
+export async function userExists(authId: string): Promise<boolean> {
+  const user = await db('users').where('authId', authId).first()
+  return !!user
+}
 
 export async function getUserById(id: string) {
   const result = await db('users').where('authId', id).select(columns).first()

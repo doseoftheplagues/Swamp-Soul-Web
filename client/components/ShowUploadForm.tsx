@@ -146,6 +146,13 @@ export function ShowUploadForm() {
           <Form.Label className="mb-1 block text-sm font-medium text-gray-700">
             Date:
           </Form.Label>
+          <DatePicker
+            id="date"
+            onChange={handleDateChange}
+            value={formData.date}
+            required
+            className="focus:ring-opacity-50 mt-1 block w-full rounded-md border-gray-300 px-3 py-2 shadow-sm focus:border-green-300 focus:ring focus:ring-green-200"
+          />
         </Form.Field>
 
         <Form.Field name="doorsTime" className="mb-4">

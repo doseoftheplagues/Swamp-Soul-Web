@@ -9,13 +9,13 @@ beforeAll(() => {
 
 describe('Upcoming shows page', () => {
   it('Displays the shows ', async () => {
-    const scope = nock('http://localhost:3000')
+    const scope = nock('http://localhost')
       .get('/api/v1/upcomingshows')
       .reply(200, {
         upcomingShows: [
           {
             id: 1,
-            date: '2025-12-14',
+            date: '2028-12-14',
             doors_time: '7:00 PM',
             price: 'koha',
             performers: 'The Velvet Swamps, Crooked Halo',
@@ -34,7 +34,7 @@ describe('Upcoming shows page', () => {
           },
           {
             id: 2,
-            date: '2026-01-20',
+            date: '2028-01-20',
             doors_time: '8:30 PM',
             price: '10$',
             performers: 'Moth Temple, The Hounds of Dawn',
@@ -62,7 +62,7 @@ describe('Upcoming shows page', () => {
   })
 
   it('displays a cancelled banner if a shows data indicates it is canceled', async () => {
-    const scope = nock('http://localhost:3000')
+    const scope = nock('http://localhost')
       .get('/api/v1/upcomingshows')
       .reply(200, {
         upcomingShows: [

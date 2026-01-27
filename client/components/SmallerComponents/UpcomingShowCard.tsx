@@ -1,6 +1,6 @@
-import { Link } from 'react-router'
+import { Link, useNavigate } from 'react-router'
 import { UpcomingShow } from '../../../models/upcomingShow'
-import { usePosters } from '../../hooks/usePosters'
+import { useDeletePoster, usePosters } from '../../hooks/usePosters'
 import {
   BathroomSymbol,
   MobilitySymbol,
@@ -9,12 +9,18 @@ import {
 import { LoadingSpinner } from './LoadingSpinner'
 import { AlertSymbol } from './SymbolSvgs'
 import { useEffect, useState } from 'react'
+import { useAuth0 } from '@auth0/auth0-react'
+import { useUser } from '../../hooks/useUsers'
+import * as AlertDialog from '@radix-ui/react-alert-dialog'
+import AdminDeleteForm from './AdminDeleteForm'
+import { useDeleteUpcomingShow } from '../../hooks/useUpcomingShows'
 
 interface Props {
   show: UpcomingShow
 }
 
 export function UpcomingShowCard({ show }: Props) {
+  const { isAuthenticated, getAccessTokenSilently } = useAuth0()
   const {
     data: poster,
     isLoading: posterIsLoading,
@@ -22,6 +28,10 @@ export function UpcomingShowCard({ show }: Props) {
   } = usePosters(show.id)
   const [titleTextSize, setTitleTextSize] = useState('')
   const [titleWrap, setTitleWrap] = useState('')
+  const { data: currentUser } = useUser()
+  const navigate = useNavigate()
+  const deleteShowMutation = useDeleteUpcomingShow()
+  const deletePosterMutation = useDeletePoster()
 
   useEffect(() => {
     if (show) {
@@ -62,6 +72,39 @@ export function UpcomingShowCard({ show }: Props) {
 
   if (posterIsError) {
     console.error(`Error loading poster for show ID: ${show.id}`)
+  }
+
+  async function handleDeleteClick(showId: number) {
+    const token = await getAccessTokenSilently()
+    if (!isAuthenticated) {
+      return alert('You need to log in to delete shows')
+    }
+
+    const posterToDelete = poster?.[0]
+
+    const performDeleteShow = () => {
+      deleteShowMutation.mutate(
+        { id: showId, token },
+        {
+          onSuccess: () => {
+            navigate(-1)
+          },
+        },
+      )
+    }
+
+    if (posterToDelete) {
+      deletePosterMutation.mutate(
+        { id: posterToDelete.id, token },
+        {
+          onSuccess: () => {
+            performDeleteShow()
+          },
+        },
+      )
+    } else {
+      performDeleteShow()
+    }
   }
 
   const lengthDisplayCheck = (input: string) => {
@@ -110,12 +153,75 @@ export function UpcomingShowCard({ show }: Props) {
   return (
     <div
       key={show.id}
-      className="mb-2 flex w-full flex-row items-start text-sm text-wrap sm:text-base"
+      className="relative mb-2 flex w-full flex-row items-start text-sm text-wrap sm:text-base"
     >
+      {isAuthenticated && currentUser?.admin == true && (
+        <AlertDialog.Root>
+          <AlertDialog.Trigger asChild>
+            <button className="absolute top-1 right-1 z-30 flex cursor-pointer items-center justify-center rounded-sm border bg-[#eca4a4] p-0.5 px-1 hover:bg-[#f3b3b3] active:bg-[#ea8686]">
+              <p>Admin: Remove show</p>
+            </button>
+          </AlertDialog.Trigger>
+          <AlertDialog.Portal>
+            <AlertDialog.Overlay className="AlertDialogOverlay" />
+            <AlertDialog.Content className="AlertDialogContent">
+              <AlertDialog.Title className="AlertDialogTitle">
+                Delete post?
+              </AlertDialog.Title>
+
+              {currentUser!.admin ? (
+                <div>
+                  <AlertDialog.Description className="AlertDialogDescription">
+                    <AdminDeleteForm
+                      userId={show.userId}
+                      contentDeleted={
+                        formatDateSmall(show.date) + ' ' + show.performers
+                      }
+                      onComplete={() => handleDeleteClick(show.id)}
+                    />
+                  </AlertDialog.Description>
+                  <AlertDialog.Cancel asChild>
+                    <button className="cursor-pointer rounded-md border px-1 shadow-md hover:bg-[#e2dece]">
+                      Cancel
+                    </button>
+                  </AlertDialog.Cancel>
+                </div>
+              ) : (
+                <div>
+                  <AlertDialog.Description className="AlertDialogDescription">
+                    <p>This cannot be undone.</p>
+                  </AlertDialog.Description>
+                  <div
+                    style={{
+                      display: 'flex',
+                      gap: 25,
+                      justifyContent: 'flex-end',
+                    }}
+                  >
+                    <AlertDialog.Cancel asChild>
+                      <button className="cursor-pointer rounded-md border px-1 shadow-md hover:bg-[#e2dece]">
+                        Cancel
+                      </button>
+                    </AlertDialog.Cancel>
+                    <AlertDialog.Action asChild>
+                      <button
+                        className="cursor-pointer rounded-md border bg-[#f8a1a1] p-2 px-1 shadow-md hover:bg-[#fd7474]"
+                        onClick={() => handleDeleteClick(show.id)}
+                      >
+                        Delete
+                      </button>
+                    </AlertDialog.Action>
+                  </div>
+                </div>
+              )}
+            </AlertDialog.Content>
+          </AlertDialog.Portal>
+        </AlertDialog.Root>
+      )}
+
       <div className="w-full">
         <Link to={`/upcomingshows/${show.id}`}>
           <div className="flex h-full w-full sm:min-h-[273px] sm:flex-row">
-            {/* border border-[#43434320] bg-[#f2e8d95c] */}
             <div className="h-fit wrap-anywhere sm:min-h-[273px]">
               {posterIsLoading ? (
                 <div className="animation-pulse h-[273px] w-36">

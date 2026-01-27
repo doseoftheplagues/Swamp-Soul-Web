@@ -64,6 +64,7 @@ export function useDeletePost() {
       deletePost(postId, token),
     onSuccess: (_, { postId }) => {
       queryClient.invalidateQueries({ queryKey: ['post', postId] })
+      queryClient.invalidateQueries({ queryKey: ['posts'] })
     },
   })
 }

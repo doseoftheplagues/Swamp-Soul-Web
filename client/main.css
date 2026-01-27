@@ -6,6 +6,13 @@
 }
 
 @font-face {
+  font-family: 'libre-caslon-text';
+  src: url('https://use.typekit.net/zui2hni.css') format('webfont');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
   font-family: 'Mess';
   src: url('/fonts/Mess-Light_web.woff2') format('woff2');
   font-weight: normal;
@@ -27,7 +34,7 @@
 }
 
 @font-face {
-  font-family: 'PicNic';
+  font-family: 'Picnic';
   src: url('/fonts/PicNic.woff2') format('woff2');
   font-weight: normal;
   font-style: normal;

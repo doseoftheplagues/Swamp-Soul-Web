@@ -2,10 +2,14 @@ import { Router } from 'express'
 import * as db from '../db/posts.ts'
 import * as userDb from '../db/users.ts'
 import checkJwt, { JwtRequest } from '../../auth0.ts'
+import { JSDOM } from 'jsdom'
+import DOMPurify from 'dompurify'
 
 const router = Router()
 
-// GET /api/v1/posts/user/:userid
+const { window } = new JSDOM('')
+const purify = DOMPurify(window)
+
 router.get('/user/:userid', async (req, res) => {
   try {
     const userId = req.params.userid
@@ -13,11 +17,12 @@ router.get('/user/:userid', async (req, res) => {
     res.json(associatedPosts)
   } catch (error) {
     console.log(error)
-    res.status(500).json({ message: 'Something went wrong fetching user posts' })
+    res
+      .status(500)
+      .json({ message: 'Something went wrong fetching user posts' })
   }
 })
 
-// GET /api/v1/posts/:postid
 router.get('/:postid', async (req, res) => {
   try {
     const postId = Number(req.params.postid)
@@ -29,7 +34,6 @@ router.get('/:postid', async (req, res) => {
   }
 })
 
-// POST /api/v1/posts/
 router.post('/', checkJwt, async (req: JwtRequest, res) => {
   try {
     const postData = req.body
@@ -45,6 +49,29 @@ router.post('/', checkJwt, async (req: JwtRequest, res) => {
       })
     }
 
+    postData.content = purify.sanitize(postData.content, {
+      ALLOWED_TAGS: [
+        'h1',
+        'h2',
+        'h3',
+        'h4',
+        'h5',
+        'h6',
+        'p',
+        'pre',
+        'strong',
+        'em',
+        'u',
+        'ol',
+        'ul',
+        'li',
+        'a',
+        'code',
+        'br',
+      ],
+      ALLOWED_ATTR: ['href'],
+    })
+
     const result = await db.addPost(postData)
     res.status(201).json(result)
   } catch (error) {
@@ -53,7 +80,6 @@ router.post('/', checkJwt, async (req: JwtRequest, res) => {
   }
 })
 
-// PUT /api/v1/posts/:postid
 router.put('/:postid', checkJwt, async (req: JwtRequest, res) => {
   try {
     const postId = Number(req.params.postid)
@@ -71,6 +97,29 @@ router.put('/:postid', checkJwt, async (req: JwtRequest, res) => {
       })
     }
 
+    postData.content = purify.sanitize(postData.content, {
+      ALLOWED_TAGS: [
+        'h1',
+        'h2',
+        'h3',
+        'h4',
+        'h5',
+        'h6',
+        'p',
+        'pre',
+        'strong',
+        'em',
+        'u',
+        'ol',
+        'ul',
+        'li',
+        'a',
+        'code',
+        'br',
+      ],
+      ALLOWED_ATTR: ['href'],
+    })
+
     await db.updatePost(postId, postData)
     res.sendStatus(200)
   } catch (error) {
@@ -79,7 +128,6 @@ router.put('/:postid', checkJwt, async (req: JwtRequest, res) => {
   }
 })
 
-// DELETE /api/v1/posts/:postid
 router.delete('/:postid', checkJwt, async (req: JwtRequest, res) => {
   try {
     const postId = Number(req.params.postid)
