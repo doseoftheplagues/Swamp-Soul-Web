@@ -5,7 +5,7 @@ export function Footer() {
     <div className="mt-auto flex h-auto w-screen flex-row justify-center bg-[#eae8d860] p-1 text-xs md:text-sm">
       <div className="flex flex-row items-center p-2 sm:py-5 sm:pl-10">
         <img
-          src="/assets/wizardBleb10ppi.png"
+          src="https://ik.imagekit.io/wosr5xwjlx/wizardBleb10ppi.png"
           alt="swamp soul logo"
           className="hidden h-40 sm:block"
         ></img>

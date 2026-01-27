@@ -42,7 +42,7 @@ export default function Credits() {
                 <p className="text-6xl"> Tenebaum</p>
               </div>
               <img
-                src="/assets/littlebleb.png"
+                src="https://ik.imagekit.io/wosr5xwjlx/littlebleb.png"
                 className="relative right-[38px] bottom-[35px] -z-20 h-[155px] rotate-12"
                 alt="drawing of little bleb"
               ></img>
