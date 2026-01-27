@@ -110,7 +110,7 @@ export default function Credits() {
               <p className="text-justify">was coded and designed by</p>
             </div>
             <div className="mt-5 mb-2">
-              <p className="font-gemini relative text-7xl hover:text-[#a7a277]">
+              <p className="font-gemini relative text-center text-6xl hover:text-[#a7a277]">
                 Sofia Tarn
               </p>
             </div>
@@ -123,7 +123,9 @@ export default function Credits() {
               </a>
             </div>
             <div>
-              <p>(ask her nicely and she&apos;ll make your website too)</p>
+              <p className="text-sm">
+                (ask her nicely and she&apos;ll make your website too)
+              </p>
             </div>
           </div>
           <div className="mt-20 flex w-screen flex-col items-center">
@@ -140,8 +142,8 @@ export default function Credits() {
                   <p className="text-6xl"> Tenebaum</p>
                 </div>
                 <img
-                  src="/assets/littlebleb.png"
-                  className="relative right-[38px] bottom-[35px] -z-20 h-[155px] rotate-12"
+                  src="https://ik.imagekit.io/wosr5xwjlx/littlebleb.png"
+                  className="relative right-[38px] bottom-[35px] -z-20 h-[155px] rotate-12 object-contain"
                   alt="drawing of little bleb"
                 ></img>
               </div>
