@@ -1,12 +1,13 @@
 import { useAuth0 } from '@auth0/auth0-react'
 import { Comment } from '../../../models/comment'
-import { useUserById } from '../../hooks/useUsers'
+import { useUser, useUserById } from '../../hooks/useUsers'
 import { useComments } from '../../hooks/useComments'
 import { CrossSymbol, TextBubbles } from './SymbolSvgs'
 import { useState } from 'react'
 import { TimeDisplay } from './ReusableFunctions'
 import * as AlertDialog from '@radix-ui/react-alert-dialog'
 import { Link } from 'react-router'
+import AdminDeleteForm from './AdminDeleteForm'
 
 type CommentWithReplies = Comment & { replies: CommentWithReplies[] }
 
@@ -21,6 +22,7 @@ export function ReplyComment({
   originIdType,
   originId,
 }: ReplyCommentProps) {
+  const { data: currentUser } = useUser()
   const [formData, setFormData] = useState({
     content: '',
     userId: '',
@@ -75,6 +77,7 @@ export function ReplyComment({
         userId: userId!,
         parent: parentId,
         [originIdType]: originId,
+        dateAdded: new Date(),
       }
       addComment.mutate({ comment: submissionData, token })
     }
@@ -111,8 +114,9 @@ export function ReplyComment({
             </div>
             <div className="relative -top-0.5 -right-0.5">
               <div className="flex flex-row">
-                {isAuthenticated && commentAuthor?.authId == user?.sub && (
-                  <div>
+                {isAuthenticated &&
+                  (commentAuthor?.authId == user?.sub ||
+                    currentUser?.admin) && (
                     <AlertDialog.Root>
                       <AlertDialog.Trigger asChild>
                         <button className="flex items-center justify-center rounded-full">
@@ -125,35 +129,58 @@ export function ReplyComment({
                           <AlertDialog.Title className="AlertDialogTitle">
                             Delete comment?
                           </AlertDialog.Title>
-                          <AlertDialog.Description className="AlertDialogDescription">
-                            This cannot be undone.
-                          </AlertDialog.Description>
-                          <div
-                            style={{
-                              display: 'flex',
-                              gap: 25,
-                              justifyContent: 'flex-end',
-                            }}
-                          >
-                            <AlertDialog.Cancel asChild>
-                              <button className="cursor-pointer rounded-md border px-1 shadow-md hover:bg-[#e2dece]">
-                                Cancel
-                              </button>
-                            </AlertDialog.Cancel>
-                            <AlertDialog.Action asChild>
-                              <button
-                                className="cursor-pointer rounded-md border bg-[#f8a1a1] p-2 px-1 shadow-md hover:bg-[#fd7474]"
-                                onClick={() => handleDeleteClick(comment.id)}
+
+                          {currentUser!.admin ? (
+                            <div>
+                              <AlertDialog.Description className="AlertDialogDescription">
+                                <AdminDeleteForm
+                                  userId={commentAuthor!.authId}
+                                  contentDeleted={comment.content}
+                                  onComplete={() =>
+                                    handleDeleteClick(comment.id)
+                                  }
+                                />
+                              </AlertDialog.Description>
+                              <AlertDialog.Cancel asChild>
+                                <button className="cursor-pointer rounded-md border px-1 shadow-md hover:bg-[#e2dece]">
+                                  Cancel
+                                </button>
+                              </AlertDialog.Cancel>
+                            </div>
+                          ) : (
+                            <div>
+                              <AlertDialog.Description className="AlertDialogDescription">
+                                <p>This cannot be undone.</p>
+                              </AlertDialog.Description>
+                              <div
+                                style={{
+                                  display: 'flex',
+                                  gap: 25,
+                                  justifyContent: 'flex-end',
+                                }}
                               >
-                                Delete
-                              </button>
-                            </AlertDialog.Action>
-                          </div>
+                                <AlertDialog.Cancel asChild>
+                                  <button className="cursor-pointer rounded-md border px-1 shadow-md hover:bg-[#e2dece]">
+                                    Cancel
+                                  </button>
+                                </AlertDialog.Cancel>
+                                <AlertDialog.Action asChild>
+                                  <button
+                                    className="cursor-pointer rounded-md border bg-[#f8a1a1] p-2 px-1 shadow-md hover:bg-[#fd7474]"
+                                    onClick={() =>
+                                      handleDeleteClick(comment.id)
+                                    }
+                                  >
+                                    Delete
+                                  </button>
+                                </AlertDialog.Action>
+                              </div>
+                            </div>
+                          )}
                         </AlertDialog.Content>
                       </AlertDialog.Portal>
                     </AlertDialog.Root>
-                  </div>
-                )}
+                  )}
                 {isAuthenticated && (
                   <button
                     onClick={() => setIsReplying(!isReplying)}

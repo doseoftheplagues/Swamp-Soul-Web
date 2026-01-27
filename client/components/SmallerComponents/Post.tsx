@@ -1,7 +1,7 @@
 import DOMPurify from 'dompurify'
 import { Post as PostModel } from '../../../models/post'
 import { useComments } from '../../hooks/useComments'
-import { useUserById } from '../../hooks/useUsers'
+import { useUser, useUserById } from '../../hooks/useUsers'
 import { CommentSection } from './CommentSection'
 import { LoadingSpinner } from './LoadingSpinner'
 import { useAuth0 } from '@auth0/auth0-react'
@@ -9,17 +9,19 @@ import { useDeletePost } from '../../hooks/usePosts'
 import * as AlertDialog from '@radix-ui/react-alert-dialog'
 import { CrossSymbol } from './SymbolSvgs'
 import { TimeDisplay } from './ReusableFunctions'
+import AdminDeleteForm from './AdminDeleteForm'
 
 interface postProps {
   post: PostModel
 }
 
 function Post({ post }: postProps) {
-  const { user, getAccessTokenSilently } = useAuth0()
+  const { user, getAccessTokenSilently, isAuthenticated } = useAuth0()
   const deletePostMutation = useDeletePost()
   const { data: postAuthor, isLoading: postAuthorIsLoading } = useUserById(
     post.userId,
   )
+  const { data: currentUser } = useUser()
 
   const { comments, isLoading: commentsAreLoading } = useComments({
     postId: post.id,
@@ -68,8 +70,8 @@ function Post({ post }: postProps) {
               </p>
             </div>
           </div>
-          {user?.sub === post.userId && (
-            <div>
+          {isAuthenticated &&
+            (post.userId == user?.sub || currentUser?.admin) && (
               <AlertDialog.Root>
                 <AlertDialog.Trigger asChild>
                   <button className="absolute top-1 right-1 flex items-center justify-center rounded-sm bg-[#eca4a4] p-0.5 active:bg-[#ea8686]">
@@ -82,35 +84,56 @@ function Post({ post }: postProps) {
                     <AlertDialog.Title className="AlertDialogTitle">
                       Delete post?
                     </AlertDialog.Title>
-                    <AlertDialog.Description className="AlertDialogDescription">
-                      This cannot be undone.
-                    </AlertDialog.Description>
-                    <div
-                      style={{
-                        display: 'flex',
-                        gap: 25,
-                        justifyContent: 'flex-end',
-                      }}
-                    >
-                      <AlertDialog.Cancel asChild>
-                        <button className="cursor-pointer rounded-md border px-1 shadow-md hover:bg-[#e2dece]">
-                          Cancel
-                        </button>
-                      </AlertDialog.Cancel>
-                      <AlertDialog.Action asChild>
-                        <button
-                          className="cursor-pointer rounded-md border bg-[#f8a1a1] p-2 px-1 shadow-md hover:bg-[#fd7474]"
-                          onClick={() => handleDelete()}
+
+                    {currentUser!.admin ? (
+                      <div>
+                        <AlertDialog.Description className="AlertDialogDescription">
+                          <AdminDeleteForm
+                            userId={post.userId}
+                            contentDeleted={
+                              post.title != '' ? post.title : post.content
+                            }
+                            onComplete={() => handleDelete()}
+                          />
+                        </AlertDialog.Description>
+                        <AlertDialog.Cancel asChild>
+                          <button className="cursor-pointer rounded-md border px-1 shadow-md hover:bg-[#e2dece]">
+                            Cancel
+                          </button>
+                        </AlertDialog.Cancel>
+                      </div>
+                    ) : (
+                      <div>
+                        <AlertDialog.Description className="AlertDialogDescription">
+                          <p>This cannot be undone.</p>
+                        </AlertDialog.Description>
+                        <div
+                          style={{
+                            display: 'flex',
+                            gap: 25,
+                            justifyContent: 'flex-end',
+                          }}
                         >
-                          Delete
-                        </button>
-                      </AlertDialog.Action>
-                    </div>
+                          <AlertDialog.Cancel asChild>
+                            <button className="cursor-pointer rounded-md border px-1 shadow-md hover:bg-[#e2dece]">
+                              Cancel
+                            </button>
+                          </AlertDialog.Cancel>
+                          <AlertDialog.Action asChild>
+                            <button
+                              className="cursor-pointer rounded-md border bg-[#f8a1a1] p-2 px-1 shadow-md hover:bg-[#fd7474]"
+                              onClick={() => handleDelete()}
+                            >
+                              Delete
+                            </button>
+                          </AlertDialog.Action>
+                        </div>
+                      </div>
+                    )}
                   </AlertDialog.Content>
                 </AlertDialog.Portal>
               </AlertDialog.Root>
-            </div>
-          )}
+            )}
         </div>
         <div className="p-1">
           {post.title && (

@@ -58,7 +58,19 @@ function AddPosterToShow() {
     return <p>Log in to edit or add posters to shows</p>
   }
   if (!data) {
-    return <p>Meow</p>
+    return (
+      <div className="min-h-[calc(100vh-4rem)] p-10 md:p-80">
+        <p>
+          It&apos;s honestly impressive that you managed to get here. I *think
+          you can only do it is by making a show and deleting it straight away,
+          which is like, why did you do that?? Did you fuck up the upload form
+          that badly? I don&apos;t know why anyone would ever do that. Take
+          pride in the fact that you are unpredictable and go forth into this
+          world with the knowledge that you are not a normal swampsoul.org user.
+          You have broken the mold. I believe in you.
+        </p>
+      </div>
+    )
   }
 
   if (isAuthenticated && user?.sub != data.userId) {
@@ -99,8 +111,8 @@ function AddPosterToShow() {
 
   if (isAuthenticated && user?.sub === data.userId)
     return (
-      <div>
-        <div className="mx-auto max-w-lg p-4 text-center">
+      <div className="min-h-[calc(100vh-4rem)] w-full">
+        <div className="block max-w-lg p-4 text-center sm:m-auto">
           <h1 className="mb-5">
             Upload poster to {data.performers} - {formatDate(data.date)}
           </h1>

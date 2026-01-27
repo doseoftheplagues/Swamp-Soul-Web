@@ -1,4 +1,4 @@
-import { Outlet, useNavigate } from 'react-router'
+import { Outlet, ScrollRestoration, useNavigate } from 'react-router'
 import Header from './Header.tsx'
 
 import { LoadingSpinner } from './SmallerComponents/LoadingSpinner.tsx'
@@ -47,6 +47,7 @@ function App() {
       </div>
       <div className="min-h-[90%]">
         <Outlet />
+        <ScrollRestoration />
       </div>
       <div>
         <Footer />

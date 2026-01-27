@@ -3,7 +3,7 @@ import { Link } from 'react-router'
 export function Footer() {
   return (
     <div className="mt-auto flex h-auto w-screen flex-row justify-center bg-[#eae8d860] p-1 text-xs md:text-sm">
-      <div className="flex flex-row items-center py-5 pl-10">
+      <div className="flex flex-row items-center p-2 sm:py-5 sm:pl-10">
         <img
           src="/assets/wizardBleb10ppi.png"
           alt="swamp soul logo"

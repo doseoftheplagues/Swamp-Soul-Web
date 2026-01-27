@@ -10,6 +10,7 @@ const columns = [
   'status',
   'email',
   'profile_picture as profilePicture',
+  'admin',
 ]
 
 export async function userExists(authId: string): Promise<boolean> {

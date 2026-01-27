@@ -11,14 +11,26 @@ export default function NewReleases() {
             ></img>
           </div>
           <div className="otherDiv flex w-[90vw] items-center md:h-160 md:w-fit">
-            <div className="ml-1 flex h-fit w-[90vw] flex-col justify-center text-justify md:w-auto md:justify-start">
+            <div className="flex h-fit w-[90vw] flex-col text-justify md:w-auto md:justify-start">
               <div>
                 <p className="text-[clamp(2rem,5vw,6rem)] md:text-7xl">
                   Baby&apos;s coming down{' '}
                 </p>
-                <div className="flex w-full flex-row justify-between md:my-2">
+                <div className="flex w-full flex-row justify-between md:my-2 md:ml-1">
                   <p className="mb-2 text-sm md:text-3xl"> Mudgoose</p>
                   <p className="text-sm md:text-3xl">5/2/2026</p>
+                </div>
+                <div className="flex flex-row justify-between md:my-2 md:ml-1.5 md:max-w-186">
+                  <p className="mb-2 text-sm md:text-lg">
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
+                    do eiusmod tempor incididunt ut labore et dolore magna
+                    aliqua. Ut enim ad minim veniam, quis nostrud exercitation
+                    ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                    Duis aute irure dolor in reprehenderit in voluptate velit
+                    esse cillum dolore eu fugiat nulla pariatur. Excepteur sint
+                    occaecat cupidatat non proident, sunt in culpa qui officia
+                    deserunt mollit anim id est laborum
+                  </p>
                 </div>
               </div>
               <div className="md:mt-4 md:w-140 md:place-self-center">

@@ -65,7 +65,7 @@ export function UpcomingShow() {
   })
   const params = useParams()
   const { data, isLoading, isError } = useGetUpcomingShowById(Number(params.id))
-  const { comments, isLoading: commentsIsLoading } = useComments({
+  const { comments } = useComments({
     upcomingShowId: Number(params.id),
   })
   const { isAuthenticated, getAccessTokenSilently, user } = useAuth0()
@@ -705,7 +705,7 @@ export function UpcomingShow() {
             </div>
           </Toast.Provider>
         </div>
-        <div className="my-4 flex w-full justify-center">
+        <div className="my-10 flex w-full justify-center">
           <CommentSection
             comments={comments}
             originIdType={'upcomingShowId'}
@@ -1088,7 +1088,7 @@ export function UpcomingShow() {
             </a>
           </div>
         )}
-        <div className="mx-2">
+        <div className="mx-2 mt-5">
           <CommentSection
             comments={comments}
             originIdType={'upcomingShowId'}

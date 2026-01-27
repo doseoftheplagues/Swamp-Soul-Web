@@ -20,6 +20,8 @@ import { Post as PostModel } from '../../models/post'
 import { useLinks } from '../hooks/useLinks'
 import * as Form from '@radix-ui/react-form'
 import { Cross1Icon } from '@radix-ui/react-icons'
+import { useAdminMessagesByUser } from '../hooks/useAdminMessages'
+import AdminMessage from './SmallerComponents/AdminMessage'
 
 const Profile = () => {
   const { deleteImage } = useImage()
@@ -31,6 +33,11 @@ const Profile = () => {
   const [postFormData, setPostFormData] = useState({
     title: '',
     content: '',
+    image: '',
+    titleFont: '',
+    titleSize: '',
+    contentFont: '',
+    contentSize: '',
   })
   const [newLink, setNewLink] = useState({ title: '', link: '' })
   const { links, addLink, deleteLink } = useLinks()
@@ -50,6 +57,7 @@ const Profile = () => {
     isLoading: showsAreLoading,
     isError: showsAreError,
   } = useGetUpcomingShowsByUserId(userLoaded)
+  const { messages } = useAdminMessagesByUser(userLoaded)
 
   const {
     comments: userCommentsAndReplies,
@@ -189,7 +197,15 @@ const Profile = () => {
         },
         {
           onSuccess: () => {
-            setPostFormData({ title: '', content: '' }) // Clear form
+            setPostFormData({
+              title: '',
+              content: '',
+              image: '',
+              titleFont: '',
+              titleSize: '',
+              contentFont: '',
+              contentSize: '',
+            })
           },
         },
       )
@@ -385,13 +401,12 @@ const Profile = () => {
               )}
               {editDetailsIsHidden && editLinksIsHidden && (
                 <div className="STUFFDIV">
-                  <div>
-                    {data?.admin && (
-                      <p className="text-md rounded-t-md border-b bg-[#e1bebe9f] pr-2 text-right text-[#424242]">
-                        Site Admin
-                      </p>
-                    )}
-                  </div>
+                  {data?.admin == true && (
+                    <p className="text-md rounded-t-md border-b-[1.5px] bg-[#e1bebe9f] pl-2 text-left text-[#424242]">
+                      Site Admin
+                    </p>
+                  )}
+
                   <div className="usernamePfpBanner mt-2 flex flex-row">
                     {data?.profilePicture ? (
                       <div>
@@ -410,12 +425,12 @@ const Profile = () => {
                       <FileUploader uploadSuccess={handleImageUrlReceived} />
                     </div>
                     <div
-                      className={`place-content-center pr-1 pl-0.5 ${!editPfpIsHidden && 'hidden'}`}
+                      className={`place-content-center pl-0.5 ${!editPfpIsHidden && 'hidden'}`}
                     >
                       <div className="flex flex-row">
-                        <p className="text-xl font-bold">
+                        <p className="pr-4 text-xl font-bold wrap-anywhere">
                           {data?.username}
-                          <span className="ml-1 text-base font-normal wrap-anywhere text-[#444] italic">
+                          <span className="mx-1 text-base font-normal wrap-anywhere text-[#444] italic">
                             {data?.status}
                           </span>
                         </p>
@@ -456,6 +471,14 @@ const Profile = () => {
               )}
             </div>
           </div>
+          {messages && messages.length != 0 && (
+            <div className="profileDiv mb-5 flex w-full flex-col rounded-md border-[1.5px] bg-[#e9e6d6ac] p-1 md:min-w-fit">
+              <p>Admin messages:</p>
+              {messages.map((message) => {
+                return <AdminMessage key={message.id} message={message} />
+              })}
+            </div>
+          )}
         </div>
         <div className="mb-10 flex w-full flex-col rounded-md border-[1.5px] bg-[#e9e6d6ac] md:ml-5 md:max-w-3/5 md:min-w-2/5">
           <div className="mb-1 flex w-full items-center rounded-t-sm border-b-[1.5px] border-b-[#0202025f] bg-[#d9d7c0d6] p-1">
@@ -517,7 +540,7 @@ const Profile = () => {
               {posts &&
                 posts
                   .sort(
-                    (a, b) =>
+                    (a: PostModel, b: PostModel) =>
                       new Date(b.dateAdded).getTime() -
                       new Date(a.dateAdded).getTime(),
                   )

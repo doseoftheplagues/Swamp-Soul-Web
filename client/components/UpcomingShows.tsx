@@ -1,12 +1,14 @@
 import { useUpcomingShows } from '../hooks/useUpcomingShows'
-import { UpcomingShow } from '../../models/upcomingShow'
+import {
+  UpcomingShow,
+  UpcomingShowWithDateObject,
+} from '../../models/upcomingShow'
 import { useState, useEffect } from 'react'
 import SearchBar from './SmallerComponents/SearchBar'
 import { LoadingSpinner } from './SmallerComponents/LoadingSpinner'
 import { UpcomingShowCard } from './SmallerComponents/UpcomingShowCard'
 import { Link } from 'react-router'
 import { PaintbrushSymbol } from './SmallerComponents/SymbolSvgs'
-import { Footer } from './Footer'
 
 export function UpcomingShows() {
   const { data, isLoading, isError } = useUpcomingShows()
@@ -24,11 +26,14 @@ export function UpcomingShows() {
           date: new Date(item.date),
         }
       })
-      dataWithDateObjects.sort((a, b) => a.date.getTime() - b.date.getTime())
+      dataWithDateObjects.sort(
+        (a: UpcomingShowWithDateObject, b: UpcomingShowWithDateObject) =>
+          a.date.getTime() - b.date.getTime(),
+      )
       const currentDate = new Date()
       currentDate.setHours(0, 0, 0, 0)
       const dateFilteredShows = dataWithDateObjects.filter(
-        (show) => show.date >= currentDate,
+        (show: UpcomingShowWithDateObject) => show.date >= currentDate,
       )
 
       setDateFilteredData(dateFilteredShows)
