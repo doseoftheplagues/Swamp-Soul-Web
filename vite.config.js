@@ -4,6 +4,7 @@ import tailwindcss from '@tailwindcss/vite'
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  base: '/', // Ensure base path is set correctly
   plugins: [react(), tailwindcss()],
   server: {
     proxy: {
@@ -11,4 +12,5 @@ export default defineConfig({
     },
     allowedHosts: ['naida-unbestowed-annice.ngrok-free.dev'],
   },
+  publicDir: 'public', // Explicitly define public directory
 })
