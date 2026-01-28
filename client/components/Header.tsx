@@ -5,6 +5,7 @@ import { useUserById } from '../hooks/useUsers'
 import { useEffect, useRef } from 'react'
 import { gsap } from 'gsap'
 import { useGSAP } from '@gsap/react'
+import LogoutButton from './SmallerComponents/LogoutButton'
 
 gsap.registerPlugin(useGSAP)
 
@@ -147,10 +148,16 @@ function Header({ scrolled }: HeaderProps) {
           </div>
           <div className="flex w-1/4 justify-end px-2 sm:w-1/2">
             {!isAuthenticated && <LoginButton classes={''} />}
+
             {isAuthenticated && location.pathname !== '/profile' && (
-              <Link to={'/profile'} className="cursor-pointer">
-                Profile
-              </Link>
+              <div>
+                <Link to={'/profile'} className="cursor-pointer">
+                  Profile
+                </Link>
+              </div>
+            )}
+            {isAuthenticated && location.pathname == '/profile' && (
+              <LogoutButton />
             )}
           </div>
         </div>

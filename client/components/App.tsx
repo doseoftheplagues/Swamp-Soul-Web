@@ -28,11 +28,11 @@ function App() {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
-  useEffect(() => {
-    if (isAuthenticated && !isLoading && !exists) {
-      navigate('/register')
-    }
-  }, [isAuthenticated, isLoading, exists, navigate])
+  // useEffect(() => {
+  //   if (isAuthenticated && !isLoading && !exists) {
+  //     navigate('/register')
+  //   }
+  // }, [isAuthenticated, isLoading, exists, navigate])
 
   if (isLoading) {
     return <LoadingSpinner />

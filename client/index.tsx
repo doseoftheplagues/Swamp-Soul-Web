@@ -16,13 +16,13 @@ document.addEventListener('DOMContentLoaded', () => {
     <Auth0Provider
       domain="https://sofia-tarn.au.auth0.com"
       clientId="mqCCZ4X7323TwP6uuAnaDLluqG6mQNSG"
-      useRefreshTokens={true}
-      cacheLocation="localstorage"
       authorizationParams={{
         redirect_uri: window.location.origin,
         audience: 'https://test/api',
         scope: 'openid profile email offline_access',
       }}
+      useRefreshTokens={true}
+      cacheLocation="localstorage"
     >
       <QueryClientProvider client={queryClient}>
         <RouterProvider router={router} />

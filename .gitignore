@@ -6,6 +6,7 @@ node_modules
 
 # SQLite DBs
 *.sqlite3
+server/db/storage/*.sqlite3
 
 # Build products
 /dist
@@ -21,3 +22,5 @@ coverage/*
 
 # Promptkit repository
 promptkit
+
+
