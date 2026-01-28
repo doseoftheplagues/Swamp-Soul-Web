@@ -5,4 +5,4 @@ RUN npm install
 COPY . .
 RUN npm run build
 EXPOSE 3000
-CMD ["npm", "start"]
+CMD ["sh", "-c", "npx knex migrate:latest --knexfile server/db/knexfile.js && node dist/server.js"]
