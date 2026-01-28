@@ -45,7 +45,7 @@ function App() {
       >
         <Header scrolled={scrolled} />
       </div>
-      <div className="min-h-[90%]">
+      <div className="">
         <Outlet />
         <ScrollRestoration />
       </div>
