@@ -21,6 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
       authorizationParams={{
         redirect_uri: window.location.origin,
         audience: 'https://test/api',
+        scope: 'openid profile email offline_access',
       }}
     >
       <QueryClientProvider client={queryClient}>
