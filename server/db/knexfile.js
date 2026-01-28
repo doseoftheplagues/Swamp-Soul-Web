@@ -47,7 +47,7 @@ production: {
     client: 'sqlite3',
     useNullAsDefault: true,
     connection: {
-      filename: '/app/server/db/dev.sqlite3',
+      filename: './storage/dev.sqlite3',
     },
     migrations: {
       directory: Path.join(__dirname, 'migrations'),
