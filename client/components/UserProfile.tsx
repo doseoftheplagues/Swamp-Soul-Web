@@ -58,7 +58,7 @@ const UserProfile = () => {
           </div>
           <div className="mx-auto my-2 w-[98%] border border-[#aaa89955]"></div>
           {links.length !== 0 && (
-            <ul className="">
+            <ul className="p-2">
               {links.map((link) => (
                 <li key={link.id} className="flex items-center">
                   <a

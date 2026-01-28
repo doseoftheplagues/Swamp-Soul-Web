@@ -115,7 +115,7 @@ export function Comment({ comment, originIdType, originId }: CommentProps) {
               <div className="flex flex-row">
                 {isAuthenticated &&
                   (commentAuthor?.authId == user?.sub ||
-                    currentUser?.admin) && (
+                    currentUser?.admin == true) && (
                     <AlertDialog.Root>
                       <AlertDialog.Trigger asChild>
                         <button className="flex items-center justify-center rounded-full">
@@ -129,7 +129,7 @@ export function Comment({ comment, originIdType, originId }: CommentProps) {
                             Delete comment?
                           </AlertDialog.Title>
 
-                          {currentUser!.admin ? (
+                          {currentUser!.admin == true ? (
                             <div>
                               <AlertDialog.Description className="AlertDialogDescription">
                                 <AdminDeleteForm
