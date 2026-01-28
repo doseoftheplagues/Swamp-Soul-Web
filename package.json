@@ -10,7 +10,7 @@
   ],
   "scripts": {
     "test": "vitest",
-    "start": "npx knex migrate:latest --knexfile server/db/knexfile.js && node dist/server.js",
+    "start": "knex migrate:latest --knexfile /app/server/db/knexfile.js && node dist/server.js",
     "dev": "run-p dev:client dev:server",
     "dev:client": "vite",
     "dev:server": "tsx watch server/index.ts",
@@ -18,7 +18,7 @@
     "build:client": "vite build",
     "build:server": "esbuild --packages=external --platform=node --format=esm --outfile=dist/server.js --bundle server/index.ts",
     "lint": "eslint --ext .js,.jsx,.ts,.tsx .",
-    "knex": "knex --knexfile /app/server/db/knexfile.js",
+    "knex": "knex --knexfile ./server/db/knexfile.js",
     "render:build": "npm install && npm run build && npm prune --omit=dev && NODE_ENV='production' npm run knex migrate:latest",
     "render:start": "node dist/server.js"
   },
