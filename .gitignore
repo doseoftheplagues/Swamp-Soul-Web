@@ -21,3 +21,6 @@ coverage/*
 
 # Promptkit repository
 promptkit
+
+# Local data directory
+/data/
