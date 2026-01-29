@@ -204,6 +204,7 @@ export function ReplyComment({
             <div className="flex flex-col rounded-md border-2 border-[#dad7c2e0] bg-[#fbfaf6] px-1 py-1 pl-2">
               <p>Reply to {commentAuthor?.username}</p>
               <form
+                autoComplete="off"
                 className="flex h-fit w-full flex-row items-baseline"
                 onSubmit={(e) => handleReplySubmit(e, comment.id)}
               >

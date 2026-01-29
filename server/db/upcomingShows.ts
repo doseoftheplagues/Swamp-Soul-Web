@@ -23,6 +23,7 @@ const showProperties = [
   'canceled',
   'name',
   'city',
+  'underage_allowed as underageAllowed',
 ]
 
 //read
@@ -65,6 +66,7 @@ export async function addUpcomingShow(showData: UpcomingShowData) {
     maxCapacity,
     canceled,
     name,
+    underageAllowed,
   } = showData
 
   const [result] = await db('upcoming_shows')
@@ -82,11 +84,11 @@ export async function addUpcomingShow(showData: UpcomingShowData) {
       location_coords: locationCoords,
       set_times: setTimes,
       tickets_link: ticketsLink,
-
       description,
       max_capacity: maxCapacity,
       canceled,
       name,
+      underage_allowed: underageAllowed,
     })
     .returning([...showProperties])
 
@@ -117,6 +119,7 @@ export async function updateUpcomingShow(
     maxCapacity,
     canceled,
     name,
+    underageAllowed,
   } = showData
   const snakeCaseShowData = {
     date,
@@ -135,6 +138,7 @@ export async function updateUpcomingShow(
     max_capacity: maxCapacity,
     canceled,
     name,
+    underage_allowed: underageAllowed,
   }
 
   return await db('upcoming_shows').where('id', id).update(snakeCaseShowData)

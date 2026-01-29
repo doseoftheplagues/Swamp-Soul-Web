@@ -39,8 +39,6 @@ function Header({ scrolled }: HeaderProps) {
     () => {
       if (!menuRef.current) return
 
-      gsap.set(menuRef.current, { autoAlpha: 0 })
-
       tl.current = gsap
         .timeline({ paused: true })
         .to(menuRef.current, { autoAlpha: 1, duration: 0.2 })
@@ -50,6 +48,7 @@ function Header({ scrolled }: HeaderProps) {
           stagger: 0.07,
           duration: 0.07,
         })
+      tl.current.reversed(true)
     },
     { scope: menuRef, dependencies: [isAuthenticated] },
   )
@@ -107,7 +106,7 @@ function Header({ scrolled }: HeaderProps) {
     return (
       <div>
         <div
-          className={`flex w-screen flex-row py-1 text-sm sm:text-lg ${
+          className={`flex w-screen flex-row py-1 text-sm transition-colors duration-200 sm:text-lg ${
             location.pathname !== '/'
               ? 'bg-[#faf8f1]'
               : `${scrolled == true ? 'bg-[#faf8f1] text-black' : 'bg-transparent text-[#faf8f1]'} `
@@ -124,7 +123,7 @@ function Header({ scrolled }: HeaderProps) {
               </button>
               <div
                 ref={menuRef}
-                className={`${location.pathname !== '/' ? `border-2 border-[#dad7c282] bg-[#faf8f1] text-black` : `${scrolled ? 'border-2 border-[#dad7c282] bg-[#faf8f1] text-black' : 'bg-transparent text-[#faf8f1]'}`} mt-1 rounded-br-sm`}
+                className={`${location.pathname !== '/' ? `border-2 border-[#dad7c282] bg-[#faf8f1] text-black` : `${scrolled ? 'border-2 border-[#dad7c282] bg-[#faf8f1] text-black' : 'bg-transparent text-[#faf8f1]'}`} mt-1 rounded-br-sm invisible`}
               >
                 <ul className="px-2 py-1">
                   <li className="menu-item">

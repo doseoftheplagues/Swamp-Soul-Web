@@ -14,7 +14,11 @@ function SearchBar({
 }: SearchBarProps) {
   return (
     <div className="relative flex w-full flex-row rounded-md text-xs sm:text-sm">
-      <form onSubmit={submitFunction} className="flex flex-row">
+      <form
+        onSubmit={submitFunction}
+        className="flex flex-row"
+        autoComplete="off"
+      >
         <label htmlFor="search" className="sr-only">
           Search
         </label>

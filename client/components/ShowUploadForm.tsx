@@ -39,6 +39,7 @@ export function ShowUploadForm() {
     maxCapacity: '',
     userId: '',
     name: '',
+    underageAllowed: '',
   })
 
   const addShowMutation = useAddUpcomingShow()
@@ -84,6 +85,7 @@ export function ShowUploadForm() {
       wheelchairAccessible: formData.wheelchairAccessible === 'true',
       mobilityAccessible: formData.mobilityAccessible === 'true',
       bathroomsNearby: formData.bathroomsNearby === 'true',
+      underageAllowed: formData.underageAllowed === 'true',
       maxCapacity: parseInt(formData.maxCapacity, 10) || 0,
       userId: user!.sub,
     }
@@ -141,7 +143,11 @@ export function ShowUploadForm() {
   return (
     <div className="mx-auto max-w-md p-4">
       <h1 className="mb-4 text-2xl font-bold">Required info</h1>
-      <Form.Root onSubmit={handleSubmit} className="space-y-4">
+      <Form.Root
+        onSubmit={handleSubmit}
+        className="space-y-4"
+        autoComplete="off"
+      >
         <Form.Field name="date" className="mb-4">
           <Form.Label className="mb-1 block text-sm font-medium text-gray-700">
             Date:
@@ -397,6 +403,39 @@ export function ShowUploadForm() {
           </Form.Message>
         </Form.Field>
 
+        <Form.Field name="underageAllowed" className="mb-4">
+          <Form.Label className="mb-1 block text-sm font-medium text-gray-700">
+            Is the show r18 or all ages?
+          </Form.Label>
+          <Select.Root
+            value={String(formData.underageAllowed)}
+            onValueChange={handleSelectChange('underageAllowed')}
+          >
+            <Select.Trigger className="focus:ring-opacity-50 mt-1 flex w-full items-center justify-between rounded-md border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm focus:border-[#8f9779]">
+              <Select.Value placeholder="Select an option" />
+              <Select.Icon className="h-4 w-4 text-gray-400">
+                <ChevronDownIcon />
+              </Select.Icon>
+            </Select.Trigger>
+            <Select.Portal>
+              <Select.Content className="z-10 rounded-md bg-white py-1 shadow-lg">
+                <Select.ScrollUpButton className="flex h-6 items-center justify-center bg-white text-gray-700">
+                  <ChevronUpIcon />
+                </Select.ScrollUpButton>
+                <Select.Viewport className="p-1">
+                  <SelectItem value="true">
+                    Yes, the show is all ages
+                  </SelectItem>
+                  <SelectItem value="false">No, it&apos;s R18</SelectItem>
+                </Select.Viewport>
+                <Select.ScrollDownButton className="flex h-6 items-center justify-center bg-white text-gray-700">
+                  <ChevronDownIcon />
+                </Select.ScrollDownButton>
+              </Select.Content>
+            </Select.Portal>
+          </Select.Root>
+        </Form.Field>
+
         <h2 className="mt-6 mb-4 text-xl font-bold">Extra info (Optional)</h2>
         <label
           htmlFor="name"
@@ -422,14 +461,14 @@ export function ShowUploadForm() {
           <button
             type="button"
             onClick={() => handleCoordsTooltipClick()}
-            className="ml-2 flex cursor-pointer items-center rounded-sm border border-[#aaa89955] bg-[#dad7c2] px-1 py-0 text-sm hover:bg-[#e2e0cf] active:bg-[#c1bd9a]"
+            className="ml-2 flex cursor-pointer items-center rounded-sm border border-[#aaa89955] bg-[#dad7c2] px-1 py-0 text-sm text-xs hover:bg-[#e2e0cf] active:bg-[#c1bd9a]"
           >
-            ?
+            How to add coordinates
           </button>
         </div>
         {coordsTooltipIsHidden == false && (
-          <div className="md flex flex-col rounded border-[1.5px] bg-[#dedccabd] p-1 text-sm wrap-anywhere">
-            <p className="mb-2 text-base underline">How to add coordinates:</p>
+          <div className="md flex flex-col rounded border-[1.5px] bg-[#dedccabd] p-2 text-sm wrap-anywhere">
+            <p className="mb-2 text-base">How to add coordinates:</p>
             <p className="mb-2">
               Open the location in maps and zoom in to where you want it.
             </p>

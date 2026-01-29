@@ -23,6 +23,7 @@ export function up(knex) {
     table.boolean('canceled').nullable()
     table.string('name').nullable()
     table.string('city').nullable()
+    table.boolean('underage_allowed').nullable()
   })
 }
 

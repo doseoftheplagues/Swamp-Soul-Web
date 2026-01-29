@@ -5,6 +5,9 @@ export interface UserData {
   email: string
   admin: boolean
   profilePicture: string
+  blebsFound: number
+  profileColorOne: string
+  profileColorTwo: string
 }
 
 export interface User extends UserData {

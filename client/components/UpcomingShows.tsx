@@ -91,19 +91,22 @@ export function UpcomingShows() {
 
   return (
     <div className="min-h-[calc(100vh-4rem)] p-1">
-      <div className="mb-2 flex h-fit flex-row rounded-md">
-        <div className="mr-1 flex cursor-pointer flex-row items-center rounded-sm border-[1.5px] border-[#aaa89955] bg-[#dad7c2] px-1 text-sm hover:bg-[#e2e0cf] active:bg-[#c1bd9a]">
-          <Link to="/showuploadform" className="flex flex-row items-center">
-            <PaintbrushSymbol className={'h-4 sm:h-5'} />
-            <p className="p-1 text-xs sm:text-sm">Add a show</p>
-          </Link>
-        </div>
-        <div className="h-fit w-fit rounded-md border-[1.5px] border-[#dad7c2]">
+      <div className="mb-2 flex h-fit w-screen flex-row justify-end rounded-md">
+        <div className="h-fit rounded-md border-[1.5px] border-[#dad7c2] sm:w-fit">
           <SearchBar
             submitFunction={handleSearch}
             changeFunction={handleChange}
             searchTerm={searchTerm}
           />
+        </div>
+        <div className="mr-2 ml-1 flex cursor-pointer flex-row items-center rounded-sm border-[1.5px] border-[#aaa89955] bg-[#dad7c2] px-1 text-sm hover:bg-[#e2e0cf] active:bg-[#c1bd9a]">
+          <Link
+            to="/showuploadform"
+            className="flex w-fit flex-row items-center"
+          >
+            <PaintbrushSymbol className={'h-4 sm:h-5'} />
+            <p className="p-1 text-xs sm:text-sm">Add a show</p>
+          </Link>
         </div>
       </div>
 

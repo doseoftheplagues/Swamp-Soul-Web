@@ -76,6 +76,7 @@ export function CommentSection({
             className="mx-1.5 inline-block max-h-10 min-h-10 max-w-10 min-w-10 rounded-full object-cover"
           />
           <form
+            autoComplete="off"
             className="flex h-fit w-full flex-row items-baseline"
             onSubmit={handleSubmit}
           >

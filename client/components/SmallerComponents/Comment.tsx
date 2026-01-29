@@ -206,6 +206,7 @@ export function Comment({ comment, originIdType, originId }: CommentProps) {
               <form
                 className="flex h-fit w-full flex-row items-baseline"
                 onSubmit={(e) => handleReplySubmit(e, comment.id)}
+                autoComplete="off"
               >
                 <label htmlFor="addComment" className="sr-only">
                   Reply to {commentAuthor?.username}
