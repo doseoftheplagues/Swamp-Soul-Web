@@ -47,7 +47,7 @@ export default {
     client: 'sqlite3',
     useNullAsDefault: true,
     connection: {
-      filename: Path.join(__dirname, 'storage', 'prod.sqlite3'),
+      filename: '/app/server/db/storage/prod.sqlite3',
     },
     migrations: {
       directory: Path.join(__dirname, 'migrations'),
