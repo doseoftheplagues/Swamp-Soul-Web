@@ -24,3 +24,5 @@ coverage/*
 promptkit
 
 
+# Local data directory
+/data/

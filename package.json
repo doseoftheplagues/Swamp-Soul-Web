@@ -10,7 +10,7 @@
   ],
   "scripts": {
     "test": "vitest",
-    "start": "npx knex migrate:latest --knexfile server/db/knexfile.js && node dist/server.js",
+    "start": "node dist/server.js",
     "dev": "run-p dev:client dev:server",
     "dev:client": "vite",
     "dev:server": "tsx watch server/index.ts",
