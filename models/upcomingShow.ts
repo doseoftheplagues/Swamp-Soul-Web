@@ -18,6 +18,7 @@ export interface UpcomingShowData {
   maxCapacity?: number | null
   canceled?: boolean | null
   name?: string | null
+  underageAllowed?: boolean | null
 }
 
 export interface UpcomingShowWithDateObject {
@@ -40,6 +41,7 @@ export interface UpcomingShowWithDateObject {
   maxCapacity?: number | null
   canceled?: boolean | null
   name?: string | null
+  underageAllowed?: boolean | null
 }
 
 export interface UpcomingShow extends UpcomingShowData {

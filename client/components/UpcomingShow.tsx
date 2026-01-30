@@ -17,7 +17,7 @@ import { useAuth0 } from '@auth0/auth0-react'
 import * as AlertDialog from '@radix-ui/react-alert-dialog'
 import { useEffect, useState, useRef } from 'react'
 import { usePosters, useDeletePoster } from '../hooks/usePosters'
-import { gsap } from 'gsap/dist/gsap'
+import { gsap } from 'gsap'
 import { Draggable } from 'gsap/dist/Draggable'
 import { ToolsSymbol } from './SmallerComponents/SymbolSvgs'
 import { PosterUploader } from './SmallerComponents/PosterUploader'
@@ -88,7 +88,7 @@ export function UpcomingShow() {
   }
   useEffect(() => {
     if (!isLoading && location.hash) {
-      const targetId = location.hash.substring(1) // Remove the '#'
+      const targetId = location.hash.substring(1)
       const targetElement = document.getElementById(targetId)
       if (targetElement) {
         targetElement.scrollIntoView({ behavior: 'smooth' })
@@ -424,7 +424,7 @@ export function UpcomingShow() {
               managePosterIsHidden == true && (
                 <div
                   ref={draggableRef}
-                  className={`absolute top-10 left-2 z-50 ${toolsHiddenClass} w-fit rounded-md border-2 bg-[#ffffff] shadow-lg shadow-black/20`}
+                  className={`absolute top-11 right-4 z-500 ${toolsHiddenClass} w-fit rounded-md border-2 bg-[#ffffff] shadow-lg shadow-black/20`}
                 >
                   <div
                     data-drag-trigger="true"

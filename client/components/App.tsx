@@ -41,11 +41,11 @@ function App() {
   return (
     <div className="">
       <div
-        className={`sticky top-0 z-2000 ${scrolled ? 'border-b-2 border-b-[#dad7c282]' : 'border-0'}`}
+        className={`sticky top-0 z-2000 ${location.pathname !== '/' ? 'border-b-2 border-b-[#dad7c282]' : `${scrolled ? 'border-b-2 border-b-[#dad7c282]' : 'border-b-0'}`}`}
       >
         <Header scrolled={scrolled} />
       </div>
-      <div className="min-h-[90%]">
+      <div className="">
         <Outlet />
         <ScrollRestoration />
       </div>

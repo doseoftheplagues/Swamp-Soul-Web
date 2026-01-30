@@ -11,6 +11,9 @@ export function up(knex) {
     table.string('email')
     table.boolean('admin').nullable()
     table.string('profile_picture').nullable()
+    table.integer('blebs_found').defaultTo(0)
+    table.string('profile_color_one').defaultTo('#d9d7c0d6')
+    table.string('profile_color_two').defaultTo('#e9e6d6ac')
   })
 }
 

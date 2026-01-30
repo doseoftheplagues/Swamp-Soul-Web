@@ -239,7 +239,7 @@ const Profile = () => {
     : []
 
   return isAuthenticated && user ? (
-    <div className="min-h-[calc(100vh-4rem)]">
+    <div className="mt-6 min-h-[calc(100vh-4rem)]">
       <div className="flex w-full flex-col items-start justify-center p-2 md:flex-row md:p-0">
         <div className="STUFFDIVCONTAINER relative flex w-full flex-col md:max-w-2/9">
           <div className="profileDiv mb-5 flex w-full flex-col rounded-md border-[1.5px] bg-[#e9e6d6ac] md:min-w-fit">

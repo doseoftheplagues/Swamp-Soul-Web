@@ -1,5 +1,3 @@
-import { Link } from 'react-router'
-
 function Home() {
   return (
     <div className="min-h-full w-full p-0">
@@ -35,12 +33,6 @@ function Home() {
             Noise / Pop / Love
           </p>
 
-          <Link
-            to="/upcomingshows"
-            className="font-gemini cursor-pointer text-[clamp(2rem,5vw,3.5rem)] text-[#faf8f1]"
-          >
-            Upcoming Shows
-          </Link>
           <div className="my-40 h-200 w-200 max-w-screen bg-[#faf8f1]">
             <p className="p-10 text-sm wrap-anywhere sm:text-base">
               more stuff here soon more stuff here soon more stuff here soon

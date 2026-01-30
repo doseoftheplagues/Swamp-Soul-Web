@@ -28,9 +28,9 @@ export function ShowEditForm() {
     doorsTime: '',
     performers: '',
     locationName: '',
-    wheelchairAccessible: '',
-    mobilityAccessible: '',
-    bathroomsNearby: '',
+    wheelchairAccessible: false,
+    mobilityAccessible: false,
+    bathroomsNearby: false,
     noiseLevel: '',
     locationCoords: '',
     setTimes: '',
@@ -38,6 +38,7 @@ export function ShowEditForm() {
     description: '',
     maxCapacity: '',
     name: '',
+    underageAllowed: false,
   })
 
   const editShowMutation = useUpdateUpcomingShow()
@@ -66,9 +67,10 @@ export function ShowEditForm() {
         doorsTime: data.doorsTime,
         performers: data.performers,
         locationName: data.locationName,
-        wheelchairAccessible: String(data.wheelchairAccessible),
-        mobilityAccessible: String(data.mobilityAccessible),
-        bathroomsNearby: String(data.bathroomsNearby),
+        wheelchairAccessible: data.wheelchairAccessible == true ? true : false,
+        mobilityAccessible: data.mobilityAccessible == true ? true : false,
+        bathroomsNearby: data.bathroomsNearby == true ? true : false,
+        underageAllowed: data.underageAllowed == true ? true : false,
         noiseLevel: data.noiseLevel,
         locationCoords: data.locationCoords || '',
         setTimes: data.setTimes || '',
@@ -103,9 +105,10 @@ export function ShowEditForm() {
     const submissionData = {
       ...formData,
       date: formData.date.toISOString(),
-      wheelchairAccessible: formData.wheelchairAccessible === 'true',
-      mobilityAccessible: formData.mobilityAccessible === 'true',
-      bathroomsNearby: formData.bathroomsNearby === 'true',
+      wheelchairAccessible: formData.wheelchairAccessible === true,
+      mobilityAccessible: formData.mobilityAccessible === true,
+      bathroomsNearby: formData.bathroomsNearby === true,
+      underageAllowed: formData.underageAllowed === true,
       maxCapacity: parseInt(formData.maxCapacity, 10) || null,
     }
     editShowMutation.mutate({ id: currentId, showData: submissionData, token })
@@ -136,7 +139,11 @@ export function ShowEditForm() {
     return (
       <div className="mx-auto max-w-md p-4">
         <h1 className="mb-4 text-2xl font-bold">Required info</h1>
-        <Form.Root onSubmit={handleSubmit} className="space-y-4">
+        <Form.Root
+          onSubmit={handleSubmit}
+          className="space-y-4"
+          autoComplete="off"
+        >
           <Form.Field name="date" className="mb-4">
             <Form.Label className="mb-1 block text-sm font-medium text-gray-700">
               Date:
@@ -224,7 +231,7 @@ export function ShowEditForm() {
               onValueChange={handleSelectChange('noiseLevel')}
               required
             >
-              <Select.Trigger className="focus:ring-opacity-50 mt-1 flex w-full items-center justify-between rounded-md border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm focus:border-[#8f9779] focus:ring-[#8f9779]">
+              <Select.Trigger className="focus:ring-opacity-50 mt-1 flex w-full items-center justify-between rounded-md border-[1.5px] bg-white px-3 py-2 text-sm shadow-sm focus:border-[#8f9779] focus:ring-[#8f9779]">
                 <Select.Value placeholder="Select noise level" />
                 <Select.Icon className="h-4 w-4 text-gray-400">
                   <ChevronDownIcon />
@@ -263,7 +270,7 @@ export function ShowEditForm() {
               onValueChange={handleSelectChange('wheelchairAccessible')}
               required
             >
-              <Select.Trigger className="focus:ring-opacity-50 shadow-s mt-1 flex w-full items-center justify-between rounded-md border border-gray-300 bg-white px-3 py-2 text-sm focus:border-[#8f9779]">
+              <Select.Trigger className="focus:ring-opacity-50 shadow-s mt-1 flex w-full items-center justify-between rounded-md border-[1.5px] bg-white px-3 py-2 text-sm focus:border-[#8f9779]">
                 <Select.Value placeholder="Select an option" />
                 <Select.Icon className="h-4 w-4 text-gray-400">
                   <ChevronDownIcon />
@@ -302,7 +309,7 @@ export function ShowEditForm() {
               onValueChange={handleSelectChange('bathroomsNearby')}
               required
             >
-              <Select.Trigger className="focus:ring-opacity-50 mt-1 flex w-full items-center justify-between rounded-md border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm focus:border-[#8f9779]">
+              <Select.Trigger className="focus:ring-opacity-50 mt-1 flex w-full items-center justify-between rounded-md border-[1.5px] bg-white px-3 py-2 text-sm shadow-sm focus:border-[#8f9779]">
                 <Select.Value placeholder="Select an option" />
                 <Select.Icon className="h-4 w-4 text-gray-400">
                   <ChevronDownIcon />
@@ -341,7 +348,7 @@ export function ShowEditForm() {
               onValueChange={handleSelectChange('mobilityAccessible')}
               required
             >
-              <Select.Trigger className="focus:ring-opacity-50 mt-1 flex w-full items-center justify-between rounded-md border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm focus:border-[#8f9779]">
+              <Select.Trigger className="focus:ring-opacity-50 mt-1 flex w-full items-center justify-between rounded-md border-[1.5px] bg-white px-3 py-2 text-sm shadow-sm focus:border-[#8f9779]">
                 <Select.Value placeholder="Select an option" />
                 <Select.Icon className="h-4 w-4 text-gray-400">
                   <ChevronDownIcon />
@@ -368,6 +375,39 @@ export function ShowEditForm() {
             >
               Please select an option
             </Form.Message>
+          </Form.Field>
+
+          <Form.Field name="underageAllowed" className="mb-4">
+            <Form.Label className="mb-1 block text-sm font-medium text-gray-700">
+              Is the show r18 or all ages?
+            </Form.Label>
+            <Select.Root
+              value={String(formData.underageAllowed)}
+              onValueChange={handleSelectChange('underageAllowed')}
+            >
+              <Select.Trigger className="focus:ring-opacity-50 mt-1 flex w-full items-center justify-between rounded-md border-[1.5px] bg-white px-3 py-2 text-sm shadow-sm focus:border-[#8f9779]">
+                <Select.Value placeholder="Select an option" />
+                <Select.Icon className="h-4 w-4 text-gray-400">
+                  <ChevronDownIcon />
+                </Select.Icon>
+              </Select.Trigger>
+              <Select.Portal>
+                <Select.Content className="z-10 rounded-md bg-white py-1 shadow-lg">
+                  <Select.ScrollUpButton className="flex h-6 items-center justify-center bg-white text-gray-700">
+                    <ChevronUpIcon />
+                  </Select.ScrollUpButton>
+                  <Select.Viewport className="p-1">
+                    <SelectItem value="true">
+                      Yes, the show is all ages
+                    </SelectItem>
+                    <SelectItem value="false">No, it&apos;s R18</SelectItem>
+                  </Select.Viewport>
+                  <Select.ScrollDownButton className="flex h-6 items-center justify-center bg-white text-gray-700">
+                    <ChevronDownIcon />
+                  </Select.ScrollDownButton>
+                </Select.Content>
+              </Select.Portal>
+            </Select.Root>
           </Form.Field>
 
           <h2 className="mt-6 mb-4 text-xl font-bold">Extra info (Optional)</h2>
@@ -397,7 +437,7 @@ export function ShowEditForm() {
               onClick={() => handleCoordsTooltipClick()}
               className="ml-2 flex cursor-pointer items-center rounded-sm border border-[#aaa89955] bg-[#dad7c2] px-1 py-0 text-sm hover:bg-[#e2e0cf] focus:border-[#8f9779] active:bg-[#c1bd9a]"
             >
-              ?
+              How to add coordinates
             </button>
           </div>
           {coordsTooltipIsHidden == false && (
