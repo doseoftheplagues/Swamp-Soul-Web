@@ -56,7 +56,9 @@ export default {
       directory: Path.join(__dirname, 'seeds'),
     },
     pool: {
-      afterCreate: (conn, cb) => conn.run('PRAGMA foreign_keys = ON', cb),
+      afterCreate: (conn, cb) => {
+      conn.run('PRAGMA foreign_keys = ON', () => {
+        conn.run('PRAGMA journal_mode = WAL', cb)
     },
   },
 }
